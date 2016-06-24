@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_card"
+        tools:context=".ui.activity.MainActivity">
+
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.jcodecraeer.xrecyclerview.progressindicator.AVLoadingIndicatorView
+            android:id="@+id/loading_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="visible"
+            app:indicator="BallSpinFadeLoader"
+            app:indicator_color="@color/colorAccent" />
+
+        <TextView
+            android:id="@+id/empty_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/empty"
+            android:visibility="gone" />
+    </RelativeLayout>
+</LinearLayout>
