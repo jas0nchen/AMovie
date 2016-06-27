@@ -1,10 +1,16 @@
 package cn.jas0n.amovie.ui.activity;
 
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -15,10 +21,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bilibili.magicasakura.utils.ThemeUtils;
+import com.ftinc.scoop.Scoop;
 import com.orhanobut.logger.Logger;
 
 import org.w3c.dom.Text;
@@ -32,9 +42,11 @@ import cn.jas0n.amovie.R;
 import cn.jas0n.amovie.adapter.HomePagerAdapter;
 import cn.jas0n.amovie.api.AMovieService;
 import cn.jas0n.amovie.bean.ConstantCategory;
+import cn.jas0n.amovie.ui.dialog.CardPickerDialog;
 import cn.jas0n.amovie.ui.fragment.LazyFragment;
 import cn.jas0n.amovie.ui.fragment.BaseFragment;
 import cn.jas0n.amovie.ui.fragment.RecFragment;
+import cn.jas0n.amovie.util.ThemeHelper;
 import cn.jas0n.amovie.util.Utils;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -46,7 +58,7 @@ import rx.schedulers.Schedulers;
  * E-mail:chendong90x@gmail.com
  */
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, CardPickerDialog.ClickListener {
     private String[] mTitle = new String[11];
 
     @BindView(R.id.drawer_layout)
@@ -74,6 +86,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Scoop.getInstance().apply(this);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
@@ -174,9 +187,23 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_share) {
 
+        } else if (id == R.id.nav_theme) {
+            CardPickerDialog dialog = new CardPickerDialog();
+            dialog.setClickListener(this);
+            dialog.show(getSupportFragmentManager(), CardPickerDialog.TAG);
         }
 
         mDrawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onConfirm(int currentTheme) {
+
     }
 }
