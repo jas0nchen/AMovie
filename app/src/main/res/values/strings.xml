@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">AMovie</string>
+    <string name="more">More ></string>
 
     <string name="recommend">Recommend</string>
     <string name="drama">Drama</string>

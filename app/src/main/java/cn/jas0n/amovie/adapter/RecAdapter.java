@@ -5,11 +5,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jas0n.amovie.R;
+import cn.jas0n.amovie.bean.RecBean;
+import cn.jas0n.amovie.ui.CustomVideoItemLayout;
 
 /**
  * Author: Jas0n
@@ -30,11 +36,67 @@ public class RecAdapter extends BaseAdapter {
 
     @Override
     public void bindHolder(RecyclerView.ViewHolder holder, int position) {
+        RecHolder recHolder = (RecHolder) holder;
+        RecBean.Video video = (RecBean.Video) mData.get(position);
+        recHolder.mTitle.setText(video.getTitle());
+        recHolder.mItem.setAvatar(video.getVideos().get(0).getAuthor().getHeadImgUrl());
+        recHolder.mItem.setCover(video.getVideos().get(0).getUrl());
+        recHolder.mItem.setTitle(video.getVideos().get(0).getTitle());
+        recHolder.mItem.setUserName(video.getVideos().get(0).getAuthor().getNickName());
+        recHolder.mItem.setViewCount(video.getVideos().get(0).getViewCount());
+        recHolder.mItem.setCommentCount(video.getVideos().get(0).getDanmuCount());
 
+        int count = video.getVideos().size() >= 5 ? 5 : video.getVideos().size();
+        switch (count) {
+            case 5:
+                fillData(video, 1, recHolder.mItem1);
+                fillData(video, 2, recHolder.mItem2);
+                fillData(video, 3, recHolder.mItem3);
+                fillData(video, 4, recHolder.mItem4);
+                break;
+            case 4:
+                fillData(video, 1, recHolder.mItem1);
+                fillData(video, 2, recHolder.mItem2);
+                fillData(video, 3, recHolder.mItem3);
+                break;
+            case 3:
+                fillData(video, 1, recHolder.mItem1);
+                fillData(video, 2, recHolder.mItem2);
+                break;
+            case 2:
+                fillData(video, 1, recHolder.mItem1);
+                break;
+            case 1:
+                break;
+        }
+    }
+
+    private void fillData(RecBean.Video video, int index, CustomVideoItemLayout item) {
+        item.setAvatar(video.getVideos().get(index).getAuthor().getHeadImgUrl());
+        item.setCover(video.getVideos().get(index).getUrl());
+        item.setTitle(video.getVideos().get(index).getTitle());
+        item.setUserName(video.getVideos().get(index).getAuthor().getNickName());
+        item.setViewCount(video.getVideos().get(index).getViewCount());
+        item.setCommentCount(video.getVideos().get(index).getDanmuCount());
+        item.setVisibility(View.VISIBLE);
     }
 
     class RecHolder extends RecyclerView.ViewHolder {
 
+        @BindView(R.id.category)
+        TextView mTitle;
+        @BindView(R.id.more)
+        TextView mMore;
+        @BindView(R.id.item)
+        CustomVideoItemLayout mItem;
+        @BindView(R.id.item1)
+        CustomVideoItemLayout mItem1;
+        @BindView(R.id.item2)
+        CustomVideoItemLayout mItem2;
+        @BindView(R.id.item3)
+        CustomVideoItemLayout mItem3;
+        @BindView(R.id.item4)
+        CustomVideoItemLayout mItem4;
 
         public RecHolder(View itemView) {
             super(itemView);

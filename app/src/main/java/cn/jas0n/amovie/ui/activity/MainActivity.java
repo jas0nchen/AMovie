@@ -2,15 +2,14 @@ package cn.jas0n.amovie.ui.activity;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -23,15 +22,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bilibili.magicasakura.utils.ThemeUtils;
-import com.ftinc.scoop.Scoop;
+import com.bilibili.magicasakura.widgets.TintView;
 import com.orhanobut.logger.Logger;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +40,6 @@ import cn.jas0n.amovie.api.AMovieService;
 import cn.jas0n.amovie.bean.ConstantCategory;
 import cn.jas0n.amovie.ui.dialog.CardPickerDialog;
 import cn.jas0n.amovie.ui.fragment.LazyFragment;
-import cn.jas0n.amovie.ui.fragment.BaseFragment;
 import cn.jas0n.amovie.ui.fragment.RecFragment;
 import cn.jas0n.amovie.util.ThemeHelper;
 import cn.jas0n.amovie.util.Utils;
@@ -63,8 +58,8 @@ public class MainActivity extends AppCompatActivity
 
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawer;
-    @BindView(R.id.fake_status_bar)
-    View mFakeStatusBar;
+    @BindView(R.id.coordinator)
+    CoordinatorLayout mCoordinator;
     @BindView(R.id.nav_view)
     NavigationView mNav;
     @BindView(R.id.toolbar)
@@ -86,7 +81,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Scoop.getInstance().apply(this);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
@@ -102,9 +96,12 @@ public class MainActivity extends AppCompatActivity
 
     private void setupTab() {
         mTitle = new String[]{getString(R.string.recommend), getString(R.string.drama),
-                getString(R.string.documentary), getString(R.string.original), getString(R.string.entertainment),
-                getString(R.string.movie), getString(R.string.open_class), getString(R.string.music),
-                getString(R.string.tech), getString(R.string.livelihood), getString(R.string.sport)};
+                getString(R.string.documentary), getString(R.string.original), getString(R.string
+                .entertainment),
+                getString(R.string.movie), getString(R.string.open_class), getString(R.string
+                .music),
+                getString(R.string.tech), getString(R.string.livelihood), getString(R.string
+                .sport)};
         for (int i = 0; i < mTitle.length; i++) {
             mFragments.add(RecFragment.newInstanse(mTitle[i]));
         }
@@ -141,11 +138,13 @@ public class MainActivity extends AppCompatActivity
 
     private void setupDrawer() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string
+                .navigation_drawer_close);
         mDrawer.addDrawerListener(toggle);
         toggle.syncState();
 
         mNav.setNavigationItemSelectedListener(this);
+        mNav.setCheckedItem(R.id.nav_home);
         mAvatar.setImageResource(R.mipmap.icon_user_big);
     }
 
@@ -198,12 +197,53 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= 21) {
+            Window window = getWindow();
+            //window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //window.setStatusBarColor(ThemeUtils.getColorById(this, R.color
+            // .theme_color_primary_dark));
+            ActivityManager.TaskDescription description = new ActivityManager.TaskDescription
+                    (null, null, ThemeUtils.getThemeAttrColor(this, android.R.attr.colorPrimary));
+            setTaskDescription(description);
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
     }
 
     @Override
     public void onConfirm(int currentTheme) {
+        if (ThemeHelper.getTheme(MainActivity.this) != currentTheme) {
+            ThemeHelper.setTheme(MainActivity.this, currentTheme);
+            ThemeUtils.refreshUI(MainActivity.this, new ThemeUtils.ExtraRefreshable() {
+                        @Override
+                        public void refreshGlobal(Activity activity) {
+                            //for global setting, just do once
+                            if (Build.VERSION.SDK_INT >= 21) {
+                                final MainActivity context = MainActivity.this;
+                                ActivityManager.TaskDescription taskDescription = new
+                                        ActivityManager.TaskDescription(null, null, ThemeUtils
+                                        .getThemeAttrColor(context, android.R.attr.colorPrimary));
+                                setTaskDescription(taskDescription);
+                                //getWindow().setStatusBarColor(ThemeUtils.getColorById(context,
+                                // R.color.theme_color_primary_dark));
+                                mCoordinator.setStatusBarBackgroundColor(ThemeUtils
+                                        .getThemeAttrColor(MainActivity.this, android.R
+                                        .attr.colorPrimaryDark));
+                            }
+                        }
 
+                        @Override
+                        public void refreshSpecificView(View view) {
+                            //TODO: will do this for each traversal
+                        }
+                    }
+            );
+        }
     }
 }

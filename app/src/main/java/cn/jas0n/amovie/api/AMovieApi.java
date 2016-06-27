@@ -1,9 +1,12 @@
 package cn.jas0n.amovie.api;
 
 import cn.jas0n.amovie.bean.ConstantCategory;
+import cn.jas0n.amovie.bean.M3U8ById;
 import cn.jas0n.amovie.bean.RecBean;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.POST;
 import rx.Observable;
 
 /**
@@ -18,4 +21,7 @@ public interface AMovieApi {
 
     @GET("video/index")
     public Observable<RecBean> getRecVideos(@Header("clientVersion") String clientVersion);
+
+    @POST("video/findM3u8ByVideoId")
+    public Observable<M3U8ById> getM3U8ByVideoId(@Field("videoId") String videoId, @Field("quality") String quality);
 }

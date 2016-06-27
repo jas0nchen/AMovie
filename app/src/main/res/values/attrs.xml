@@ -14,4 +14,12 @@
     </declare-styleable>
 
     <attr name="SwipeBackLayoutStyle" format="reference"/>
+
+    <declare-styleable name="CustomVideoItemLayout">
+        <attr name="cover_style" format="enum">
+            <enum name="small" value="0"/>
+            <enum name="large" value="1"/>
+        </attr>
+    </declare-styleable>
+
 </resources>

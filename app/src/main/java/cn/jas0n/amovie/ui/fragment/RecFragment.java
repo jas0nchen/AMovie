@@ -73,7 +73,7 @@ public class RecFragment extends BaseFragment {
         mAdapter = new RecAdapter(mVideoList, getContext());
         mRecyclerView.setAdapter(mAdapter);
 
-
+        mRecyclerView.setLoadingMoreEnabled(false);
     }
 
     @Override
