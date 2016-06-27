@@ -16,8 +16,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +47,7 @@ import rx.schedulers.Schedulers;
  */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private String[] mTitle = new String[]{"推荐", "英美剧", "纪录片", "原创", "娱乐", "电影", "公开课", "音乐",
-            "科技", "生活", "体育"};
+    private String[] mTitle = new String[11];
 
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawer;
@@ -61,6 +64,10 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.pager)
     ViewPager mPager;
 
+    private ImageView mAvatar;
+    private TextView mUserName;
+    private TextView mIntro;
+
     private HomePagerAdapter mAdapter;
     private List<LazyFragment> mFragments = new ArrayList<>();
 
@@ -70,6 +77,10 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        View headerView = mNav.getHeaderView(0);
+        mAvatar = (ImageView) headerView.findViewById(R.id.avatar);
+        mUserName = (TextView) headerView.findViewById(R.id.username);
+        mIntro = (TextView) headerView.findViewById(R.id.intro);
         setupToolbar();
         setupDrawer();
         setupFab();
@@ -77,6 +88,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setupTab() {
+        mTitle = new String[]{getString(R.string.recommend), getString(R.string.drama),
+                getString(R.string.documentary), getString(R.string.original), getString(R.string.entertainment),
+                getString(R.string.movie), getString(R.string.open_class), getString(R.string.music),
+                getString(R.string.tech), getString(R.string.livelihood), getString(R.string.sport)};
         for (int i = 0; i < mTitle.length; i++) {
             mFragments.add(RecFragment.newInstanse(mTitle[i]));
         }
@@ -118,6 +133,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         mNav.setNavigationItemSelectedListener(this);
+        mAvatar.setImageResource(R.mipmap.icon_user_big);
     }
 
     private void setupToolbar() {
@@ -156,17 +172,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        if (id == R.id.nav_share) {
 
         }
 

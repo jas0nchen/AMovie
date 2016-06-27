@@ -1,11 +1,32 @@
 <resources>
     <string name="app_name">AMovie</string>
+    
+    <string name="recommend">Recommend</string>
+    <string name="drama">Drama</string>
+    <string name="documentary">Documentary</string>
+    <string name="original">Original</string>
+    <string name="entertainment">Entertainment</string>
+    <string name="movie">Movie</string>
+    <string name="open_class">Open Class</string>
+    <string name="music">Music</string>
+    <string name="tech">Technology</string>
+    <string name="livelihood">Livelihood</string>
+    <string name="sport">Sport</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="home">Home</string>
+    <string name="subscribe">Subscribe</string>
+    <string name="daily_task">Daily Task</string>
+    <string name="download">Download</string>
+    <string name="share">Share</string>
+    <string name="setting">Setting</string>
+    <string name="app_description">Enjoy AMovie.</string>
+    <string name="customization">Customization</string>
     <string name="action_settings">Settings</string>
     <string name="empty">Ops! Nothing Here!</string>
+    <string name="empty_intro">A lazy man, nothing here!</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
