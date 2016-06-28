@@ -1,4 +1,4 @@
-package cn.jas0n.amovie.ui;
+package cn.jas0n.amovie.ui.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -94,5 +94,9 @@ public class CustomVideoItemLayout extends RelativeLayout {
 
     public void setCommentCount(int count) {
         mCommentCount.setText(String.valueOf(count));
+    }
+
+    public ImageView getCover(){
+        return mCover;
     }
 }

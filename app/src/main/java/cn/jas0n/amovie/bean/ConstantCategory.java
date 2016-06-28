@@ -1,5 +1,6 @@
 package cn.jas0n.amovie.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  * Date: 2016/6/24
  * E-mail:chendong90x@gmail.com
  */
-public class ConstantCategory {
+public class ConstantCategory implements Serializable {
 
     /*{
         "code":"0000",

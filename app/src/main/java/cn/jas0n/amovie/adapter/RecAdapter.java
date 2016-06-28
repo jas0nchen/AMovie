@@ -5,9 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -15,17 +14,32 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jas0n.amovie.R;
 import cn.jas0n.amovie.bean.RecBean;
-import cn.jas0n.amovie.ui.CustomVideoItemLayout;
+import cn.jas0n.amovie.ui.view.CustomVideoItemLayout;
 
 /**
  * Author: Jas0n
  * Date: 2016/6/24
  * E-mail:chendong90x@gmail.com
  */
-public class RecAdapter extends BaseAdapter {
+public class RecAdapter extends BaseAdapter implements View.OnClickListener {
+
+    private ClickVideo clickVideo;
 
     public RecAdapter(List mData, Context mContext) {
         super(mData, mContext);
+    }
+
+    @Override
+    public void onClick(View view) {
+
+    }
+
+    public interface ClickVideo {
+        void onVideoClicked(ImageView image, RecBean.HotVideoItem video);
+    }
+
+    public void setClickVideo(ClickVideo clickVideo){
+        this.clickVideo = clickVideo;
     }
 
     @Override
@@ -36,8 +50,8 @@ public class RecAdapter extends BaseAdapter {
 
     @Override
     public void bindHolder(RecyclerView.ViewHolder holder, int position) {
-        RecHolder recHolder = (RecHolder) holder;
-        RecBean.Video video = (RecBean.Video) mData.get(position);
+        final RecHolder recHolder = (RecHolder) holder;
+        final RecBean.Video video = (RecBean.Video) mData.get(position);
         recHolder.mTitle.setText(video.getTitle());
         recHolder.mItem.setAvatar(video.getVideos().get(0).getAuthor().getHeadImgUrl());
         recHolder.mItem.setCover(video.getVideos().get(0).getUrl());
@@ -69,9 +83,16 @@ public class RecAdapter extends BaseAdapter {
             case 1:
                 break;
         }
+
+        recHolder.mItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clickVideo.onVideoClicked(recHolder.mItem.getCover(), video.getVideos().get(0));
+            }
+        });
     }
 
-    private void fillData(RecBean.Video video, int index, CustomVideoItemLayout item) {
+    private void fillData(final RecBean.Video video, final int index, final CustomVideoItemLayout item) {
         item.setAvatar(video.getVideos().get(index).getAuthor().getHeadImgUrl());
         item.setCover(video.getVideos().get(index).getUrl());
         item.setTitle(video.getVideos().get(index).getTitle());
@@ -79,6 +100,12 @@ public class RecAdapter extends BaseAdapter {
         item.setViewCount(video.getVideos().get(index).getViewCount());
         item.setCommentCount(video.getVideos().get(index).getDanmuCount());
         item.setVisibility(View.VISIBLE);
+        item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clickVideo.onVideoClicked(item.getCover(), video.getVideos().get(index));
+            }
+        });
     }
 
     class RecHolder extends RecyclerView.ViewHolder {

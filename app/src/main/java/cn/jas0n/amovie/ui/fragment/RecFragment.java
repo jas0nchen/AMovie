@@ -1,7 +1,10 @@
 package cn.jas0n.amovie.ui.fragment;
 
+import android.app.ActivityOptions;
+import android.os.Build;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
+import android.widget.ImageView;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -15,6 +18,7 @@ import cn.jas0n.amovie.adapter.BaseAdapter;
 import cn.jas0n.amovie.adapter.RecAdapter;
 import cn.jas0n.amovie.api.AMovieService;
 import cn.jas0n.amovie.bean.RecBean;
+import cn.jas0n.amovie.ui.activity.VideoDetailActivity;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -47,7 +51,6 @@ public class RecFragment extends BaseFragment {
                     public void call(RecBean recBean) {
                         fillData(recBean);
                         setupViews();
-                        Logger.d(recBean.toString());
                         hideLoadingView();
                     }
                 }, new Action1<Throwable>() {
@@ -71,6 +74,7 @@ public class RecFragment extends BaseFragment {
 
     private void setupViews() {
         mAdapter = new RecAdapter(mVideoList, getContext());
+        ((RecAdapter) mAdapter).setClickVideo(getClickVideo());
         mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.setLoadingMoreEnabled(false);
@@ -79,7 +83,7 @@ public class RecFragment extends BaseFragment {
     @Override
     protected void doOnRefresh() {
         super.doOnRefresh();
-        new Handler().postDelayed(new Runnable(){
+        new Handler().postDelayed(new Runnable() {
             public void run() {
                 mRecyclerView.refreshComplete();
             }
@@ -90,11 +94,26 @@ public class RecFragment extends BaseFragment {
     @Override
     protected void doOnLoad() {
         super.doOnLoad();
-        new Handler().postDelayed(new Runnable(){
+        new Handler().postDelayed(new Runnable() {
             public void run() {
                 mRecyclerView.loadMoreComplete();
             }
 
         }, 3000);
+    }
+
+    private RecAdapter.ClickVideo getClickVideo() {
+        return new RecAdapter.ClickVideo() {
+            @Override
+            public void onVideoClicked(ImageView image, RecBean.HotVideoItem video) {
+                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP){
+                    startActivity(VideoDetailActivity.newIntent(getContext(), video),
+                            ActivityOptions.makeSceneTransitionAnimation(getActivity(), image,
+                                    "transitionCover").toBundle());
+                }else {
+                    startActivity(VideoDetailActivity.newIntent(getContext(), video));
+                }
+            }
+        };
     }
 }

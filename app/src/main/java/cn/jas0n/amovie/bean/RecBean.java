@@ -1,5 +1,6 @@
 package cn.jas0n.amovie.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  * Date: 2016/6/24
  * E-mail:chendong90x@gmail.com
  */
-public class RecBean {
+public class RecBean implements Serializable {
 
     private String code;
     private String msg;
@@ -46,7 +47,7 @@ public class RecBean {
                 '}';
     }
 
-    public class Data {
+    public class Data implements Serializable {
         private List<HotVideoItem> hotVideo;
         private List<RecDramaItem> recDrama;
         private List<Video> video;
@@ -85,7 +86,7 @@ public class RecBean {
         }
     }
 
-    public class HotVideoItem {
+    public class HotVideoItem implements Serializable {
         private int danmuCount;
         private String title;
         private String url;
@@ -194,7 +195,7 @@ public class RecBean {
         }
     }
 
-    public class RecDramaItem {
+    public class RecDramaItem implements Serializable {
         private String title;
         private String url;
         private int upInfo;
@@ -283,7 +284,7 @@ public class RecBean {
         }
     }
 
-    public class Video {
+    public class Video implements Serializable{
         private List<HotVideoItem> videos;
         private int categoryId;
         private String title;

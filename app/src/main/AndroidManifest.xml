@@ -27,6 +27,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.activity.SeasonDetailActivity"
+            android:theme="@style/AppTheme.TransparentStatusBar"/>
+        <activity
             android:name=".ui.activity.VideoDetailActivity"
             android:theme="@style/AppTheme.TransparentStatusBar"/>
     </application>

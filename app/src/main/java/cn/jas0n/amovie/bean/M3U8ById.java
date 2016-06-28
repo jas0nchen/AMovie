@@ -1,5 +1,6 @@
 package cn.jas0n.amovie.bean;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Arrays;
  * Date: 16/6/26
  * E-mail:chendong90x@gmail.com
  */
-public class M3U8ById {
+public class M3U8ById implements Serializable {
 
     /*{
             "code": "0000",

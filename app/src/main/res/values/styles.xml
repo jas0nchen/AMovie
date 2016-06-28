@@ -1,8 +1,6 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -36,4 +34,19 @@
         <item name="android:maxWidth">1080px</item>
     </style>
 
+    <style name="AppTheme.NoActionBar.Blue" parent="AppTheme.NoActionBar">
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryDark">@color/blue_dark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="AppTheme.NoActionBar.Green" parent="AppTheme.NoActionBar">
+        <item name="colorPrimary">@color/green</item>
+        <item name="colorPrimaryDark">@color/green_dark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="AppTheme.NoActionBar.Orange" parent="AppTheme.NoActionBar">
+        <item name="colorPrimary">@color/orange</item>
+        <item name="colorPrimaryDark">@color/orange_dark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
 </resources>

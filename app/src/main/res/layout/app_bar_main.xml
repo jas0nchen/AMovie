@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout android:id="@+id/coordinator"
-                                                 xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                                  xmlns:app="http://schemas.android.com/apk/res-auto"
                                                  xmlns:tools="http://schemas.android.com/tools"
+                                                 android:id="@+id/coordinator"
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent"
                                                  android:fitsSystemWindows="true"
@@ -28,11 +28,11 @@
             android:layout_width="match_parent"
             android:layout_height="46dp"
             app:tabBackground="@color/colorPrimary"
-            app:tabIndicatorColor="@color/colorAccent"
+            app:tabIndicatorColor="@color/white"
             app:tabIndicatorHeight="3dp"
             app:tabMode="scrollable"
-            app:tabSelectedTextColor="@color/colorAccent"
-            app:tabTextColor="@android:color/white"/>
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextColor="@color/white_60"/>
 
     </android.support.design.widget.AppBarLayout>
 

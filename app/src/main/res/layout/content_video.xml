@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                                            xmlns:app="http://schemas.android.com/apk/res-auto"
+                                            xmlns:tools="http://schemas.android.com/tools"
+                                            android:id="@+id/scroll_view"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                                            tools:context=".ui.activity.SeasonDetailActivity"
+                                            tools:showIn="@layout/activity_video_detail">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    app:tabIndicatorColor="@color/colorAccent"
+                    app:tabIndicatorHeight="1dp"
+                    app:tabSelectedTextColor="@color/colorAccent"
+                    app:tabTextColor="@color/primaryText"/>
+            </RelativeLayout>
+
+            <cn.jas0n.amovie.ui.view.FixedViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

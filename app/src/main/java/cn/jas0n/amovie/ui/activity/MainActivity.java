@@ -1,11 +1,7 @@
 package cn.jas0n.amovie.ui.activity;
 
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,13 +16,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bilibili.magicasakura.utils.ThemeUtils;
-import com.bilibili.magicasakura.widgets.TintView;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
@@ -38,10 +31,8 @@ import cn.jas0n.amovie.R;
 import cn.jas0n.amovie.adapter.HomePagerAdapter;
 import cn.jas0n.amovie.api.AMovieService;
 import cn.jas0n.amovie.bean.ConstantCategory;
-import cn.jas0n.amovie.ui.dialog.CardPickerDialog;
 import cn.jas0n.amovie.ui.fragment.LazyFragment;
 import cn.jas0n.amovie.ui.fragment.RecFragment;
-import cn.jas0n.amovie.util.ThemeHelper;
 import cn.jas0n.amovie.util.Utils;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -53,7 +44,7 @@ import rx.schedulers.Schedulers;
  * E-mail:chendong90x@gmail.com
  */
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, CardPickerDialog.ClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener {
     private String[] mTitle = new String[11];
 
     @BindView(R.id.drawer_layout)
@@ -116,7 +107,7 @@ public class MainActivity extends AppCompatActivity
                 .subscribe(new Action1<ConstantCategory>() {
                     @Override
                     public void call(ConstantCategory constantCategory) {
-                        Logger.d(constantCategory.toString());
+
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -172,24 +163,19 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            startActivity(new Intent(this, VideoDetailActivity.class));
+            startActivity(new Intent(this, SeasonDetailActivity.class));
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_theme) {
-            CardPickerDialog dialog = new CardPickerDialog();
-            dialog.setClickListener(this);
-            dialog.show(getSupportFragmentManager(), CardPickerDialog.TAG);
         }
 
         mDrawer.closeDrawer(GravityCompat.START);
@@ -197,53 +183,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= 21) {
-            Window window = getWindow();
-            //window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            //window.setStatusBarColor(ThemeUtils.getColorById(this, R.color
-            // .theme_color_primary_dark));
-            ActivityManager.TaskDescription description = new ActivityManager.TaskDescription
-                    (null, null, ThemeUtils.getThemeAttrColor(this, android.R.attr.colorPrimary));
-            setTaskDescription(description);
-        }
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
-    }
-
-    @Override
-    public void onConfirm(int currentTheme) {
-        if (ThemeHelper.getTheme(MainActivity.this) != currentTheme) {
-            ThemeHelper.setTheme(MainActivity.this, currentTheme);
-            ThemeUtils.refreshUI(MainActivity.this, new ThemeUtils.ExtraRefreshable() {
-                        @Override
-                        public void refreshGlobal(Activity activity) {
-                            //for global setting, just do once
-                            if (Build.VERSION.SDK_INT >= 21) {
-                                final MainActivity context = MainActivity.this;
-                                ActivityManager.TaskDescription taskDescription = new
-                                        ActivityManager.TaskDescription(null, null, ThemeUtils
-                                        .getThemeAttrColor(context, android.R.attr.colorPrimary));
-                                setTaskDescription(taskDescription);
-                                //getWindow().setStatusBarColor(ThemeUtils.getColorById(context,
-                                // R.color.theme_color_primary_dark));
-                                mCoordinator.setStatusBarBackgroundColor(ThemeUtils
-                                        .getThemeAttrColor(MainActivity.this, android.R
-                                        .attr.colorPrimaryDark));
-                            }
-                        }
-
-                        @Override
-                        public void refreshSpecificView(View view) {
-                            //TODO: will do this for each traversal
-                        }
-                    }
-            );
-        }
     }
 }

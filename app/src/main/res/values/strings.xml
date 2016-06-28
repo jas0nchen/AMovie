@@ -35,6 +35,8 @@
     <string name="empty">Ops! Nothing Here!</string>
     <string name="empty_intro">A lazy man, nothing here!</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
+    <string name="description">Description</string>
+    <string name="comments">Comments(%d)</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
