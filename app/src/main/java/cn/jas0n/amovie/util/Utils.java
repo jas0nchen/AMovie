@@ -4,7 +4,10 @@ package cn.jas0n.amovie.util;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Point;
 import android.os.Build;
+import android.view.WindowManager;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -18,11 +21,32 @@ public class Utils {
     private Utils() {
     }
 
-    public static boolean isLollipop(){
+    public static int getUnScrollFixedViewpagerHeight(Context context) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP)
+            return Utils.getScreenHeight(context) - Utils.dip2px
+                    (context, 296f);
+        else
+            return Utils.getScreenHeight(context) - Utils.getStatusBarHeight(context) - Utils.dip2px
+                    (context, 296f);
+    }
+
+    public static int getFixedViewpagerHeight(Context context) {
+        return Utils.getScreenHeight(context) - Utils.getStatusBarHeight(context) - Utils
+                .getActionBarHeight(context) - Utils.dip2px(context, 40f);
+    }
+
+    public static int getScreenHeight(Context context) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Point point = new Point();
+        wm.getDefaultDisplay().getSize(point);
+        return point.y;
+    }
+
+    public static boolean isLollipop() {
         return Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP;
     }
 
-    public static int getStatusBarHeight(Context context){
+    public static int getStatusBarHeight(Context context) {
         Class<?> c = null;
         Object obj = null;
         Field field = null;
@@ -41,6 +65,12 @@ public class Utils {
         return sbar;
     }
 
+    public static int getActionBarHeight(Context context) {
+        TypedArray actionbarSizeTypedArray = context.obtainStyledAttributes(new int[]{android.R.attr.actionBarSize});
+        float h = actionbarSizeTypedArray.getDimension(0, 0);
+        return (int) h;
+    }
+
     public static int dip2px(Context context, float dpValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
@@ -55,11 +85,11 @@ public class Utils {
      * Convert a translucent themed Activity
      * {@link android.R.attr#windowIsTranslucent} to a fullscreen opaque
      * Activity.
-     * <p>
+     * <p/>
      * Call this whenever the background of a translucent Activity has changed
      * to become opaque. Doing so will allow the {@link android.view.Surface} of
      * the Activity behind to be released.
-     * <p>
+     * <p/>
      * This call has no effect on non-translucent activities or on activities
      * with the {@link android.R.attr#windowIsFloating} attribute.
      */
@@ -77,10 +107,10 @@ public class Utils {
      * {@link android.R.attr#windowIsTranslucent} back from opaque to
      * translucent following a call to
      * {@link #convertActivityFromTranslucent(Activity)} .
-     * <p>
+     * <p/>
      * Calling this allows the Activity behind this one to be seen again. Once
      * all such Activities have been redrawn
-     * <p>
+     * <p/>
      * This call has no effect on non-translucent activities or on activities
      * with the {@link android.R.attr#windowIsFloating} attribute.
      */
@@ -107,8 +137,8 @@ public class Utils {
             Method method = Activity.class.getDeclaredMethod("convertToTranslucent",
                     translucentConversionListenerClazz);
             method.setAccessible(true);
-            method.invoke(activity, new Object[] {
-                null
+            method.invoke(activity, new Object[]{
+                    null
             });
         } catch (Throwable t) {
         }

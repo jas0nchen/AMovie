@@ -1,6 +1,8 @@
 package cn.jas0n.amovie.api;
 
+import cn.jas0n.amovie.bean.Comment;
 import cn.jas0n.amovie.bean.ConstantCategory;
+import cn.jas0n.amovie.bean.Login;
 import cn.jas0n.amovie.bean.M3U8ById;
 import cn.jas0n.amovie.bean.RecBean;
 import cn.jas0n.amovie.bean.VideoDetail;
@@ -9,6 +11,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -31,5 +34,19 @@ public interface AMovieApi {
     @FormUrlEncoded
     @POST("video/detail")
     public Observable<VideoDetail> getVideoDetail(@Field("videoId") String videoId, @Field("token")
-                                                  String token);
+    String token);
+
+    @FormUrlEncoded
+    @POST("comment/list")
+    public Observable<Comment> getCommentList(@Query("page") int page, @Query("rows") int
+            rows, @Field("videoId") String videoId, @Field("infoId") String infoId,
+                                              @Field("activeId") String activeId,
+                                              @Field("reportId") String reportId,
+                                              @Field("seasonId") String seasonId,
+                                              @Field("userId") String userId);
+
+    @FormUrlEncoded
+    @POST("user/mobileLogin")
+    public Observable<Login> loginByMobile(@Field("mobile") String mobile, @Field("password")
+                                           String password);
 }

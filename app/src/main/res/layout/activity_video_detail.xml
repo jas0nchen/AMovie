@@ -32,11 +32,17 @@
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"/>
 
-            <View
+            <io.codetail.widget.RevealFrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="bottom"
-                android:background="@drawable/black_bg"/>
+                android:layout_height="match_parent">
+
+                <FrameLayout
+                    android:id="@+id/video_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorAccent"
+                    android:visibility="invisible"/>
+            </io.codetail.widget.RevealFrameLayout>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

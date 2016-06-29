@@ -49,6 +49,7 @@ public class RecFragment extends BaseFragment {
                 .subscribe(new Action1<RecBean>() {
                     @Override
                     public void call(RecBean recBean) {
+                        Logger.d(recBean.toString());
                         fillData(recBean);
                         setupViews();
                         hideLoadingView();

@@ -53,13 +53,14 @@ public class RecAdapter extends BaseAdapter implements View.OnClickListener {
         final RecHolder recHolder = (RecHolder) holder;
         final RecBean.Video video = (RecBean.Video) mData.get(position);
         recHolder.mTitle.setText(video.getTitle());
-        recHolder.mItem.setAvatar(video.getVideos().get(0).getAuthor().getHeadImgUrl());
         recHolder.mItem.setCover(video.getVideos().get(0).getUrl());
         recHolder.mItem.setTitle(video.getVideos().get(0).getTitle());
-        recHolder.mItem.setUserName(video.getVideos().get(0).getAuthor().getNickName());
         recHolder.mItem.setViewCount(video.getVideos().get(0).getViewCount());
         recHolder.mItem.setCommentCount(video.getVideos().get(0).getDanmuCount());
-
+        if(video.getVideos().get(0).getAuthor() != null){
+            recHolder.mItem.setUserName(video.getVideos().get(0).getAuthor().getNickName());
+            recHolder.mItem.setAvatar(video.getVideos().get(0).getAuthor().getHeadImgUrl());
+        }
         int count = video.getVideos().size() >= 5 ? 5 : video.getVideos().size();
         switch (count) {
             case 5:
@@ -93,10 +94,12 @@ public class RecAdapter extends BaseAdapter implements View.OnClickListener {
     }
 
     private void fillData(final RecBean.Video video, final int index, final CustomVideoItemLayout item) {
-        item.setAvatar(video.getVideos().get(index).getAuthor().getHeadImgUrl());
+        if(video.getVideos().get(index).getAuthor() != null){
+            item.setAvatar(video.getVideos().get(index).getAuthor().getHeadImgUrl());
+            item.setUserName(video.getVideos().get(index).getAuthor().getNickName());
+        }
         item.setCover(video.getVideos().get(index).getUrl());
         item.setTitle(video.getVideos().get(index).getTitle());
-        item.setUserName(video.getVideos().get(index).getAuthor().getNickName());
         item.setViewCount(video.getVideos().get(index).getViewCount());
         item.setCommentCount(video.getVideos().get(index).getDanmuCount());
         item.setVisibility(View.VISIBLE);

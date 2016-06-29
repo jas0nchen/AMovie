@@ -64,7 +64,7 @@
             android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
-            android:src="@color/divider"/>
+            android:background="@mipmap/icon_user_big"/>
 
         <TextView
             android:id="@+id/title"

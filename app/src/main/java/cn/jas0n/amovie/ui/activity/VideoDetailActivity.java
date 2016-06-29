@@ -15,14 +15,15 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
+import com.jaouan.revealator.Revealator;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
@@ -30,21 +31,23 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.jas0n.amovie.AMovie;
 import cn.jas0n.amovie.R;
 import cn.jas0n.amovie.adapter.VideoDetailPagerAdapter;
 import cn.jas0n.amovie.api.AMovieService;
 import cn.jas0n.amovie.bean.M3U8ById;
 import cn.jas0n.amovie.bean.RecBean;
 import cn.jas0n.amovie.bean.VideoDetail;
+import cn.jas0n.amovie.ui.fragment.CommentListFragment;
 import cn.jas0n.amovie.ui.fragment.DescFragment;
-import cn.jas0n.amovie.ui.fragment.LazyFragment;
 import cn.jas0n.amovie.ui.swipebacklayout.SwipeBackActivity;
+import cn.jas0n.amovie.ui.view.FixedViewPager;
 import cn.jas0n.amovie.util.Utils;
 import cn.jas0n.amovie.util.ViewGroupUtils;
+import cn.jas0n.amovie.videoplayer.VideoPlayView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 /**
  * Author: Jas0n
@@ -72,18 +75,23 @@ public class VideoDetailActivity extends SwipeBackActivity {
     @BindView(R.id.tab)
     TabLayout mTab;
     @BindView(R.id.pager)
-    ViewPager mPager;
+    FixedViewPager mPager;
     @BindView(R.id.fake_tab)
     TabLayout mFakeTab;
     @BindView(R.id.fake_tab_layout)
     RelativeLayout mFakeTabLayout;
+    @BindView(R.id.video_layout)
+    FrameLayout mVideoLayout;
 
+    private VideoPlayView mVideoPlayView;
     private List<Fragment> mFragments = new ArrayList<>();
     private VideoDetailPagerAdapter mAdapter;
     private RecBean.HotVideoItem mVideo;
     private VideoDetail mDetail;
     private boolean isM3U8Ready = false;
     private String[] mQuality;
+    private String mCurrentQuality;
+    private M3U8ById m3U8Info;
 
     public static Intent newIntent(Context context, RecBean.HotVideoItem video) {
         Intent intent = new Intent(context, VideoDetailActivity.class);
@@ -126,8 +134,8 @@ public class VideoDetailActivity extends SwipeBackActivity {
     }
 
     private void setupAdapter() {
-        mFragments.add(new DescFragment());
-        mFragments.add(new DescFragment());
+        mFragments.add(DescFragment.newInstance(mDetail));
+        mFragments.add(CommentListFragment.newInstance(mVideo));
         mAdapter = new VideoDetailPagerAdapter(getSupportFragmentManager(), new String[]
                 {getString(R.string.description), String.format(getString(R.string.comments),
                         mDetail.getData().getUserVideoView().getCommentCount())}, mFragments);
@@ -143,7 +151,7 @@ public class VideoDetailActivity extends SwipeBackActivity {
         mVideo = (RecBean.HotVideoItem) getIntent().getSerializableExtra("video");
 
         if (getSupportActionBar() != null)
-            getSupportActionBar().setTitle(mVideo.getTitle());
+            getSupportActionBar().setTitle("");
 
         Glide.with(this).load(mVideo.getUrl()).centerCrop().crossFade().into(mDetailImage);
         fetchM3U8ById();
@@ -177,11 +185,12 @@ public class VideoDetailActivity extends SwipeBackActivity {
                     @Override
                     public void call(M3U8ById m3U8ById) {
                         isM3U8Ready = true;
+                        m3U8Info = m3U8ById;
+                        mCurrentQuality = m3U8ById.getData().getM3u8().getCurrentQuality();
+                        mQuality = m3U8ById.getData().getM3u8().getQualityArr();
                         ColorStateList colorStateList = ContextCompat.getColorStateList
                                 (VideoDetailActivity.this, R.color.selector_fab);
                         mFab.setBackgroundTintList(colorStateList);
-
-                        mQuality = m3U8ById.getData().getM3u8().getQualityArr();
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -195,11 +204,44 @@ public class VideoDetailActivity extends SwipeBackActivity {
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isM3U8Ready) {
-
-                }
+                doClickFab();
             }
         });
+    }
+
+    private void doClickFab() {
+        if (isM3U8Ready) {
+            Revealator.reveal(mVideoLayout)
+                    .from(mFab)
+                    .withChildsAnimation()
+                    .withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            CoordinatorLayout.LayoutParams params =
+                                    (CoordinatorLayout.LayoutParams) mAppBar.getLayoutParams();
+                            params.setBehavior(null);
+                            mPager.setDisableAppbar(true);
+                            mPager.requestLayout();
+                            initVideoPlayer();
+                        }
+                    })
+                    .start();
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+                mFab.setVisibility(View.GONE);
+        }
+    }
+
+    private void initVideoPlayer() {
+        mVideoPlayView = new VideoPlayView(this);
+        mVideoPlayView.setCompletionListener(new VideoPlayView.CompletionListener() {
+            @Override
+            public void completion(IMediaPlayer mp) {
+
+            }
+        });
+        mVideoLayout.addView(mVideoPlayView);
+        mVideoPlayView.start(m3U8Info.getData().getM3u8().getUrl());
+        mVideoPlayView.setKeepScreenOn(true);
     }
 
     private void setupToolbar() {
@@ -218,5 +260,20 @@ public class VideoDetailActivity extends SwipeBackActivity {
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mVideoPlayView != null && mVideoPlayView.isPlay())
+            mVideoPlayView.pause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mVideoPlayView != null){
+            mVideoPlayView.release();
+        }
     }
 }

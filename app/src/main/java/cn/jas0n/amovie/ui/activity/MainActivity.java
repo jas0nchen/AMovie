@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SeasonDetailActivity.class));
+            startActivity(new Intent(this, LoginActivity.class));
             return true;
         }
 

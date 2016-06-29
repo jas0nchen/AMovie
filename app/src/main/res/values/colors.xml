@@ -4,12 +4,14 @@
     <color name="colorPrimaryDark">#1976D2</color>
     <color name="colorPrimaryLight">#BBDEFB</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorAccentDark">#b85671</color>
     <color name="primaryText">#212121</color>
     <color name="secondaryText">#727272</color>
 
     <color name="white">#FFFFFF</color>
     <color name="white_40">#40FFFFFF</color>
     <color name="white_60">#60FFFFFF</color>
+    <color name="white_90">#DDFFFFFF</color>
     <color name="black_90">#DD000000</color>
     <color name="black_60">#60000000</color>
     <color name="divider">#B6B6B6</color>
@@ -50,4 +52,6 @@
     <color name="red">#F44336</color>
     <color name="red_dark">#C62828</color>
     <color name="red_trans">#99F44336</color>
+
+    <color name="black_overlay">#66000000</color>
 </resources>
