@@ -105,12 +105,12 @@ public class CustomMediaContoller implements IMediaController {
     public void start() {
         pauseImage.setVisibility(View.GONE);
         itemView.setVisibility(View.GONE);
-        play.setImageResource(R.mipmap.video_stop_btn);
+        play.setImageResource(R.mipmap.ic_pause_circle_outline_white_36dp);
         progressBar.setVisibility(View.VISIBLE);
     }
 
     public void pause(){
-        play.setImageResource(R.mipmap.video_play_btn);
+        play.setImageResource(R.mipmap.ic_play_circle_outline_white_36dp);
         videoView.pause();
         bitmap = videoView.getBitmap();
         if (bitmap != null) {
@@ -120,7 +120,7 @@ public class CustomMediaContoller implements IMediaController {
     }
 
     public void reStart(){
-        play.setImageResource(R.mipmap.video_stop_btn);
+        play.setImageResource(R.mipmap.ic_pause_circle_outline_white_36dp);
         videoView.start();
         if (bitmap != null) {
             handler.sendEmptyMessageDelayed(PAUSE_IMAGE_HIDE,100);
@@ -222,11 +222,11 @@ public class CustomMediaContoller implements IMediaController {
             public void onClick(View v) {
                 if (isSound) {
                     //静音
-                    sound.setImageResource(R.mipmap.sound_mult_icon);
+                    sound.setImageResource(R.mipmap.ic_volume_off_white_36dp);
                     audioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
                 } else {
                     //取消静音
-                    sound.setImageResource(R.mipmap.sound_open_icon);
+                    sound.setImageResource(R.mipmap.ic_volume_high_white_36dp);
                     audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
                 }
                 isSound = !isSound;
@@ -250,8 +250,10 @@ public class CustomMediaContoller implements IMediaController {
             public void onClick(View v) {
                 Log.e("full","full");
                 if (getScreenOrientation((Activity) context) == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+                    full.setImageResource(R.mipmap.ic_fullscreen_white_36dp);
                     ((Activity)context).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 } else {
+                    full.setImageResource(R.mipmap.ic_fullscreen_exit_white_36dp);
                     ((Activity)context).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 }
             }

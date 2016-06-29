@@ -14,10 +14,10 @@
 
         <ImageView
             android:id="@+id/player_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_centerInParent="true"
-            android:src="@mipmap/video_stop_btn" />
+            android:src="@mipmap/ic_pause_circle_outline_white_36dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,7 +35,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_gravity="center_vertical"
-                android:src="@mipmap/sound_open_icon" />
+                android:src="@mipmap/ic_volume_high_white_36dp" />
 
             <TextView
                 android:id="@+id/time"
@@ -69,11 +69,11 @@
 
             <ImageView
                 android:id="@+id/full"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
-                android:src="@mipmap/full_screen_icon" />
+                android:src="@mipmap/ic_fullscreen_white_36dp" />
         </LinearLayout>
 
     </RelativeLayout>
