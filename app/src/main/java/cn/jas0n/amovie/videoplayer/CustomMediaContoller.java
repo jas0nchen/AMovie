@@ -191,18 +191,18 @@ public class CustomMediaContoller implements IMediaController {
 
         itemView.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (gestureDetector.onTouchEvent(event))
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (gestureDetector.onTouchEvent(motionEvent))
                     return true;
 
                 // 处理手势结束
-                switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_UP:
                         endGesture();
                         break;
                 }
 
-                return false;
+                return true;
             }
         });
 
@@ -454,6 +454,10 @@ public class CustomMediaContoller implements IMediaController {
 
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
+            if (isShowing())
+                hide();
+            else
+                show();
             return false;
         }
 
