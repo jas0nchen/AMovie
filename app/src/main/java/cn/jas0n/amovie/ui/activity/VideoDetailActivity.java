@@ -2,7 +2,9 @@ package cn.jas0n.amovie.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -18,6 +20,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -82,6 +85,8 @@ public class VideoDetailActivity extends SwipeBackActivity {
     RelativeLayout mFakeTabLayout;
     @BindView(R.id.video_layout)
     FrameLayout mVideoLayout;
+    @BindView(R.id.fullscreen)
+    FrameLayout mFullScreen;
 
     private VideoPlayView mVideoPlayView;
     private List<Fragment> mFragments = new ArrayList<>();
@@ -92,6 +97,7 @@ public class VideoDetailActivity extends SwipeBackActivity {
     private String[] mQuality;
     private String mCurrentQuality;
     private M3U8ById m3U8Info;
+    private boolean isVideoPlayBeforeActivityPause;
 
     public static Intent newIntent(Context context, RecBean.HotVideoItem video) {
         Intent intent = new Intent(context, VideoDetailActivity.class);
@@ -236,7 +242,32 @@ public class VideoDetailActivity extends SwipeBackActivity {
         mVideoPlayView.setCompletionListener(new VideoPlayView.CompletionListener() {
             @Override
             public void completion(IMediaPlayer mp) {
-
+                if (Utils.isLandscape(VideoDetailActivity.this)) {
+                    if (mFullScreen.isShown()) {
+                        changeToPortrait();
+                    }
+                } else {
+                    FrameLayout frameLayout = (FrameLayout) mVideoPlayView.getParent();
+                    mVideoPlayView.release();
+                    if (frameLayout != null && frameLayout.getChildCount() > 0) {
+                        frameLayout.removeAllViews();
+                        Revealator.unreveal(mVideoLayout)
+                                .withEndAction(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        CoordinatorLayout.LayoutParams params =
+                                                (CoordinatorLayout.LayoutParams) mAppBar.getLayoutParams();
+                                        params.setBehavior(new AppBarLayout.Behavior());
+                                        mPager.setDisableAppbar(false);
+                                        mPager.requestLayout();
+                                        mFab.show();
+                                    }
+                                })
+                                .start();
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+                            mFab.setVisibility(View.VISIBLE);
+                    }
+                }
             }
         });
         mVideoLayout.addView(mVideoPlayView);
@@ -259,21 +290,71 @@ public class VideoDetailActivity extends SwipeBackActivity {
 
     @Override
     public void onBackPressed() {
-        finish();
+        if (Utils.isLandscape(this) && mFullScreen.isShown()) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            changeToPortrait();
+        } else
+            finish();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if(mVideoPlayView != null && mVideoPlayView.isPlay())
+        if (mVideoPlayView != null && mVideoPlayView.isPlay()) {
             mVideoPlayView.pause();
+            mVideoPlayView.setMediaControllerStop();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mVideoPlayView != null){
+            mVideoPlayView.setContorllerVisiable();
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mVideoPlayView != null){
+        if (mVideoPlayView != null) {
             mVideoPlayView.release();
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (mVideoPlayView != null) {
+            mVideoPlayView.onChanged(newConfig);
+            if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                changeToPortrait();
+            } else {
+                changeToFullScreen();
+            }
+        } else {
+            mCoordinator.setVisibility(View.VISIBLE);
+            mFullScreen.setVisibility(View.GONE);
+        }
+    }
+
+    private void changeToPortrait() {
+        mCoordinator.setVisibility(View.VISIBLE);
+        mFullScreen.setVisibility(View.GONE);
+        mFullScreen.removeAllViews();
+        mVideoLayout.removeAllViews();
+        mVideoLayout.addView(mVideoPlayView);
+        mVideoPlayView.setShowContoller(true);
+        mVideoPlayView.setContorllerVisiable();
+    }
+
+    private void changeToFullScreen() {
+        ViewGroup viewGroup = (ViewGroup) mVideoPlayView.getParent();
+        if (viewGroup == null)
+            return;
+        viewGroup.removeAllViews();
+        mFullScreen.addView(mVideoPlayView);
+        mCoordinator.setVisibility(View.GONE);
+        mFullScreen.setVisibility(View.VISIBLE);
     }
 }

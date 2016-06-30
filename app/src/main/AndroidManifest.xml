@@ -31,6 +31,7 @@
             android:theme="@style/AppTheme.TransparentStatusBar"/>
         <activity
             android:name=".ui.activity.VideoDetailActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
             android:theme="@style/AppTheme.TransparentStatusBar"/>
         <activity
             android:name=".ui.activity.LoginActivity"
