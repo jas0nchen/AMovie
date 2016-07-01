@@ -95,6 +95,7 @@
     <string name="TrackType_metadata">Meta data</string>
     <string name="TrackType_unknown">Unknown</string>
 
+    <string name="update_to">Update to E%d</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 

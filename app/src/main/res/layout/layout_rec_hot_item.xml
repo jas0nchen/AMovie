@@ -32,23 +32,13 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/category"
             android:background="@color/divider"/>
-
     </RelativeLayout>
 
-    <cn.jas0n.amovie.ui.view.CustomVideoItemLayout
-        android:id="@+id/item"
+    <cn.jas0n.amovie.ui.view.FixedGridView
+        android:id="@+id/hot_grid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/category_layout"
-        android:background="?selectableItemBackground"
-        android:clickable="true"
-        app:cover_style="large"/>
-
-    <cn.jas0n.amovie.ui.view.FixedGridView
-        android:id="@+id/video_grid"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/item"
         android:layout_marginTop="5dp"
         android:horizontalSpacing="5dp"
         android:numColumns="2"
@@ -60,7 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@id/video_grid"
+        android:layout_below="@id/hot_grid"
         android:layout_marginTop="5dp"
         android:text="@string/more"/>
 

@@ -49,16 +49,17 @@ public class RecFragment extends BaseFragment {
                 .subscribe(new Action1<RecBean>() {
                     @Override
                     public void call(RecBean recBean) {
-                        Logger.d(recBean.toString());
                         fillData(recBean);
                         setupViews();
                         hideLoadingView();
+                        mRecyclerView.refreshComplete();
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
                         Logger.e(throwable.getMessage());
                         hideLoadingView();
+                        mRecyclerView.refreshComplete();
                     }
                 });
     }
@@ -74,33 +75,16 @@ public class RecFragment extends BaseFragment {
     }
 
     private void setupViews() {
-        mAdapter = new RecAdapter(mVideoList, getContext());
+        mAdapter = new RecAdapter(mHotList, mRecList, mVideoList, getContext());
         ((RecAdapter) mAdapter).setClickVideo(getClickVideo());
         mRecyclerView.setAdapter(mAdapter);
-
         mRecyclerView.setLoadingMoreEnabled(false);
     }
 
     @Override
     protected void doOnRefresh() {
         super.doOnRefresh();
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                mRecyclerView.refreshComplete();
-            }
-
-        }, 3000);
-    }
-
-    @Override
-    protected void doOnLoad() {
-        super.doOnLoad();
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                mRecyclerView.loadMoreComplete();
-            }
-
-        }, 3000);
+        initData();
     }
 
     private RecAdapter.ClickVideo getClickVideo() {

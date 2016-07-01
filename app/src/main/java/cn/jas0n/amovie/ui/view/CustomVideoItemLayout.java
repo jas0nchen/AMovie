@@ -48,7 +48,7 @@ public class CustomVideoItemLayout extends RelativeLayout {
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
         this.mContext = context;
-        LayoutInflater.from(mContext).inflate(R.layout.layout_rec_video_item, this, true);
+        LayoutInflater.from(mContext).inflate(R.layout.layout_custom_video_item, this, true);
         this.mCover = (ImageView) this.findViewById(R.id.cover);
         this.mAvatar = (CircleImageView) this.findViewById(R.id.avatar);
         this.mTitle = (TextView) this.findViewById(R.id.title);
