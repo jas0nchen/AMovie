@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:id="@+id/layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
@@ -15,10 +15,10 @@
 
     <ImageView
         android:id="@+id/pause_image"
-        android:visibility="gone"
-        android:layout_centerInParent="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
         />
 
     <include
@@ -32,7 +32,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="gone" />
+        android:visibility="gone"/>
+
+    <include
+        android:id="@+id/slide_pannel"
+        layout="@layout/layout_mediacontroller_slide_pannel"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerInParent="true"/>
 
 </RelativeLayout>
 

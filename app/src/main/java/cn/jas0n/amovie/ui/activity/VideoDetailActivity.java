@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
@@ -87,6 +88,8 @@ public class VideoDetailActivity extends SwipeBackActivity {
     FrameLayout mVideoLayout;
     @BindView(R.id.fullscreen)
     FrameLayout mFullScreen;
+    @BindView(R.id.progressbar)
+    ProgressBar mProgressBar;
 
     private VideoPlayView mVideoPlayView;
     private List<Fragment> mFragments = new ArrayList<>();
@@ -174,11 +177,13 @@ public class VideoDetailActivity extends SwipeBackActivity {
                         Logger.d(videoDetail.toString());
                         mDetail = videoDetail;
                         setupAdapter();
+                        mProgressBar.setVisibility(View.GONE);
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
                         Logger.e(throwable.getMessage());
+                        mProgressBar.setVisibility(View.GONE);
                     }
                 });
     }
@@ -239,40 +244,46 @@ public class VideoDetailActivity extends SwipeBackActivity {
 
     private void initVideoPlayer() {
         mVideoPlayView = new VideoPlayView(this);
+        mVideoPlayView.setQualities(mCurrentQuality, mQuality);
         mVideoPlayView.setCompletionListener(new VideoPlayView.CompletionListener() {
             @Override
             public void completion(IMediaPlayer mp) {
                 if (Utils.isLandscape(VideoDetailActivity.this)) {
                     if (mFullScreen.isShown()) {
                         changeToPortrait();
+                        doCompleteAnimation();
                     }
                 } else {
-                    FrameLayout frameLayout = (FrameLayout) mVideoPlayView.getParent();
-                    mVideoPlayView.release();
-                    if (frameLayout != null && frameLayout.getChildCount() > 0) {
-                        frameLayout.removeAllViews();
-                        Revealator.unreveal(mVideoLayout)
-                                .withEndAction(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        CoordinatorLayout.LayoutParams params =
-                                                (CoordinatorLayout.LayoutParams) mAppBar.getLayoutParams();
-                                        params.setBehavior(new AppBarLayout.Behavior());
-                                        mPager.setDisableAppbar(false);
-                                        mPager.requestLayout();
-                                        mFab.show();
-                                    }
-                                })
-                                .start();
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
-                            mFab.setVisibility(View.VISIBLE);
-                    }
+                    doCompleteAnimation();
                 }
             }
         });
         mVideoLayout.addView(mVideoPlayView);
         mVideoPlayView.start(m3U8Info.getData().getM3u8().getUrl());
         mVideoPlayView.setKeepScreenOn(true);
+    }
+
+    private void doCompleteAnimation() {
+        FrameLayout frameLayout = (FrameLayout) mVideoPlayView.getParent();
+        mVideoPlayView.release();
+        if (frameLayout != null && frameLayout.getChildCount() > 0) {
+            frameLayout.removeAllViews();
+            Revealator.unreveal(mVideoLayout)
+                    .withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            CoordinatorLayout.LayoutParams params =
+                                    (CoordinatorLayout.LayoutParams) mAppBar.getLayoutParams();
+                            params.setBehavior(new AppBarLayout.Behavior());
+                            mPager.setDisableAppbar(false);
+                            mPager.requestLayout();
+                            mFab.show();
+                        }
+                    })
+                    .start();
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+                mFab.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setupToolbar() {
@@ -346,6 +357,7 @@ public class VideoDetailActivity extends SwipeBackActivity {
         mVideoLayout.addView(mVideoPlayView);
         mVideoPlayView.setShowContoller(true);
         mVideoPlayView.setContorllerVisiable();
+        mVideoPlayView.setPortraitAction();
     }
 
     private void changeToFullScreen() {
@@ -356,5 +368,6 @@ public class VideoDetailActivity extends SwipeBackActivity {
         mFullScreen.addView(mVideoPlayView);
         mCoordinator.setVisibility(View.GONE);
         mFullScreen.setVisibility(View.VISIBLE);
+        mVideoPlayView.setFullAction();
     }
 }

@@ -5,34 +5,25 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
-import android.graphics.Rect;
 import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.VideoView;
-
-import com.orhanobut.logger.Logger;
 
 import cn.jas0n.amovie.R;
+import cn.jas0n.amovie.util.Utils;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
-/**
- * @Description ${控制器}
- */
+
 public class CustomMediaContoller implements IMediaController {
     private static final int SET_VIEW_HIDE = 1;
     private static final int TIME_OUT = 5000;
@@ -43,29 +34,16 @@ public class CustomMediaContoller implements IMediaController {
     private boolean isShow;
     private IjkVideoView videoView;
     private boolean isScroll;
-
-    /**
-     * 最大声音
-     */
-    private int mMaxVolume;
-    /**
-     * 当前声音
-     */
-    private int mVolume = -1;
-    /**
-     * 当前亮度
-     */
-    private float mBrightness = -1f;
-
     private SeekBar seekBar;
+    private RelativeLayout mTopPannel;
+    private TextView mCurrentQuality;
     AudioManager audioManager;
     private ProgressBar progressBar;
 
-    private GestureDetector gestureDetector;
-    private MyGestureListener gestureListener;
     private boolean isSound;
     private boolean isDragging;
-
+    private String mCurrentQulityLevel;
+    private String[] mQualities;
     private boolean isPause;
 
     private boolean isShowContoller;
@@ -114,6 +92,8 @@ public class CustomMediaContoller implements IMediaController {
     }
 
     public void initView() {
+        mTopPannel = (RelativeLayout) itemView.findViewById(R.id.top_pannel);
+        mCurrentQuality = (TextView) mTopPannel.findViewById(R.id.quality);
         progressBar = (ProgressBar) view.findViewById(R.id.loading);
         seekBar = (SeekBar) itemView.findViewById(R.id.seekbar);
         allTime = (TextView) itemView.findViewById(R.id.all_time);
@@ -122,10 +102,18 @@ public class CustomMediaContoller implements IMediaController {
         sound = (ImageView) itemView.findViewById(R.id.sound);
         play = (ImageView) itemView.findViewById(R.id.player_btn);
         pauseImage = (ImageView) view.findViewById(R.id.pause_image);
+    }
 
-        gestureListener = new MyGestureListener(itemView);
-        gestureDetector = new GestureDetector(context, gestureListener);
-        mMaxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+    public void setQualities(String currentQuality, String[] qualities){
+        mCurrentQulityLevel = currentQuality;
+        mQualities = qualities;
+        mCurrentQuality.setText(mCurrentQulityLevel);
+        mCurrentQuality.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     public void start() {
@@ -156,6 +144,14 @@ public class CustomMediaContoller implements IMediaController {
         }
     }
 
+    public void showTopPannel() {
+        mTopPannel.setVisibility(View.VISIBLE);
+    }
+
+    public void hideTopPannel() {
+        mTopPannel.setVisibility(View.GONE);
+    }
+
     private long duration;
 
     private void initAction() {
@@ -163,7 +159,7 @@ public class CustomMediaContoller implements IMediaController {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                String string = generateTime((long) (duration * progress * 1.0f / 100));
+                String string = Utils.generateTime((long) (duration * progress * 1.0f / 100));
                 time.setText(string);
             }
 
@@ -186,23 +182,6 @@ public class CustomMediaContoller implements IMediaController {
                 isDragging = false;
                 handler.sendEmptyMessageDelayed(MESSAGE_SHOW_PROGRESS, 1000);
                 show();
-            }
-        });
-
-        itemView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (gestureDetector.onTouchEvent(motionEvent))
-                    return true;
-
-                // 处理手势结束
-                switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
-                    case MotionEvent.ACTION_UP:
-                        endGesture();
-                        break;
-                }
-
-                return true;
             }
         });
 
@@ -277,6 +256,16 @@ public class CustomMediaContoller implements IMediaController {
             }
 
         });
+    }
+
+    public void setFullAction() {
+        full.setImageResource(R.mipmap.ic_fullscreen_exit_white_36dp);
+        showTopPannel();
+    }
+
+    public void setPortraitAction() {
+        full.setImageResource(R.mipmap.ic_fullscreen_white_36dp);
+        hideTopPannel();
     }
 
     public void setShowContoller(boolean isShowContoller) {
@@ -391,14 +380,6 @@ public class CustomMediaContoller implements IMediaController {
     public void showOnce(View view) {
     }
 
-    private String generateTime(long time) {
-        int totalSeconds = (int) (time / 1000);
-        int seconds = totalSeconds % 60;
-        int minutes = (totalSeconds / 60) % 60;
-        int hours = totalSeconds / 3600;
-        return hours > 0 ? String.format("%02d:%02d:%02d", hours, minutes, seconds) : String.format("%02d:%02d", minutes, seconds);
-    }
-
     public void setVisiable() {
         show();
     }
@@ -411,8 +392,8 @@ public class CustomMediaContoller implements IMediaController {
         long position = videoView.getCurrentPosition();
         long duration = videoView.getDuration();
         this.duration = duration;
-        if (!generateTime(duration).equals(allTime.getText().toString()))
-            allTime.setText(generateTime(duration));
+        if (!Utils.generateTime(duration).equals(allTime.getText().toString()))
+            allTime.setText(Utils.generateTime(duration));
         if (seekBar != null) {
             if (duration > 0) {
                 long pos = 100L * position / duration;
@@ -421,7 +402,7 @@ public class CustomMediaContoller implements IMediaController {
             int percent = videoView.getBufferPercentage();
             seekBar.setSecondaryProgress(percent);
         }
-        String string = generateTime(position);
+        String string = Utils.generateTime(position);
         time.setText(string);
         return position;
     }
@@ -432,123 +413,7 @@ public class CustomMediaContoller implements IMediaController {
         void pause(boolean pause);
     }
 
-    /**
-     * 手势结束
-     */
-    private void endGesture() {
-        mVolume = -1;
-        mBrightness = -1f;
-    }
-
     public void setPauseImageHide() {
         pauseImage.setVisibility(View.GONE);
-    }
-
-    private class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
-
-        private View item;
-
-        public MyGestureListener(View item) {
-            this.item = item;
-        }
-
-        @Override
-        public boolean onSingleTapUp(MotionEvent e) {
-            if (isShowing())
-                hide();
-            else
-                show();
-            return false;
-        }
-
-        @Override
-        public boolean onDoubleTap(MotionEvent e) {
-            return true;
-        }
-
-        /**
-         * 滑动
-         */
-        @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2,
-                                float distanceX, float distanceY) {
-            float mOldX = e1.getX(), mOldY = e1.getY();
-            int y = (int) e2.getRawY();
-
-            int windowWidth = item.getWidth();
-            int windowHeight = item.getHeight();
-
-            if (mOldX > windowWidth * 4.0 / 5)// 右边滑动
-                onVolumeSlide((mOldY - y) / windowHeight);
-            else if (mOldX < windowWidth / 5.0)// 左边滑动
-                onBrightnessSlide((mOldY - y) / windowHeight);
-
-            return super.onScroll(e1, e2, distanceX, distanceY);
-        }
-    }
-
-    /**
-     * 滑动改变声音大小
-     *
-     * @param percent
-     */
-    private void onVolumeSlide(float percent) {
-        Logger.d("OnVolumeSlide --> " + percent);
-        if (mVolume == -1) {
-            mVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-            if (mVolume < 0)
-                mVolume = 0;
-
-            // 显示
-            //mOperationBg.setImageResource(R.drawable.video_volumn_bg);
-            //mVolumeBrightnessLayout.setVisibility(View.VISIBLE);
-        }
-
-        int index = (int) (percent * mMaxVolume) + mVolume;
-        if (index > mMaxVolume)
-            index = mMaxVolume;
-        else if (index < 0)
-            index = 0;
-
-        // 变更声音
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, index, 0);
-
-        // 变更进度条
-        //ViewGroup.LayoutParams lp = mOperationPercent.getLayoutParams();
-        //lp.width = findViewById(R.id.operation_full).getLayoutParams().width
-        //        * index / mMaxVolume;
-        //mOperationPercent.setLayoutParams(lp);
-    }
-
-    /**
-     * 滑动改变亮度
-     *
-     * @param percent
-     */
-    private void onBrightnessSlide(float percent) {
-        Logger.d("OnBrightnessSlide --> " + percent);
-        if (mBrightness < 0) {
-            mBrightness = ((Activity) context).getWindow().getAttributes().screenBrightness;
-            if (mBrightness <= 0.00f)
-                mBrightness = 0.50f;
-            if (mBrightness < 0.01f)
-                mBrightness = 0.01f;
-
-            // 显示
-            //mOperationBg.setImageResource(R.drawable.video_brightness_bg);
-            //mVolumeBrightnessLayout.setVisibility(View.VISIBLE);
-        }
-        WindowManager.LayoutParams lpa = ((Activity) context).getWindow().getAttributes();
-        lpa.screenBrightness = mBrightness + percent;
-        if (lpa.screenBrightness > 1.0f)
-            lpa.screenBrightness = 1.0f;
-        else if (lpa.screenBrightness < 0.01f)
-            lpa.screenBrightness = 0.01f;
-        ((Activity) context).getWindow().setAttributes(lpa);
-
-        //ViewGroup.LayoutParams lp = mOperationPercent.getLayoutParams();
-        //lp.width = (int) (findViewById(R.id.operation_full).getLayoutParams().width * lpa
-        //        .screenBrightness);
-        //mOperationPercent.setLayoutParams(lp);
     }
 }
