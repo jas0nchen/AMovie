@@ -2,9 +2,11 @@ package cn.jas0n.amovie.api;
 
 import cn.jas0n.amovie.bean.Comment;
 import cn.jas0n.amovie.bean.ConstantCategory;
+import cn.jas0n.amovie.bean.Episode;
 import cn.jas0n.amovie.bean.Login;
 import cn.jas0n.amovie.bean.M3U8ById;
 import cn.jas0n.amovie.bean.RecBean;
+import cn.jas0n.amovie.bean.SeasonDetail;
 import cn.jas0n.amovie.bean.VideoDetail;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -49,4 +51,13 @@ public interface AMovieApi {
     @POST("user/mobileLogin")
     public Observable<Login> loginByMobile(@Field("mobile") String mobile, @Field("password")
                                            String password);
+
+    @FormUrlEncoded
+    @POST("season/detail")
+    Observable<SeasonDetail> getSeasonDetail(@Field("seasonId")  String seasonId);
+
+    @FormUrlEncoded
+    @POST("video/findM3u8ByEpisodeSid")
+    Observable<Episode> getEpisode(@Field("quality") String quality, @Field("seasonId") String
+            seasonId, @Field("episodeSid") String episodeSid);
 }
