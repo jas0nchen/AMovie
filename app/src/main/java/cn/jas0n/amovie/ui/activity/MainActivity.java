@@ -1,6 +1,7 @@
 package cn.jas0n.amovie.ui.activity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         View headerView = mNav.getHeaderView(0);
         mAvatar = (ImageView) headerView.findViewById(R.id.avatar);
         mUserName = (TextView) headerView.findViewById(R.id.username);

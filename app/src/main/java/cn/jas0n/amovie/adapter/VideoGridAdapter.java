@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -25,6 +26,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class VideoGridAdapter extends android.widget.BaseAdapter {
     private List<RecBean.HotVideoItem> mData;
     private Context mContext;
+    private RecAdapter.ClickVideo clickVideo;
 
     public VideoGridAdapter(List<RecBean.HotVideoItem> mData, Context mContext) {
         this.mData = mData;
@@ -33,21 +35,24 @@ public class VideoGridAdapter extends android.widget.BaseAdapter {
 
     @Override
     public int getCount() {
-        return mData.size() - 1;
+        if (mData.size() >= 4)
+            return 4;
+        else
+            return mData.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return mData.get(i + 1);
+        return mData.get(i);
     }
 
     @Override
     public long getItemId(int i) {
-        return mData.get(i + 1).getId();
+        return mData.get(i).getId();
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(final int i, View view, ViewGroup viewGroup) {
         ViewHolder holder = null;
         if (view == null) {
             view = LayoutInflater.from(mContext).inflate(R.layout.layout_video_item, viewGroup,
@@ -58,20 +63,30 @@ public class VideoGridAdapter extends android.widget.BaseAdapter {
         } else {
             holder = (ViewHolder) view.getTag();
         }
-        holder.mTitle.setText(mData.get(i + 1).getTitle());
-        Glide.with(mContext).load(mData.get(i + 1).getUrl()).centerCrop().crossFade().into
+        holder.mTitle.setText(mData.get(i).getTitle());
+        Glide.with(mContext).load(mData.get(i).getUrl()).centerCrop().crossFade().into
                 (holder.mCover);
         if (mData.get(i + 1).getAuthor() != null) {
-            Glide.with(mContext).load(mData.get(i + 1).getAuthor().getHeadImgUrl()).centerCrop()
+            Glide.with(mContext).load(mData.get(i).getAuthor().getHeadImgUrl()).centerCrop()
                     .crossFade().into(holder.mAvatar);
-            holder.mName.setText(mData.get(i + 1).getAuthor().getNickName());
+            holder.mName.setText(mData.get(i).getAuthor().getNickName());
         }
-        holder.mViewCount.setText(String.valueOf(mData.get(i + 1).getViewCount()));
-        holder.mCommentCount.setText(String.valueOf(mData.get(i + 1).getDanmuCount()));
+        holder.mViewCount.setText(String.valueOf(mData.get(i).getViewCount()));
+        holder.mCommentCount.setText(String.valueOf(mData.get(i).getDanmuCount()));
+
+        final ViewHolder finalHolder = holder;
+        holder.mLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clickVideo.onVideoClicked(finalHolder.mCover, mData.get(i));
+            }
+        });
         return view;
     }
 
     static class ViewHolder {
+        @BindView(R.id.layout)
+        RelativeLayout mLayout;
         @BindView(R.id.cover)
         ImageView mCover;
         @BindView(R.id.title)
@@ -84,5 +99,9 @@ public class VideoGridAdapter extends android.widget.BaseAdapter {
         TextView mViewCount;
         @BindView(R.id.comment_count)
         TextView mCommentCount;
+    }
+
+    public void setClickVideo(RecAdapter.ClickVideo clickVideo) {
+        this.clickVideo = clickVideo;
     }
 }

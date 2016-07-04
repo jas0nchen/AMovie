@@ -1,10 +1,16 @@
 package cn.jas0n.amovie.ui.fragment;
 
 import android.app.ActivityOptions;
+import android.content.res.Configuration;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -15,10 +21,13 @@ import java.util.List;
 
 import cn.jas0n.amovie.R;
 import cn.jas0n.amovie.adapter.BaseAdapter;
+import cn.jas0n.amovie.adapter.DramaGridAdapter;
 import cn.jas0n.amovie.adapter.RecAdapter;
+import cn.jas0n.amovie.adapter.VideoGridAdapter;
 import cn.jas0n.amovie.api.AMovieService;
 import cn.jas0n.amovie.bean.RecBean;
 import cn.jas0n.amovie.ui.activity.VideoDetailActivity;
+import cn.jas0n.amovie.ui.view.FixedGridView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -30,10 +39,14 @@ import rx.schedulers.Schedulers;
  */
 public class RecFragment extends BaseFragment {
 
+    private boolean isPaused;
+    private boolean isHeaderLoaded;
     private RecBean.Data mData;
     private List<RecBean.HotVideoItem> mHotList = new ArrayList<>();
     private List<RecBean.RecDramaItem> mRecList = new ArrayList<>();
     private List<RecBean.Video> mVideoList = new ArrayList<>();
+
+    private View mHeader;
 
     public static RecFragment newInstanse(String title) {
         RecFragment fragment = new RecFragment();
@@ -75,10 +88,33 @@ public class RecFragment extends BaseFragment {
     }
 
     private void setupViews() {
-        mAdapter = new RecAdapter(mHotList, mRecList, mVideoList, getContext());
+        mAdapter = new RecAdapter(mVideoList, getContext());
         ((RecAdapter) mAdapter).setClickVideo(getClickVideo());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLoadingMoreEnabled(false);
+        mRecyclerView.setHasFixedSize(true);
+
+        if(!isHeaderLoaded) {
+            mHeader = LayoutInflater.from(getContext()).inflate(R.layout.layout_hot_header,
+                    mContent, false);
+            mRecyclerView.addHeaderView(mHeader);
+            isHeaderLoaded = true;
+        }
+        fillHeader();
+    }
+
+    private void fillHeader() {
+        VideoGridAdapter hotAdapter = new VideoGridAdapter(mHotList, getContext());
+        DramaGridAdapter dramaAdapter = new DramaGridAdapter(mRecList, getContext());
+        TextView hotCategory = (TextView) mHeader.findViewById(R.id.category);
+        FixedGridView hotGrid = (FixedGridView) mHeader.findViewById(R.id.hot_grid);
+        TextView dramaCategory = (TextView) mHeader.findViewById(R.id.drama_category);
+        FixedGridView dramaGrid = (FixedGridView) mHeader.findViewById(R.id.drama_grid);
+        hotCategory.setText("热门");
+        dramaCategory.setText("英美剧");
+        hotGrid.setAdapter(hotAdapter);
+        dramaGrid.setAdapter(dramaAdapter);
+        hotAdapter.setClickVideo(getClickVideo());
     }
 
     @Override
@@ -100,5 +136,11 @@ public class RecFragment extends BaseFragment {
                 }
             }
         };
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
     }
 }

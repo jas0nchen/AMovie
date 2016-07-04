@@ -12,13 +12,7 @@
             android:id="@+id/cover"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/divider"
             android:transitionName="transitionCover"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/video_cover"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,6 +20,7 @@
             android:layout_alignParentBottom="true"
             android:gravity="right"
             android:orientation="horizontal"
+            android:background="@drawable/black_bg"
             android:padding="8dp">
 
             <TextView
@@ -64,8 +59,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
-            android:layout_marginRight="5dp"
-            android:src="@color/divider"/>
+            android:layout_marginRight="5dp"/>
 
         <TextView
             android:id="@+id/title"

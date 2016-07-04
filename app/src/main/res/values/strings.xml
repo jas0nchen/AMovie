@@ -62,7 +62,7 @@
     <string name="VideoView_ar_16_9_fit_parent">16:9 / Fit parent</string>
     <string name="VideoView_ar_4_3_fit_parent">4:3 / Fit parent</string>
     <string name="VideoView_error_text_invalid_progressive_playback">Invalid progressive playback</string>
-    <string name="VideoView_error_text_unknown">Unknown error happens, please try again.</string>
+    <string name="VideoView_error_text_unknown">Unknown error happens, please try it later.</string>
     <string name="VideoView_error_button">OK</string>
     <string name="VideoView_render_none">Render: None</string>
     <string name="VideoView_render_surface_view">Render: SurfaceView</string>

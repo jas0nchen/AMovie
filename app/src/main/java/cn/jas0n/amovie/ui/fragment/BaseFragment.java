@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -27,6 +28,8 @@ import cn.jas0n.amovie.adapter.BaseAdapter;
 public class BaseFragment extends LazyFragment {
 
     protected View mView;
+    @BindView(R.id.content)
+    RelativeLayout mContent;
     @BindView(R.id.recycler_view)
     XRecyclerView mRecyclerView;
     @BindView(R.id.loading_view)
