@@ -45,7 +45,7 @@ public class DramaGridAdapter extends android.widget.BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(final int i, View view, ViewGroup viewGroup) {
         ViewHolder holder = null;
         if (view == null) {
             view = LayoutInflater.from(mContext).inflate(R.layout.layout_drama_item, viewGroup, false);
@@ -60,15 +60,34 @@ public class DramaGridAdapter extends android.widget.BaseAdapter {
                 .getUpInfo()));
         Glide.with(mContext).load(mData.get(i).getVerticalUrl()).centerCrop().crossFade().into
                 (holder.mCover);
+        final ViewHolder finalHolder = holder;
+        holder.mLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clickSeason.onClickSeason(finalHolder.mCover, mData.get(i));
+            }
+        });
         return view;
     }
 
     static class ViewHolder {
+        @BindView(R.id.layout)
+        RelativeLayout mLayout;
         @BindView(R.id.cover)
         ImageView mCover;
         @BindView(R.id.name)
         TextView mName;
         @BindView(R.id.update)
         TextView mUpdate;
+    }
+
+    private ClickSeason clickSeason;
+
+    public interface ClickSeason{
+        void onClickSeason(ImageView imageView, RecBean.RecDramaItem dramaItem);
+    }
+
+    public void setClickSeason(ClickSeason clickSeason){
+        this.clickSeason = clickSeason;
     }
 }

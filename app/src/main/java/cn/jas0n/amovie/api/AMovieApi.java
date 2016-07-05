@@ -24,23 +24,23 @@ import rx.Observable;
 public interface AMovieApi {
 
     @GET("constant/category")
-    public Observable<ConstantCategory> getConstantCategory();
+    Observable<ConstantCategory> getConstantCategory();
 
     @GET("video/index")
-    public Observable<RecBean> getRecVideos(@Header("clientVersion") String clientVersion);
+    Observable<RecBean> getRecVideos(@Header("clientVersion") String clientVersion);
 
     @FormUrlEncoded
     @POST("video/findM3u8ByVideoId")
-    public Observable<M3U8ById> getM3U8ByVideoId(@Field("videoId") String videoId, @Field("quality") String quality);
+    Observable<M3U8ById> getM3U8ByVideoId(@Field("videoId") String videoId, @Field("quality") String quality);
 
     @FormUrlEncoded
     @POST("video/detail")
-    public Observable<VideoDetail> getVideoDetail(@Field("videoId") String videoId, @Field("token")
+    Observable<VideoDetail> getVideoDetail(@Field("videoId") String videoId, @Field("token")
     String token);
 
     @FormUrlEncoded
     @POST("comment/list")
-    public Observable<Comment> getCommentList(@Query("page") int page, @Query("rows") int
+    Observable<Comment> getCommentList(@Query("page") int page, @Query("rows") int
             rows, @Field("videoId") String videoId, @Field("infoId") String infoId,
                                               @Field("activeId") String activeId,
                                               @Field("reportId") String reportId,
@@ -49,7 +49,7 @@ public interface AMovieApi {
 
     @FormUrlEncoded
     @POST("user/mobileLogin")
-    public Observable<Login> loginByMobile(@Field("mobile") String mobile, @Field("password")
+    Observable<Login> loginByMobile(@Field("mobile") String mobile, @Field("password")
                                            String password);
 
     @FormUrlEncoded

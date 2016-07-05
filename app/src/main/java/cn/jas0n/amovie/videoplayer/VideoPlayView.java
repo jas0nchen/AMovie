@@ -292,10 +292,11 @@ public class VideoPlayView extends RelativeLayout implements MediaPlayer.OnInfoL
 
         @Override
         public boolean onDoubleTap(MotionEvent e) {
-            if (mVideoView.isPlaying())
-                mVideoView.pause();
-            else
-                mVideoView.start();
+            if (mVideoView.isPlaying()) {
+                mediaController.pause();
+            }else {
+                mediaController.start();
+            }
             return true;
         }
 

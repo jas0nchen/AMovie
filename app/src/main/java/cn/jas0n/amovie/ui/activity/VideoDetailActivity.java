@@ -144,7 +144,7 @@ public class VideoDetailActivity extends SwipeBackActivity {
 
     private void setupAdapter() {
         mFragments.add(DescFragment.newInstance(mDetail));
-        mFragments.add(CommentListFragment.newInstance(mVideo));
+        mFragments.add(CommentListFragment.newInstance(String.valueOf(mVideo.getId()), CommentListFragment.VIDEO));
         mAdapter = new VideoDetailPagerAdapter(getSupportFragmentManager(), new String[]
                 {getString(R.string.description), String.format(getString(R.string.comments),
                         mDetail.getData().getUserVideoView().getCommentCount())}, mFragments);

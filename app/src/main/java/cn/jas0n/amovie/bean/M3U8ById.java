@@ -30,7 +30,7 @@ public class M3U8ById implements Serializable {
     private String msg;
     private Data data;
 
-    public class Data{
+    public class Data implements Serializable{
         private M3U8 m3u8;
 
         public M3U8 getM3u8() {
@@ -49,7 +49,7 @@ public class M3U8ById implements Serializable {
         }
     }
 
-    public class M3U8{
+    public class M3U8 implements Serializable{
         private String currentQuality;
         private String url;
         private String[] qualityArr;

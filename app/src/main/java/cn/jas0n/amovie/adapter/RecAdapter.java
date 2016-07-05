@@ -90,7 +90,6 @@ public class RecAdapter extends BaseAdapter implements View.OnClickListener {
         final RecHolder recHolder = (RecHolder) holder;
         final RecBean.HotVideoItem videoItem = videos.get(position);
         if(categoryMap.keySet().contains(position)){
-            Logger.d("Category -->" + categoryMap.get(position));
             recHolder.mCategoryLayout.setVisibility(View.VISIBLE);
             recHolder.mTitle.setText(categoryMap.get(position));
         }else{

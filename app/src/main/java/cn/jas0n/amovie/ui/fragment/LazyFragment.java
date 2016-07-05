@@ -47,7 +47,7 @@ public abstract class LazyFragment extends Fragment {
     /**
      * 是否第一次加载
      */
-    private boolean isFirstLoad = true;
+    protected boolean isFirstLoad = true;
 
 
     @Override

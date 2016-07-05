@@ -26,6 +26,7 @@ import cn.jas0n.amovie.adapter.RecAdapter;
 import cn.jas0n.amovie.adapter.VideoGridAdapter;
 import cn.jas0n.amovie.api.AMovieService;
 import cn.jas0n.amovie.bean.RecBean;
+import cn.jas0n.amovie.ui.activity.SeasonDetailActivity;
 import cn.jas0n.amovie.ui.activity.VideoDetailActivity;
 import cn.jas0n.amovie.ui.view.FixedGridView;
 import rx.android.schedulers.AndroidSchedulers;
@@ -115,6 +116,7 @@ public class RecFragment extends BaseFragment {
         hotGrid.setAdapter(hotAdapter);
         dramaGrid.setAdapter(dramaAdapter);
         hotAdapter.setClickVideo(getClickVideo());
+        dramaAdapter.setClickSeason(getClickSeason());
     }
 
     @Override
@@ -133,6 +135,21 @@ public class RecFragment extends BaseFragment {
                                     "transitionCover").toBundle());
                 }else {
                     startActivity(VideoDetailActivity.newIntent(getContext(), video));
+                }
+            }
+        };
+    }
+
+    private DramaGridAdapter.ClickSeason getClickSeason(){
+        return new DramaGridAdapter.ClickSeason() {
+            @Override
+            public void onClickSeason(ImageView imageView, RecBean.RecDramaItem dramaItem) {
+                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP){
+                    startActivity(SeasonDetailActivity.newIntent(getContext(), dramaItem),
+                            ActivityOptions.makeSceneTransitionAnimation(getActivity(), imageView,
+                                    "transitionCover").toBundle());
+                }else {
+                    startActivity(SeasonDetailActivity.newIntent(getContext(), dramaItem));
                 }
             }
         };

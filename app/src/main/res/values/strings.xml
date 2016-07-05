@@ -36,7 +36,10 @@
     <string name="empty_intro">A lazy man, nothing here!</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="description">Description</string>
+    <string name="episodes">Episodes</string>
+    <string name="comment">Comment</string>
     <string name="comments">Comments(%d)</string>
+    <string name="score">Score: %.1f</string>
     <string name="play_count">Play: %d</string>
     <string name="danmu_count">Danmu: %d</string>
     <string name="created_at">Created at: %s</string>
@@ -94,6 +97,7 @@
     <string name="TrackType_timedtext">Timed text</string>
     <string name="TrackType_metadata">Meta data</string>
     <string name="TrackType_unknown">Unknown</string>
+    <string name="season_num">Season %d</string>
 
     <string name="update_to">Update to E%d</string>
     <string name="large_text">
@@ -189,4 +193,6 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string name="title_activity_episode_play">EpisodePlayActivity</string>
 </resources>
