@@ -21,6 +21,7 @@ import cn.jas0n.amovie.api.AMovieApi;
 import cn.jas0n.amovie.api.AMovieService;
 import cn.jas0n.amovie.bean.Login;
 import cn.jas0n.amovie.ui.swipebacklayout.SwipeBackActivity;
+import cn.jas0n.amovie.util.MD5Utils;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -62,13 +63,14 @@ public class LoginActivity extends SwipeBackActivity implements View.OnClickList
 
     private void doLogin() {
         AMovieService.builder().getApiService().loginByMobile(mName.getText().toString().trim(),
-                mPassword.getText().toString().trim())
+                MD5Utils.MD5(mPassword.getText().toString().trim()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Login>() {
                     @Override
                     public void call(Login login) {
                         Logger.d(login.toString());
+
                     }
                 }, new Action1<Throwable>() {
                     @Override
