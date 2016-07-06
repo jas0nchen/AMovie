@@ -7,6 +7,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -20,8 +22,12 @@ import cn.jas0n.amovie.R;
 import cn.jas0n.amovie.api.AMovieApi;
 import cn.jas0n.amovie.api.AMovieService;
 import cn.jas0n.amovie.bean.Login;
+import cn.jas0n.amovie.realm.Account;
 import cn.jas0n.amovie.ui.swipebacklayout.SwipeBackActivity;
 import cn.jas0n.amovie.util.MD5Utils;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -39,6 +45,8 @@ public class LoginActivity extends SwipeBackActivity implements View.OnClickList
     TextInputEditText mPassword;
     @BindView(R.id.login)
     TextView mLogin;
+    @BindView(R.id.api_provider)
+    TextView mApiProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +55,8 @@ public class LoginActivity extends SwipeBackActivity implements View.OnClickList
         ButterKnife.bind(this);
 
         mLogin.setOnClickListener(this);
+        mApiProvider.setAutoLinkMask(Linkify.ALL);
+        mApiProvider.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     @Override
@@ -56,7 +66,7 @@ public class LoginActivity extends SwipeBackActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        if(view == mLogin){
+        if (view == mLogin) {
             doLogin();
         }
     }
@@ -69,8 +79,7 @@ public class LoginActivity extends SwipeBackActivity implements View.OnClickList
                 .subscribe(new Action1<Login>() {
                     @Override
                     public void call(Login login) {
-                        Logger.d(login.toString());
-
+                        saveAccountToRealm(login);
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -78,5 +87,41 @@ public class LoginActivity extends SwipeBackActivity implements View.OnClickList
                         Logger.e(throwable.getMessage());
                     }
                 });
+    }
+
+    private void saveAccountToRealm(Login login) {
+        Login.User user = login.getData().getUser();
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        realm.delete(Account.class);
+        realm.commitTransaction();
+        realm.beginTransaction();
+        Account account = realm.createObject(Account.class);
+        account.setSilverCount(user.getSilverCount());
+        account.setHeadImgUrl(user.getHeadImgUrl());
+        account.setConfirmed(user.isConfirmed());
+        account.setNickName(user.getNickName());
+        account.setScore(user.getScore());
+        account.setReplyCount(user.getReplyCount());
+        account.setMobile(user.getMobile());
+        account.setSex(user.getSex());
+        account.setBirthday(user.getBirthday());
+        account.setCity(user.getCity());
+        account.setFansCount(user.getFansCount());
+        account.setFocusUserCount(user.getFocusUserCount());
+        account.setRoleInfo(user.getRoleInfo());
+        account.setConfirmInfo(user.getConfirmInfo());
+        account.setArticleCount(user.getArticleCount());
+        account.setLoginFrom(user.getLoginFrom());
+        account.setFavoriteCount(user.getFavoriteCount());
+        account.setSeriesCount(user.getSeriesCount());
+        account.setActorCount(user.getActorCount());
+        account.setLevelStr(user.getLevelStr());
+        account.setLevel(user.getLevel());
+        account.setWmSign(user.getWmSign());
+        account.setSign(user.getSign());
+        account.setToken(user.getToken());
+        account.setId(user.getId());
+        realm.commitTransaction();
     }
 }

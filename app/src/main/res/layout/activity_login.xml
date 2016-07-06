@@ -55,4 +55,14 @@
         android:text="@string/login"
         android:textColor="@color/white"
         android:textSize="14sp"/>
+
+    <TextView
+        android:id="@+id/api_provider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="80dp"
+        android:text="@string/api_provider"
+        android:textColor="@color/white"/>
 </RelativeLayout>

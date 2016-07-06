@@ -14,6 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jas0n.amovie.R;
 import cn.jas0n.amovie.bean.RecBean;
+import cn.jas0n.amovie.interfaces.ClickSeason;
 
 /**
  * Author: Jas0n
@@ -82,10 +83,6 @@ public class DramaGridAdapter extends android.widget.BaseAdapter {
     }
 
     private ClickSeason clickSeason;
-
-    public interface ClickSeason{
-        void onClickSeason(ImageView imageView, RecBean.RecDramaItem dramaItem);
-    }
 
     public void setClickSeason(ClickSeason clickSeason){
         this.clickSeason = clickSeason;

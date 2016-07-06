@@ -16,6 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jas0n.amovie.R;
 import cn.jas0n.amovie.bean.RecBean;
+import cn.jas0n.amovie.interfaces.ClickVideo;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -26,7 +27,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class VideoGridAdapter extends android.widget.BaseAdapter {
     private List<RecBean.HotVideoItem> mData;
     private Context mContext;
-    private RecAdapter.ClickVideo clickVideo;
+    private ClickVideo clickVideo;
 
     public VideoGridAdapter(List<RecBean.HotVideoItem> mData, Context mContext) {
         this.mData = mData;
@@ -101,7 +102,7 @@ public class VideoGridAdapter extends android.widget.BaseAdapter {
         TextView mCommentCount;
     }
 
-    public void setClickVideo(RecAdapter.ClickVideo clickVideo) {
+    public void setClickVideo(ClickVideo clickVideo) {
         this.clickVideo = clickVideo;
     }
 }

@@ -8,7 +8,11 @@ import android.support.annotation.ColorRes;
 import com.bilibili.magicasakura.utils.ThemeUtils;
 import com.orhanobut.logger.Logger;
 
+import cn.jas0n.amovie.realm.Account;
 import cn.jas0n.amovie.util.ThemeHelper;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 
 
 /**
@@ -18,12 +22,47 @@ import cn.jas0n.amovie.util.ThemeHelper;
  */
 public class AMovie extends Application implements ThemeUtils.switchColor {
 
+    private static AMovie mInstance;
+    private Realm mRealm;
+
     @Override
     public void onCreate() {
         super.onCreate();
 
+        if (mInstance == null)
+            mInstance = this;
         Logger.init();
         ThemeUtils.setSwitchColor(this);
+        RealmConfiguration configuration = new RealmConfiguration.Builder
+                (this).name("amovie.realm").schemaVersion(1).build();
+        Realm.setDefaultConfiguration(configuration);
+        mRealm = Realm.getDefaultInstance();
+    }
+
+    public static AMovie getInstance() {
+        return mInstance;
+    }
+
+    public boolean isLogin() {
+        RealmResults<Account> accounts = mRealm.where(Account.class).findAll();
+        if (accounts.size() > 0)
+            return true;
+        else
+            return false;
+    }
+
+    public Account getAccount() {
+        Account account = null;
+        if (isLogin())
+            account = mRealm.where(Account.class).findFirst();
+        return account;
+    }
+
+    public String getToken() {
+        if (getAccount() != null)
+            return getAccount().getToken();
+        else
+            return "";
     }
 
     @Override

@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 24
@@ -17,6 +18,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
     }
 }
 
@@ -45,4 +49,8 @@ dependencies {
     compile 'tv.danmaku.ijk.media:ijkplayer-exo:0.5.1'
     compile 'com.flyco.tablayout:FlycoTabLayout_Lib:2.0.6@aar'
     compile 'com.jude:easyrecyclerview:4.0.2'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }

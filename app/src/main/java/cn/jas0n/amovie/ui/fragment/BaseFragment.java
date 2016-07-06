@@ -2,6 +2,8 @@ package cn.jas0n.amovie.ui.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,8 @@ import android.widget.TextView;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jcodecraeer.xrecyclerview.progressindicator.AVLoadingIndicatorView;
+import com.jude.easyrecyclerview.EasyRecyclerView;
+import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 
 import java.util.List;
 
@@ -19,6 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jas0n.amovie.R;
 import cn.jas0n.amovie.adapter.BaseAdapter;
+import cn.jas0n.amovie.adapter.RecAdapter;
 
 /**
  * Author: Jas0n
@@ -31,13 +36,9 @@ public class BaseFragment extends LazyFragment {
     @BindView(R.id.content)
     RelativeLayout mContent;
     @BindView(R.id.recycler_view)
-    XRecyclerView mRecyclerView;
-    @BindView(R.id.loading_view)
-    AVLoadingIndicatorView mLoadingView;
-    @BindView(R.id.empty_view)
-    TextView mEmptyView;
+    EasyRecyclerView mRecyclerView;
 
-    protected BaseAdapter mAdapter;
+    protected RecyclerArrayAdapter mAdapter;
     private Handler mHandler;
 
     @Override
@@ -52,21 +53,15 @@ public class BaseFragment extends LazyFragment {
     }
 
     private void setupRecyclerView() {
-        mRecyclerView.setRefreshProgressStyle(ProgressStyle.Pacman);
-        mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
-        mRecyclerView.setArrowImageView(R.mipmap.ic_down_arrow);
+        mRecyclerView.setRefreshingColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setEmptyView(mEmptyView);
-
-        mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+        mRecyclerView.setErrorView(R.layout.view_error_large);
+        mAdapter = new RecAdapter(getContext());
+        mRecyclerView.setAdapterWithProgress(mAdapter);
+        mRecyclerView.setRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 doOnRefresh();
-            }
-
-            @Override
-            public void onLoadMore() {
-                doOnLoad();
             }
         });
     }
@@ -82,14 +77,6 @@ public class BaseFragment extends LazyFragment {
     protected void doOnRefresh(){}
 
     protected void doOnLoad(){}
-
-    protected void hideLoadingView() {
-        mLoadingView.setVisibility(View.GONE);
-    }
-
-    private void showLoadingView() {
-        mLoadingView.setVisibility(View.VISIBLE);
-    }
 
     public void setHandler(Handler handler){
         this.mHandler = handler;

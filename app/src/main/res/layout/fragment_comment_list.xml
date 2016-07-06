@@ -10,26 +10,13 @@
         android:layout_height="match_parent"
         tools:context=".ui.activity.VideoDetailActivity">
 
-        <com.jcodecraeer.xrecyclerview.XRecyclerView
+        <com.jude.easyrecyclerview.EasyRecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            app:layout_progress="@layout/view_progress"
+            app:layout_empty="@layout/view_empty"
+            app:scrollbarStyle="insideOverlay"/>
 
-        <com.jcodecraeer.xrecyclerview.progressindicator.AVLoadingIndicatorView
-            android:id="@+id/loading_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="visible"
-            app:indicator="BallSpinFadeLoader"
-            app:indicator_color="@color/colorAccent"/>
-
-        <TextView
-            android:id="@+id/empty_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/empty"
-            android:visibility="gone"/>
     </RelativeLayout>
 </LinearLayout>

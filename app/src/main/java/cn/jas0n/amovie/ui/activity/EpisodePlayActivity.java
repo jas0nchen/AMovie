@@ -95,6 +95,31 @@ public class EpisodePlayActivity extends AppCompatActivity {
         delayedHide(100);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mVideoPlayView != null && mVideoPlayView.isPlay()) {
+            mVideoPlayView.pause();
+            mVideoPlayView.setMediaControllerStop();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mVideoPlayView != null){
+            mVideoPlayView.setContorllerVisiable();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mVideoPlayView != null) {
+            mVideoPlayView.release();
+        }
+    }
+
     private void toggle() {
         if (mVisible) {
             hide();

@@ -12,6 +12,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.jude.easyrecyclerview.adapter.BaseViewHolder;
+import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
@@ -24,6 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jas0n.amovie.R;
 import cn.jas0n.amovie.bean.RecBean;
+import cn.jas0n.amovie.interfaces.ClickVideo;
 import cn.jas0n.amovie.ui.view.CustomVideoItemLayout;
 import cn.jas0n.amovie.ui.view.FixedGridView;
 
@@ -32,100 +36,69 @@ import cn.jas0n.amovie.ui.view.FixedGridView;
  * Date: 2016/6/24
  * E-mail:chendong90x@gmail.com
  */
-public class RecAdapter extends BaseAdapter implements View.OnClickListener {
-    private static final int VIDEO_ITEM = 1;
+public class RecAdapter extends RecyclerArrayAdapter<RecBean.HotVideoItem> {
 
-    private ClickVideo clickVideo;
-    private Map<Integer,String> categoryMap = new HashMap<>();
+    private Map<Integer, String> mCateMap = new HashMap<>();
+    private ClickVideo mClickVideo;
 
-    private List<RecBean.HotVideoItem> videos = new ArrayList<>();
-
-    public RecAdapter(List data, Context context) {
-        super(data, context);
-        init();
-    }
-
-    private void init() {
-        int count = 0;
-        this.categoryMap.clear();
-        this.videos.clear();
-        for(int i = 0; i < mData.size(); i++){
-            this.videos.addAll(((RecBean.Video) mData.get(i)).getVideos());
-            categoryMap.put(count, ((RecBean.Video) mData.get(i)).getTitle());
-            count += ((RecBean.Video) mData.get(i)).getVideos().size();
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-
-    }
-
-    public interface ClickVideo {
-        void onVideoClicked(ImageView image, RecBean.HotVideoItem video);
+    public RecAdapter(Context context) {
+        super(context);
     }
 
     public void setClickVideo(ClickVideo clickVideo) {
-        this.clickVideo = clickVideo;
+        this.mClickVideo = clickVideo;
+    }
+
+    public void setCateMap(Map<Integer, String> cateMap) {
+        this.mCateMap = cateMap;
     }
 
     @Override
-    public int getItemCount() {
-        return videos.size();
+    public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
+        return new RecHolder(parent, this);
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        return VIDEO_ITEM;
-    }
+    public class RecHolder extends BaseViewHolder<RecBean.HotVideoItem> {
 
-    @Override
-    public RecyclerView.ViewHolder createHolder(ViewGroup parent, int viewType) {
-        return new RecHolder(LayoutInflater.from(mContext).inflate(R.layout.layout_rec_item,
-                parent, false));
-    }
-
-    @Override
-    public void bindHolder(RecyclerView.ViewHolder holder, int position) {
-        final RecHolder recHolder = (RecHolder) holder;
-        final RecBean.HotVideoItem videoItem = videos.get(position);
-        if(categoryMap.keySet().contains(position)){
-            recHolder.mCategoryLayout.setVisibility(View.VISIBLE);
-            recHolder.mTitle.setText(categoryMap.get(position));
-        }else{
-            recHolder.mCategoryLayout.setVisibility(View.GONE);
-        }
-
-        recHolder.mItem.setCover(videoItem.getUrl());
-        recHolder.mItem.setTitle(videoItem.getTitle());
-        recHolder.mItem.setViewCount(videoItem.getViewCount());
-        recHolder.mItem.setCommentCount(videoItem.getDanmuCount());
-        if (videoItem.getAuthor() != null) {
-            recHolder.mItem.setUserName(videoItem.getAuthor().getNickName());
-            recHolder.mItem.setAvatar(videoItem.getAuthor().getHeadImgUrl());
-        }
-        recHolder.mItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                clickVideo.onVideoClicked(recHolder.mItem.getCover(), videoItem);
-            }
-        });
-    }
-
-    class RecHolder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.category_layout)
+        RecyclerArrayAdapter mAdapter;
         RelativeLayout mCategoryLayout;
-        @BindView(R.id.category)
         TextView mTitle;
-        @BindView(R.id.more)
         TextView mMore;
-        @BindView(R.id.item)
         CustomVideoItemLayout mItem;
 
-        public RecHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        public RecHolder(ViewGroup parent, RecyclerArrayAdapter arrayAdapter) {
+            super(parent, R.layout.layout_rec_item);
+
+            this.mAdapter = arrayAdapter;
+            mCategoryLayout = $(R.id.category_layout);
+            mTitle = $(R.id.category);
+            mMore = $(R.id.more);
+            mItem = $(R.id.item);
+        }
+
+        @Override
+        public void setData(final RecBean.HotVideoItem item) {
+            if (mCateMap.containsKey(mAdapter.getPosition(item))) {
+                mCategoryLayout.setVisibility(View.VISIBLE);
+                mTitle.setText(mCateMap.get(mAdapter.getPosition(item)));
+            } else {
+                mCategoryLayout.setVisibility(View.GONE);
+            }
+            mItem.setCover(item.getUrl());
+            mItem.setTitle(item.getTitle());
+            mItem.setViewCount(item.getViewCount());
+            mItem.setCommentCount(item.getDanmuCount());
+            if (item.getAuthor() != null) {
+                mItem.setUserName(item.getAuthor().getNickName());
+                mItem.setAvatar(item.getAuthor().getHeadImgUrl());
+            }
+
+            mItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mClickVideo.onVideoClicked(mItem.getCover(), item);
+                }
+            });
         }
     }
 }

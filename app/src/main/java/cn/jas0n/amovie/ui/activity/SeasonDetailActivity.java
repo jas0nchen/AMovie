@@ -216,8 +216,6 @@ public class SeasonDetailActivity extends SwipeBackActivity implements OnTabSele
                                 .getRecommend().get(position).getHorizontalUrl()).centerCrop().crossFade().into(mDetailImage);
 
                         mDetail = seasonDetail;
-                        //fillData();
-                        //setupAdapter();
                         mSeasonDescFragment.setData(mDetail);
                         mCommentListFragment.setData(mDetail.getData().getSeason().getSid(), CommentListFragment.SEASON);
                         mProgressBar.setVisibility(View.GONE);

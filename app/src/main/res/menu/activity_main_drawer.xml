@@ -15,7 +15,7 @@
             android:icon="@mipmap/ic_star_grey600_36dp"
             android:title="@string/collection"/>
         <item
-            android:id="@+id/download"
+            android:id="@+id/nav_download"
             android:icon="@mipmap/ic_download_grey600_36dp"
             android:title="@string/download"/>
     </group>

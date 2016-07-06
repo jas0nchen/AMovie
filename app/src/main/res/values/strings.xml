@@ -50,6 +50,11 @@
     <string name="email_phone">Email/Phone</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
+    <string name="error_happens">Something wrong with network, please check out and try
+        again.</string>
+    <string name="api_provider">All Api provided by http://api.rrmj.tv/</string>
+    <string name="no_more">(*￣ω￣) Nothing more!</string>
+    <string name="loading_more">Loading more...</string>
 
     <!-- ijkPlayer  -->
     <string name="N_A">N/A</string>
