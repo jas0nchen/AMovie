@@ -2,6 +2,7 @@ package cn.jas0n.amovie.api;
 
 import cn.jas0n.amovie.bean.Comment;
 import cn.jas0n.amovie.bean.ConstantCategory;
+import cn.jas0n.amovie.bean.DramaBean;
 import cn.jas0n.amovie.bean.Episode;
 import cn.jas0n.amovie.bean.Login;
 import cn.jas0n.amovie.bean.M3U8ById;
@@ -30,6 +31,9 @@ public interface AMovieApi {
 
     @GET("video/index")
     Observable<RecBean> getRecVideos(@Header("clientVersion") String clientVersion);
+
+    @GET("season/index")
+    Observable<DramaBean> getSeasonIndex(@Header("clientVersion") String clientVersion);
 
     @FormUrlEncoded
     @POST("video/findM3u8ByVideoId")

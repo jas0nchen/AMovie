@@ -95,7 +95,9 @@ public class HomeFragment extends LazyFragment {
                 .music),
                 getString(R.string.tech), getString(R.string.livelihood), getString(R.string
                 .sport)};
-        for (int i = 0; i < mTitle.length; i++) {
+        mFragments.add(RecFragment.newInstanse(mTitle[0]));
+        mFragments.add(new DramaFragment());
+        for (int i = 2; i < mTitle.length; i++) {
             mFragments.add(RecFragment.newInstanse(mTitle[i]));
         }
         mAdapter = new HomePagerAdapter(getChildFragmentManager(), mTitle, mFragments);
