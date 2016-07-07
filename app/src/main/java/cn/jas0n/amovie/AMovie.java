@@ -7,6 +7,7 @@ import android.support.annotation.ColorRes;
 
 import com.bilibili.magicasakura.utils.ThemeUtils;
 import com.orhanobut.logger.Logger;
+import com.squareup.leakcanary.LeakCanary;
 
 import cn.jas0n.amovie.realm.Account;
 import cn.jas0n.amovie.util.ThemeHelper;
@@ -31,6 +32,8 @@ public class AMovie extends Application implements ThemeUtils.switchColor {
 
         if (mInstance == null)
             mInstance = this;
+
+        LeakCanary.install(this);
         Logger.init();
         ThemeUtils.setSwitchColor(this);
         RealmConfiguration configuration = new RealmConfiguration.Builder
