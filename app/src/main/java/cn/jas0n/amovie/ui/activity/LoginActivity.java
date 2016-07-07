@@ -1,8 +1,13 @@
 package cn.jas0n.amovie.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.content.res.ColorStateList;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +16,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
@@ -25,6 +31,7 @@ import cn.jas0n.amovie.bean.Login;
 import cn.jas0n.amovie.realm.Account;
 import cn.jas0n.amovie.ui.swipebacklayout.SwipeBackActivity;
 import cn.jas0n.amovie.util.MD5Utils;
+import cn.jas0n.amovie.util.Utils;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
@@ -39,6 +46,8 @@ import rx.schedulers.Schedulers;
  */
 public class LoginActivity extends SwipeBackActivity implements View.OnClickListener {
 
+    @BindView(R.id.back)
+    ImageView mBack;
     @BindView(R.id.name)
     TextInputEditText mName;
     @BindView(R.id.password)
@@ -57,6 +66,13 @@ public class LoginActivity extends SwipeBackActivity implements View.OnClickList
         mLogin.setOnClickListener(this);
         mApiProvider.setAutoLinkMask(Linkify.ALL);
         mApiProvider.setMovementMethod(LinkMovementMethod.getInstance());
+
+        initBack();
+    }
+
+    private void initBack() {
+        Utils.setTint(this, mBack, R.color.colorAccent, R.mipmap.ic_arrow_left_white_24dp);
+        mBack.setOnClickListener(this);
     }
 
     @Override
@@ -68,6 +84,8 @@ public class LoginActivity extends SwipeBackActivity implements View.OnClickList
     public void onClick(View view) {
         if (view == mLogin) {
             doLogin();
+        }else if(view == mBack){
+            finish();
         }
     }
 

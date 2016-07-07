@@ -4,14 +4,21 @@ package cn.jas0n.amovie.util;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+
+import cn.jas0n.amovie.R;
 
 /**
  * Author: Jas0n
@@ -20,6 +27,14 @@ import java.lang.reflect.Method;
  */
 public class Utils {
     private Utils() {
+    }
+
+    public static void setTint(Context context, ImageView imageView, int color, int resource){
+        Drawable drawable = ContextCompat.getDrawable(context, resource);
+        Drawable wrapedDrawable = DrawableCompat.wrap(drawable);
+        DrawableCompat.setTintList(wrapedDrawable, ColorStateList.valueOf(ContextCompat.getColor(context,
+                color)));
+        imageView.setImageDrawable(wrapedDrawable);
     }
 
     public static String generateTime(long time) {

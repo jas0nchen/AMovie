@@ -90,12 +90,8 @@ public class HomeFragment extends LazyFragment {
 
     private void setupTab() {
         mTitle = new String[]{getString(R.string.recommend), getString(R.string.drama),
-                getString(R.string.documentary), getString(R.string.original), getString(R.string
-                .entertainment),
-                getString(R.string.movie), getString(R.string.open_class), getString(R.string
-                .music),
-                getString(R.string.tech), getString(R.string.livelihood), getString(R.string
-                .sport)};
+                getString(R.string.original), getString(R.string.entertainment), getString(R.string.movie), getString(R.string.open_class), getString(R.string.music),
+                getString(R.string.tech), getString(R.string.livelihood), getString(R.string.sport), getString(R.string.documentary)};
         mFragments.add(RecFragment.newInstanse(mTitle[0]));
         mFragments.add(new DramaFragment());
         for (int i = 2; i < mTitle.length; i++) {
