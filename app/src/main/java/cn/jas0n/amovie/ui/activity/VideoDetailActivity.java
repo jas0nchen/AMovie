@@ -2,7 +2,6 @@ package cn.jas0n.amovie.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Rect;
@@ -21,8 +20,6 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -49,15 +46,11 @@ import cn.jas0n.amovie.ui.view.FixedViewPager;
 import cn.jas0n.amovie.ui.view.JCVideoPlayerStandardShowShareButtonAfterFullscreen;
 import cn.jas0n.amovie.util.Utils;
 import cn.jas0n.amovie.util.ViewGroupUtils;
-import cn.jas0n.amovie.videoplayer.VideoPlayView;
 import fm.jiecao.jcvideoplayer_lib.JCBuriedPointStandard;
-import fm.jiecao.jcvideoplayer_lib.JCFullScreenActivity;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
-import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
-import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 /**
  * Author: Jas0n

@@ -1,10 +1,7 @@
 package cn.jas0n.amovie.ui.fragment;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,20 +12,16 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.jas0n.amovie.AMovie;
 import cn.jas0n.amovie.R;
 import cn.jas0n.amovie.adapter.EpisodeGridAdapter;
 import cn.jas0n.amovie.api.AMovieService;
 import cn.jas0n.amovie.bean.Episode;
 import cn.jas0n.amovie.bean.SeasonDetail;
-import cn.jas0n.amovie.bean.VideoDetail;
-import cn.jas0n.amovie.ui.activity.EpisodePlayActivity;
 import cn.jas0n.amovie.ui.view.FixedGridView;
 import cn.jas0n.amovie.ui.view.JCVideoPlayerStandardShowShareButtonAfterFullscreen;
 import de.hdodenhof.circleimageview.CircleImageView;

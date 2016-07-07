@@ -40,12 +40,6 @@
             android:label="@string/title_activity_login"
             android:theme="@style/FullscreenTheme">
         </activity>
-        <activity
-            android:name=".ui.activity.EpisodePlayActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_episode_play"
-            android:theme="@style/FullscreenTheme">
-        </activity>
     </application>
 
 </manifest>
