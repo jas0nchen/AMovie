@@ -17,9 +17,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jcodecraeer.xrecyclerview.progressindicator.AVLoadingIndicatorView;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.orhanobut.logger.Logger;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,22 +49,38 @@ import rx.schedulers.Schedulers;
  * Date: 2016/6/24
  * E-mail:chendong90x@gmail.com
  */
-public class DramaFragment extends LazyFragment {
+public class DramaFragment extends LazyFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     protected View mView;
+    @BindView(R.id.refresh_layout)
+    SwipeRefreshLayout mRefreshLayout;
     @BindView(R.id.content)
     RelativeLayout mContent;
-    @BindView(R.id.recycler_view)
-    EasyRecyclerView mRecyclerView;
+    @BindView(R.id.category)
+    TextView mLastUpdateCate;
+    @BindView(R.id.grid)
+    FixedGridView mLastUpdateGrid;
+    @BindView(R.id.rec_category)
+    TextView mRecCate;
+    @BindView(R.id.rec_grid)
+    FixedGridView mRecGrid;
+    @BindView(R.id.hot_category)
+    TextView mHotCate;
+    @BindView(R.id.hot_grid)
+    FixedGridView mHotGrid;
+    @BindView(R.id.error)
+    TextView mError;
+    @BindView(R.id.empty)
+    TextView mEmpty;
+    @BindView(R.id.loading_view)
+    AVLoadingIndicatorView mProgressBar;
 
-    protected RecyclerArrayAdapter mAdapter;
-    private DramaBean mDramaBean;
+    private DramaGridAdapter mLastUpdateAdapter;
+    private DramaGridAdapter mRecAdapter;
+    private DramaGridAdapter mHotAdapter;
     private List<RecBean.RecDramaItem> mLastUpdate = new ArrayList<>();
     private List<RecBean.RecDramaItem> mRecommended = new ArrayList<>();
     private List<RecBean.RecDramaItem> mHot = new ArrayList<>();
-
-    private View mHeaderView;
-    private RecyclerArrayAdapter.ItemView mHeader;
 
     @Override
     protected View initViews(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -75,20 +94,8 @@ public class DramaFragment extends LazyFragment {
     }
 
     private void setupRecyclerView() {
-        mRecyclerView.setRefreshingColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
-        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(3,
-                StaggeredGridLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(gridLayoutManager);
-        mRecyclerView.setErrorView(R.layout.view_error_large);
-        mAdapter = new DramaAdapter(getContext());
-        ((DramaAdapter) mAdapter).setClickSeason(getClickSeason());
-        mRecyclerView.setAdapterWithProgress(mAdapter);
-        mRecyclerView.setRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                doOnRefresh();
-            }
-        });
+        mRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorAccent));
+        mRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
@@ -99,14 +106,16 @@ public class DramaFragment extends LazyFragment {
                 .subscribe(new Action1<DramaBean>() {
                     @Override
                     public void call(DramaBean dramaBean) {
-                        mDramaBean = dramaBean;
-                        fillData(dramaBean);
+                        if (dramaBean.getData().getHot().size() == 0)
+                            showEmpty();
+                        else
+                            fillData(dramaBean);
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
                         Logger.e(throwable.getMessage());
-                        mRecyclerView.showError();
+                        showError();
                     }
                 });
     }
@@ -119,46 +128,22 @@ public class DramaFragment extends LazyFragment {
         mRecommended = dramaBean.getData().getRecommended();
         mHot = dramaBean.getData().getHot();
 
-        mAdapter.clear();
+        mLastUpdateAdapter = new DramaGridAdapter(mLastUpdate, getContext());
+        mRecAdapter = new DramaGridAdapter(mRecommended, getContext());
+        mHotAdapter = new DramaGridAdapter(mHot, getContext());
 
-        mHeader = new RecyclerArrayAdapter.ItemView() {
-            @Override
-            public View onCreateView(ViewGroup parent) {
-                mHeaderView = LayoutInflater.from(getContext()).inflate(R.layout
-                        .layout_drama_header, parent, false);
-                mHeaderView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams
-                        .MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                return mHeaderView;
-            }
+        mLastUpdateGrid.setAdapter(mLastUpdateAdapter);
+        mRecGrid.setAdapter(mRecAdapter);
+        mHotGrid.setAdapter(mHotAdapter);
+        mLastUpdateAdapter.setClickSeason(getClickSeason());
+        mRecAdapter.setClickSeason(getClickSeason());
+        mHotAdapter.setClickSeason(getClickSeason());
 
-            @Override
-            public void onBindView(View headerView) {
-                DramaGridAdapter lastUpdateAdapter = new DramaGridAdapter(mLastUpdate, getContext());
-                DramaGridAdapter recAdapter = new DramaGridAdapter(mRecommended, getContext());
-                TextView lastUpdateCategory = (TextView) headerView.findViewById(R.id.category);
-                FixedGridView lastUpdateGrid = (FixedGridView) headerView.findViewById(R.id.grid);
-                TextView recCategory = (TextView) headerView.findViewById(R.id.rec_category);
-                FixedGridView recGrid = (FixedGridView) headerView.findViewById(R.id.rec_grid);
-                TextView hotCategory = (TextView) headerView.findViewById(R.id.hot_category);
-                lastUpdateCategory.setText("最近更新");
-                recCategory.setText("小编推荐");
-                hotCategory.setText("热门剧集");
-                lastUpdateGrid.setAdapter(lastUpdateAdapter);
-                recGrid.setAdapter(recAdapter);
-                lastUpdateAdapter.setClickSeason(getClickSeason());
-                recAdapter.setClickSeason(getClickSeason());
-            }
-        };
-        mAdapter.addHeader(mHeader);
-        mAdapter.addAll(mHot);
+        showContent();
     }
 
     @Override
     protected void setDefaultFragmentTitle(String title) {
-    }
-
-    protected void doOnRefresh() {
-        initData();
     }
 
     private ClickSeason getClickSeason() {
@@ -174,5 +159,33 @@ public class DramaFragment extends LazyFragment {
                 }
             }
         };
+    }
+
+    @Override
+    public void onRefresh() {
+        initData();
+    }
+
+    private void showError() {
+        hideAll();
+        mError.setVisibility(View.VISIBLE);
+    }
+
+    private void showEmpty() {
+        hideAll();
+        mEmpty.setVisibility(View.VISIBLE);
+    }
+
+    private void showContent() {
+        hideAll();
+        mContent.setVisibility(View.VISIBLE);
+    }
+
+    private void hideAll() {
+        mContent.setVisibility(View.GONE);
+        mEmpty.setVisibility(View.GONE);
+        mError.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.GONE);
+        mRefreshLayout.setRefreshing(false);
     }
 }

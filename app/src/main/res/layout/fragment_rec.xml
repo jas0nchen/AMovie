@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_card"
+        tools:context=".ui.activity.MainActivity">
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v4.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp"
+                android:scrollbars="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <RelativeLayout
+                        android:id="@+id/hot_category_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp">
+
+                        <View
+                            android:id="@+id/hot_flag"
+                            android:layout_width="3dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorAccent"/>
+
+                        <TextView
+                            android:id="@+id/hot_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@id/hot_flag"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="8dp"
+                            android:text="@string/hot"
+                            android:textColor="@color/primaryText"/>
+
+                        <TextView
+                            android:id="@+id/hot_more"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/more"/>
+                    </RelativeLayout>
+
+                    <cn.jas0n.amovie.ui.view.FixedGridView
+                        android:id="@+id/hot_grid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/hot_category_layout"
+                        android:layout_marginTop="5dp"
+                        android:horizontalSpacing="5dp"
+                        android:numColumns="2"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="5dp"/>
+
+                    <RelativeLayout
+                        android:id="@+id/drama_category_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_below="@id/hot_grid"
+                        android:layout_marginTop="5dp">
+
+                        <View
+                            android:id="@+id/drama_flag"
+                            android:layout_width="3dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorAccent"/>
+
+                        <TextView
+                            android:id="@+id/drama_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@id/drama_flag"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="8dp"
+                            android:text="@string/drama"
+                            android:textColor="@color/primaryText"/>
+
+                        <TextView
+                            android:id="@+id/drama_more"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/more"/>
+                    </RelativeLayout>
+
+                    <cn.jas0n.amovie.ui.view.FixedGridView
+                        android:id="@+id/drama_grid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/drama_category_layout"
+                        android:layout_marginTop="5dp"
+                        android:horizontalSpacing="5dp"
+                        android:numColumns="3"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="5dp"/>
+
+                    <RelativeLayout
+                        android:id="@+id/original_category_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_below="@id/drama_grid"
+                        android:layout_marginTop="5dp">
+
+                        <View
+                            android:id="@+id/original_flag"
+                            android:layout_width="3dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorAccent"/>
+
+                        <TextView
+                            android:id="@+id/original_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@id/original_flag"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="8dp"
+                            android:text="@string/original"
+                            android:textColor="@color/primaryText"/>
+
+                        <TextView
+                            android:id="@+id/original_more"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/more"/>
+                    </RelativeLayout>
+
+                    <cn.jas0n.amovie.ui.view.CustomVideoItemLayout
+                        android:id="@+id/original_first"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/original_category_layout"
+                        android:layout_marginTop="5dp"/>
+
+                    <cn.jas0n.amovie.ui.view.FixedGridView
+                        android:id="@+id/original_grid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/original_first"
+                        android:layout_marginTop="5dp"
+                        android:horizontalSpacing="5dp"
+                        android:numColumns="2"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="5dp"/>
+
+                    <RelativeLayout
+                        android:id="@+id/entertain_category_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_below="@id/original_grid"
+                        android:layout_marginTop="5dp">
+
+                        <View
+                            android:id="@+id/entertain_flag"
+                            android:layout_width="3dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorAccent"/>
+
+                        <TextView
+                            android:id="@+id/entertain_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@id/entertain_flag"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="8dp"
+                            android:text="@string/entertainment"
+                            android:textColor="@color/primaryText"/>
+
+                        <TextView
+                            android:id="@+id/entertain_more"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/more"/>
+                    </RelativeLayout>
+
+                    <cn.jas0n.amovie.ui.view.CustomVideoItemLayout
+                        android:id="@+id/entertain_first"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/entertain_category_layout"
+                        android:layout_marginTop="5dp"/>
+
+                    <cn.jas0n.amovie.ui.view.FixedGridView
+                        android:id="@+id/entertain_grid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/entertain_first"
+                        android:layout_marginTop="5dp"
+                        android:horizontalSpacing="5dp"
+                        android:numColumns="2"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="5dp"/>
+
+                    <RelativeLayout
+                        android:id="@+id/movie_category_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_below="@id/entertain_grid"
+                        android:layout_marginTop="5dp">
+
+                        <View
+                            android:id="@+id/movie_flag"
+                            android:layout_width="3dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorAccent"/>
+
+                        <TextView
+                            android:id="@+id/movie_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@id/movie_flag"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="8dp"
+                            android:text="@string/movie"
+                            android:textColor="@color/primaryText"/>
+
+                        <TextView
+                            android:id="@+id/movie_more"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/more"/>
+                    </RelativeLayout>
+
+                    <cn.jas0n.amovie.ui.view.FixedGridView
+                        android:id="@+id/movie_grid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/movie_category_layout"
+                        android:layout_marginTop="5dp"
+                        android:horizontalSpacing="5dp"
+                        android:numColumns="3"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="5dp"/>
+
+                    <RelativeLayout
+                        android:id="@+id/open_category_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_below="@id/movie_grid"
+                        android:layout_marginTop="5dp">
+
+                        <View
+                            android:id="@+id/open_flag"
+                            android:layout_width="3dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorAccent"/>
+
+                        <TextView
+                            android:id="@+id/open_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@id/open_flag"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="8dp"
+                            android:text="@string/open_class"
+                            android:textColor="@color/primaryText"/>
+
+                        <TextView
+                            android:id="@+id/open_more"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/more"/>
+                    </RelativeLayout>
+
+                    <cn.jas0n.amovie.ui.view.CustomVideoItemLayout
+                        android:id="@+id/open_first"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/open_category_layout"
+                        android:layout_marginTop="5dp"/>
+
+                    <cn.jas0n.amovie.ui.view.FixedGridView
+                        android:id="@+id/open_grid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/open_first"
+                        android:layout_marginTop="5dp"
+                        android:horizontalSpacing="5dp"
+                        android:numColumns="2"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="5dp"/>
+
+                    <RelativeLayout
+                        android:id="@+id/music_category_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_below="@id/open_grid"
+                        android:layout_marginTop="5dp">
+
+                        <View
+                            android:id="@+id/music_flag"
+                            android:layout_width="3dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorAccent"/>
+
+                        <TextView
+                            android:id="@+id/music_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@id/music_flag"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="8dp"
+                            android:text="@string/music"
+                            android:textColor="@color/primaryText"/>
+
+                        <TextView
+                            android:id="@+id/music_more"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/more"/>
+                    </RelativeLayout>
+
+                    <cn.jas0n.amovie.ui.view.CustomVideoItemLayout
+                        android:id="@+id/music_first"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/music_category_layout"
+                        android:layout_marginTop="5dp"/>
+
+                    <cn.jas0n.amovie.ui.view.FixedGridView
+                        android:id="@+id/music_grid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/music_first"
+                        android:layout_marginTop="5dp"
+                        android:horizontalSpacing="5dp"
+                        android:numColumns="2"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="5dp"/>
+
+                    <RelativeLayout
+                        android:id="@+id/tech_category_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_below="@id/music_grid"
+                        android:layout_marginTop="5dp">
+
+                        <View
+                            android:id="@+id/tech_flag"
+                            android:layout_width="3dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorAccent"/>
+
+                        <TextView
+                            android:id="@+id/tech_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@id/tech_flag"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="8dp"
+                            android:text="@string/tech"
+                            android:textColor="@color/primaryText"/>
+
+                        <TextView
+                            android:id="@+id/tech_more"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/more"/>
+                    </RelativeLayout>
+
+                    <cn.jas0n.amovie.ui.view.CustomVideoItemLayout
+                        android:id="@+id/tech_first"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tech_category_layout"
+                        android:layout_marginTop="5dp"/>
+
+                    <cn.jas0n.amovie.ui.view.FixedGridView
+                        android:id="@+id/tech_grid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tech_first"
+                        android:layout_marginTop="5dp"
+                        android:horizontalSpacing="5dp"
+                        android:numColumns="2"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="5dp"/>
+
+                    <RelativeLayout
+                        android:id="@+id/live_category_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_below="@id/tech_grid"
+                        android:layout_marginTop="5dp">
+
+                        <View
+                            android:id="@+id/live_flag"
+                            android:layout_width="3dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorAccent"/>
+
+                        <TextView
+                            android:id="@+id/live_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@id/live_flag"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="8dp"
+                            android:text="@string/livelihood"
+                            android:textColor="@color/primaryText"/>
+
+                        <TextView
+                            android:id="@+id/live_more"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/more"/>
+                    </RelativeLayout>
+
+                    <cn.jas0n.amovie.ui.view.CustomVideoItemLayout
+                        android:id="@+id/live_first"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/live_category_layout"
+                        android:layout_marginTop="5dp"/>
+
+                    <cn.jas0n.amovie.ui.view.FixedGridView
+                        android:id="@+id/live_grid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/live_first"
+                        android:layout_marginTop="5dp"
+                        android:horizontalSpacing="5dp"
+                        android:numColumns="2"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="5dp"/>
+
+                    <RelativeLayout
+                        android:id="@+id/sport_category_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_below="@id/live_grid"
+                        android:layout_marginTop="5dp">
+
+                        <View
+                            android:id="@+id/sport_flag"
+                            android:layout_width="3dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorAccent"/>
+
+                        <TextView
+                            android:id="@+id/sport_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@id/sport_flag"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="8dp"
+                            android:text="@string/sport"
+                            android:textColor="@color/primaryText"/>
+
+                        <TextView
+                            android:id="@+id/sport_more"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/more"/>
+                    </RelativeLayout>
+
+                    <cn.jas0n.amovie.ui.view.CustomVideoItemLayout
+                        android:id="@+id/sport_first"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/sport_category_layout"
+                        android:layout_marginTop="5dp"/>
+
+                    <cn.jas0n.amovie.ui.view.FixedGridView
+                        android:id="@+id/sport_grid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/sport_first"
+                        android:layout_marginTop="5dp"
+                        android:horizontalSpacing="5dp"
+                        android:numColumns="2"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="5dp"/>
+
+                    <RelativeLayout
+                        android:id="@+id/document_category_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_below="@id/sport_grid"
+                        android:layout_marginTop="5dp">
+
+                        <View
+                            android:id="@+id/document_flag"
+                            android:layout_width="3dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorAccent"/>
+
+                        <TextView
+                            android:id="@+id/document_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@id/document_flag"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="8dp"
+                            android:text="@string/documentary"
+                            android:textColor="@color/primaryText"/>
+
+                        <TextView
+                            android:id="@+id/document_more"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/more"/>
+                    </RelativeLayout>
+
+                    <cn.jas0n.amovie.ui.view.CustomVideoItemLayout
+                        android:id="@+id/document_first"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/document_category_layout"
+                        android:layout_marginTop="5dp"/>
+
+                    <cn.jas0n.amovie.ui.view.FixedGridView
+                        android:id="@+id/document_grid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/document_first"
+                        android:layout_marginTop="5dp"
+                        android:horizontalSpacing="5dp"
+                        android:numColumns="2"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="5dp"/>
+                </RelativeLayout>
+            </android.support.v4.widget.NestedScrollView>
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/error_happens"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/empty"
+        android:textSize="18sp"
+        android:visibility="gone"/>
+
+    <com.jcodecraeer.xrecyclerview.progressindicator.AVLoadingIndicatorView
+        android:id="@+id/loading_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:indicator="BallSpinFadeLoader"
+        app:indicator_color="@color/colorAccent"/>
+</RelativeLayout>

@@ -84,7 +84,7 @@ public class DramaGridAdapter extends android.widget.BaseAdapter {
 
     private ClickSeason clickSeason;
 
-    public void setClickSeason(ClickSeason clickSeason){
+    public void setClickSeason(ClickSeason clickSeason) {
         this.clickSeason = clickSeason;
     }
 }

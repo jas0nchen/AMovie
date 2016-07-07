@@ -14,52 +14,40 @@
             android:id="@+id/cover"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/user_layout"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_below="@id/cover_layout"
-        android:layout_marginTop="5dp">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/avatar"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="5dp"/>
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:layout_toRightOf="@id/avatar"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:maxLines="1"
-            android:text="@string/app_name"
-            android:textColor="@color/black_90"
-            android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:layout_below="@id/title"
-            android:layout_toRightOf="@id/avatar"
+            android:layout_alignParentBottom="true"
+            android:background="@color/black_60"
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="1"
+            android:paddingLeft="8dp"
             android:text="@string/app_name"
+            android:textColor="@color/white"
             android:textSize="10sp"/>
-
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cover_layout"
+        android:layout_marginTop="5dp"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:paddingLeft="8dp"
+        android:text="@string/app_name"
+        android:textColor="@color/black_90"
+        android:textSize="14sp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/user_layout"
+        android:layout_below="@id/title"
         android:orientation="horizontal"
         android:padding="8dp">
 

@@ -36,10 +36,7 @@ public class VideoGridAdapter extends android.widget.BaseAdapter {
 
     @Override
     public int getCount() {
-        if (mData.size() >= 4)
-            return 4;
-        else
-            return mData.size();
+        return mData.size();
     }
 
     @Override
@@ -67,9 +64,7 @@ public class VideoGridAdapter extends android.widget.BaseAdapter {
         holder.mTitle.setText(mData.get(i).getTitle());
         Glide.with(mContext).load(mData.get(i).getUrl()).centerCrop().crossFade().into
                 (holder.mCover);
-        if (mData.get(i + 1).getAuthor() != null) {
-            Glide.with(mContext).load(mData.get(i).getAuthor().getHeadImgUrl()).centerCrop()
-                    .crossFade().into(holder.mAvatar);
+        if (mData.get(i).getAuthor() != null) {
             holder.mName.setText(mData.get(i).getAuthor().getNickName());
         }
         holder.mViewCount.setText(String.valueOf(mData.get(i).getViewCount()));
@@ -94,8 +89,6 @@ public class VideoGridAdapter extends android.widget.BaseAdapter {
         TextView mTitle;
         @BindView(R.id.name)
         TextView mName;
-        @BindView(R.id.avatar)
-        CircleImageView mAvatar;
         @BindView(R.id.view_count)
         TextView mViewCount;
         @BindView(R.id.comment_count)

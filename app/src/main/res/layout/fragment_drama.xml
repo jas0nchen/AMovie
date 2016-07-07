@@ -7,18 +7,184 @@
               android:padding="5dp">
 
     <RelativeLayout
-        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/bg_card"
         tools:context=".ui.activity.MainActivity">
 
-        <com.jude.easyrecyclerview.EasyRecyclerView
-            android:id="@+id/recycler_view"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v4.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                android:padding="8dp">
+
+                <RelativeLayout
+                    android:id="@+id/content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <RelativeLayout
+                        android:id="@+id/category_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp">
+
+                        <View
+                            android:id="@+id/flag"
+                            android:layout_width="3dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorAccent"/>
+
+                        <TextView
+                            android:id="@+id/category"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@id/flag"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="8dp"
+                            android:text="@string/last_update"
+                            android:textColor="@color/primaryText"/>
+
+                        <TextView
+                            android:id="@+id/more"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/more"/>
+                    </RelativeLayout>
+
+                    <cn.jas0n.amovie.ui.view.FixedGridView
+                        android:id="@+id/grid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/category_layout"
+                        android:layout_marginTop="5dp"
+                        android:horizontalSpacing="5dp"
+                        android:numColumns="3"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="5dp"/>
+
+                    <RelativeLayout
+                        android:id="@+id/rec_category_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_below="@id/grid"
+                        android:layout_marginTop="5dp">
+
+                        <View
+                            android:id="@+id/rec_flag"
+                            android:layout_width="3dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorAccent"/>
+
+                        <TextView
+                            android:id="@+id/rec_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@id/rec_flag"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="8dp"
+                            android:text="@string/recommended"
+                            android:textColor="@color/primaryText"/>
+
+                        <TextView
+                            android:id="@+id/rec_more"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/more"/>
+                    </RelativeLayout>
+
+                    <cn.jas0n.amovie.ui.view.FixedGridView
+                        android:id="@+id/rec_grid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/rec_category_layout"
+                        android:layout_marginTop="5dp"
+                        android:horizontalSpacing="5dp"
+                        android:numColumns="3"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="5dp"/>
+
+                    <RelativeLayout
+                        android:id="@+id/hot_category_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_below="@id/rec_grid"
+                        android:layout_marginTop="5dp">
+
+                        <View
+                            android:id="@+id/hot_flag"
+                            android:layout_width="3dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorAccent"/>
+
+                        <TextView
+                            android:id="@+id/hot_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@id/hot_flag"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="8dp"
+                            android:text="@string/hot_season"
+                            android:textColor="@color/primaryText"/>
+
+                        <TextView
+                            android:id="@+id/hot_more"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/more"/>
+                    </RelativeLayout>
+
+                    <cn.jas0n.amovie.ui.view.FixedGridView
+                        android:id="@+id/hot_grid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/hot_category_layout"
+                        android:layout_marginTop="5dp"
+                        android:horizontalSpacing="5dp"
+                        android:numColumns="3"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="5dp"/>
+                </RelativeLayout>
+            </android.support.v4.widget.NestedScrollView>
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <TextView
+            android:id="@+id/error"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_empty="@layout/view_empty"
-            app:layout_progress="@layout/view_progress"
-            app:scrollbarStyle="insideOverlay"/>
+            android:gravity="center"
+            android:text="@string/error_happens"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/empty"
+            android:textSize="18sp"
+            android:visibility="gone"/>
+
+        <com.jcodecraeer.xrecyclerview.progressindicator.AVLoadingIndicatorView
+            android:id="@+id/loading_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:indicator="BallSpinFadeLoader"
+            app:indicator_color="@color/colorAccent"/>
     </RelativeLayout>
 </LinearLayout>

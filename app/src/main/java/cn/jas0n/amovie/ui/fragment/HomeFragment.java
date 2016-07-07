@@ -80,6 +80,7 @@ public class HomeFragment extends LazyFragment {
 
     private void setupToolbar() {
         ((MainActivity) getActivity()).setSupportActionBar(mToolbar);
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.home));
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 getActivity(), ((MainActivity) getActivity()).getDrawerLayout(), mToolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);

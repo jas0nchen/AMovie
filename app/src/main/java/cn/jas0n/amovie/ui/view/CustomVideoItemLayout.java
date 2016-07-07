@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import cn.jas0n.amovie.R;
+import cn.jas0n.amovie.bean.RecBean;
+import cn.jas0n.amovie.interfaces.ClickVideo;
 import cn.jas0n.amovie.util.Utils;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -30,6 +33,13 @@ public class CustomVideoItemLayout extends RelativeLayout {
     private TextView mCommentCount;
 
     private int style = 1;
+
+    private ClickVideo mClickVideo;
+    private RecBean.HotVideoItem mVideo;
+
+    public void setClickVideo(ClickVideo clickVideo){
+        this.mClickVideo = clickVideo;
+    }
 
     public CustomVideoItemLayout(Context context) {
         super(context);
@@ -65,11 +75,30 @@ public class CustomVideoItemLayout extends RelativeLayout {
             params.height = Utils.dip2px(mContext, 100f);
         }
 
+
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+    }
+
+    public void setVideo(final RecBean.HotVideoItem video){
+        this.mVideo = video;
+        this.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mClickVideo.onVideoClicked(mCover, video);
+            }
+        });
+        setTitle(video.getTitle());
+        setCover(video.getUrl());
+        setViewCount(video.getViewCount());
+        setCommentCount(video.getDanmuCount());
+        if(video.getAuthor() != null){
+            setUserName(video.getAuthor().getNickName());
+            setAvatar(video.getAuthor().getHeadImgUrl());
+        }
     }
 
     public void setTitle(String title) {

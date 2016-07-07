@@ -3,12 +3,18 @@ package cn.jas0n.amovie.ui.fragment;
 import android.app.ActivityOptions;
 import android.content.res.Configuration;
 import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jcodecraeer.xrecyclerview.progressindicator.AVLoadingIndicatorView;
+import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.orhanobut.logger.Logger;
 
@@ -17,6 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.jas0n.amovie.R;
 import cn.jas0n.amovie.adapter.DramaGridAdapter;
 import cn.jas0n.amovie.adapter.RecAdapter;
@@ -27,6 +35,7 @@ import cn.jas0n.amovie.interfaces.ClickSeason;
 import cn.jas0n.amovie.interfaces.ClickVideo;
 import cn.jas0n.amovie.ui.activity.SeasonDetailActivity;
 import cn.jas0n.amovie.ui.activity.VideoDetailActivity;
+import cn.jas0n.amovie.ui.view.CustomVideoItemLayout;
 import cn.jas0n.amovie.ui.view.FixedGridView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -37,24 +46,112 @@ import rx.schedulers.Schedulers;
  * Date: 2016/6/24
  * E-mail:chendong90x@gmail.com
  */
-public class RecFragment extends BaseFragment {
+public class RecFragment extends LazyFragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    private boolean isPaused;
-    private boolean isHeaderLoaded;
-    private RecBean.Data mData;
+    protected View mView;
+    @BindView(R.id.refresh_layout)
+    SwipeRefreshLayout mRefreshLayout;
+    @BindView(R.id.content)
+    RelativeLayout mContent;
+    @BindView(R.id.hot_more)
+    TextView mHotMore;
+    @BindView(R.id.hot_grid)
+    FixedGridView mHotGrid;
+    @BindView(R.id.drama_more)
+    TextView mDramaMore;
+    @BindView(R.id.drama_grid)
+    FixedGridView mDramaGrid;
+    @BindView(R.id.original_more)
+    TextView mOriginalMore;
+    @BindView(R.id.original_first)
+    CustomVideoItemLayout mOriginalFirst;
+    @BindView(R.id.original_grid)
+    FixedGridView mOriginalGrid;
+    @BindView(R.id.entertain_more)
+    TextView mEntertainMore;
+    @BindView(R.id.entertain_first)
+    CustomVideoItemLayout mEntertainFirst;
+    @BindView(R.id.entertain_grid)
+    FixedGridView mEntertainGrid;
+    @BindView(R.id.movie_more)
+    TextView mMovieMore;
+    @BindView(R.id.movie_grid)
+    FixedGridView mMovieGrid;
+    @BindView(R.id.open_more)
+    TextView mOpenMore;
+    @BindView(R.id.open_first)
+    CustomVideoItemLayout mOpenFirst;
+    @BindView(R.id.open_grid)
+    FixedGridView mOpenGrid;
+    @BindView(R.id.music_more)
+    TextView mMusicMore;
+    @BindView(R.id.music_first)
+    CustomVideoItemLayout mMusicFirst;
+    @BindView(R.id.music_grid)
+    FixedGridView mMusicGrid;
+    @BindView(R.id.tech_more)
+    TextView mTechMore;
+    @BindView(R.id.tech_first)
+    CustomVideoItemLayout mTechFirst;
+    @BindView(R.id.tech_grid)
+    FixedGridView mTechGrid;
+    @BindView(R.id.live_more)
+    TextView mLiveMore;
+    @BindView(R.id.live_first)
+    CustomVideoItemLayout mLiveFirst;
+    @BindView(R.id.live_grid)
+    FixedGridView mLiveGrid;
+    @BindView(R.id.sport_more)
+    TextView mSportMore;
+    @BindView(R.id.sport_first)
+    CustomVideoItemLayout mSportFirst;
+    @BindView(R.id.sport_grid)
+    FixedGridView mSportGrid;
+    @BindView(R.id.document_more)
+    TextView mDocumentMore;
+    @BindView(R.id.document_first)
+    CustomVideoItemLayout mDocumentFirst;
+    @BindView(R.id.document_grid)
+    FixedGridView mDocumentGrid;
+    @BindView(R.id.error)
+    TextView mError;
+    @BindView(R.id.empty)
+    TextView mEmpty;
+    @BindView(R.id.loading_view)
+    AVLoadingIndicatorView mProgressBar;
+
+    private VideoGridAdapter mHotAdapter;
+    private DramaGridAdapter mDramaAdapter;
+    private VideoGridAdapter mOriAdapter;
+    private VideoGridAdapter mEntertainAdapter;
+    private VideoGridAdapter mMovieAdapter;
+    private VideoGridAdapter mOpenAdapter;
+    private VideoGridAdapter mMusicAdapter;
+    private VideoGridAdapter mTechAdapter;
+    private VideoGridAdapter mLiveAdapter;
+    private VideoGridAdapter mSportAdapter;
+    private VideoGridAdapter mDocumentAdapter;
+
     private List<RecBean.HotVideoItem> mHotList = new ArrayList<>();
     private List<RecBean.RecDramaItem> mRecList = new ArrayList<>();
     private List<RecBean.Video> mVideoList = new ArrayList<>();
-    private List<Object> mVideos = new ArrayList<>();
-    private Map<Integer, String> mCateMap = new HashMap<>();
-
-    private View mHeaderView;
-    private RecyclerArrayAdapter.ItemView mHeader;
+    private Map<String, RecBean.Video> mVideoMap = new HashMap<>();
 
     public static RecFragment newInstanse(String title) {
         RecFragment fragment = new RecFragment();
         fragment.setDefaultFragmentTitle(title);
         return fragment;
+    }
+
+    @Override
+    protected View initViews(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (mView == null) {
+            mView = inflater.inflate(R.layout.fragment_rec, container, false);
+        }
+        ButterKnife.bind(this, mView);
+        mRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorAccent));
+        mRefreshLayout.setOnRefreshListener(this);
+        return mView;
     }
 
     @Override
@@ -72,67 +169,75 @@ public class RecFragment extends BaseFragment {
                     @Override
                     public void call(Throwable throwable) {
                         Logger.e(throwable.getMessage());
-                        mRecyclerView.showError();
+                        showError();
                     }
                 });
     }
 
+    @Override
+    protected void setDefaultFragmentTitle(String title) {
+    }
+
     private void fillData(RecBean recBean) {
-        mData = recBean.getData();
         mVideoList.clear();
         mHotList.clear();
         mRecList.clear();
-        mVideos.clear();
         mVideoList = recBean.getData().getVideo();
         mHotList = recBean.getData().getHotVideo();
         mRecList = recBean.getData().getRecDrama();
 
-        int count = 0;
-        for (int i = 0; i < mVideoList.size(); i++) {
-            mVideos.addAll(mVideoList.get(i).getVideos());
-            mCateMap.put(count, mVideoList.get(i).getTitle());
-            count += mVideoList.get(i).getVideos().size();
+        for (RecBean.Video video : mVideoList) {
+            mVideoMap.put(video.getTitle(), video);
         }
     }
 
     private void setupViews() {
-        mAdapter.clear();
-        mAdapter.removeAllHeader();
-        ((RecAdapter) mAdapter).setCateMap(mCateMap);
-        ((RecAdapter) mAdapter).setClickVideo(getClickVideo());
+        if (mHotList.size() >= 4) {
+            mHotAdapter = new VideoGridAdapter(mHotList.subList(0, 4), getContext());
+        } else {
+            mHotAdapter = new VideoGridAdapter(mHotList, getContext());
+        }
+        if(mRecList.size() >= 6){
+            mDramaAdapter = new DramaGridAdapter(mRecList.subList(0, 6), getContext());
+        }else{
+            mDramaAdapter = new DramaGridAdapter(mRecList, getContext());
+        }
 
-        mHeader = new RecyclerArrayAdapter.ItemView() {
-            @Override
-            public View onCreateView(ViewGroup parent) {
-                mHeaderView = LayoutInflater.from(getContext()).inflate(R.layout.layout_hot_header,
-                        parent, false);
-                return mHeaderView;
-            }
+        mHotGrid.setAdapter(mHotAdapter);
+        mDramaGrid.setAdapter(mDramaAdapter);
+        mHotAdapter.setClickVideo(getClickVideo());
+        mDramaAdapter.setClickSeason(getClickSeason());
 
-            @Override
-            public void onBindView(View headerView) {
-                VideoGridAdapter hotAdapter = new VideoGridAdapter(mHotList, getContext());
-                DramaGridAdapter dramaAdapter = new DramaGridAdapter(mRecList, getContext());
-                TextView hotCategory = (TextView) headerView.findViewById(R.id.category);
-                FixedGridView hotGrid = (FixedGridView) headerView.findViewById(R.id.hot_grid);
-                TextView dramaCategory = (TextView) headerView.findViewById(R.id.drama_category);
-                FixedGridView dramaGrid = (FixedGridView) headerView.findViewById(R.id.drama_grid);
-                hotCategory.setText("热门");
-                dramaCategory.setText("英美剧");
-                hotGrid.setAdapter(hotAdapter);
-                dramaGrid.setAdapter(dramaAdapter);
-                hotAdapter.setClickVideo(getClickVideo());
-                dramaAdapter.setClickSeason(getClickSeason());
-            }
-        };
-        mAdapter.addHeader(mHeader);
-        mAdapter.addAll(mVideos);
+        fillVideo("原创", mOriAdapter, mOriginalFirst, mOriginalGrid);
+        fillVideo("娱乐", mEntertainAdapter, mEntertainFirst, mEntertainGrid);
+        fillVideo("电影", mMovieAdapter, null, mMovieGrid);
+        fillVideo("公开课", mOpenAdapter, mOpenFirst, mOpenGrid);
+        fillVideo("音乐", mMusicAdapter, mMusicFirst, mMusicGrid);
+        fillVideo("科技", mTechAdapter, mTechFirst, mTechGrid);
+        fillVideo("生活", mLiveAdapter, mLiveFirst, mLiveGrid);
+        fillVideo("体育", mSportAdapter, mSportFirst, mSportGrid);
+        fillVideo("纪录片", mDocumentAdapter, mDocumentFirst, mDocumentGrid);
+
+        showContent();
     }
 
-    @Override
-    protected void doOnRefresh() {
-        super.doOnRefresh();
-        initData();
+    private void fillVideo(String cat, VideoGridAdapter adapter, CustomVideoItemLayout firstItem,
+                           FixedGridView gridView) {
+        List<RecBean.HotVideoItem> videoItems = mVideoMap.get(cat).getVideos();
+        if (firstItem != null) {
+            firstItem.setClickVideo(getClickVideo());
+            firstItem.setVideo(videoItems.get(0));
+            videoItems.remove(0);
+        }
+
+        if (firstItem != null && videoItems.size() >= 4) {
+            adapter = new VideoGridAdapter(videoItems.subList(0, 4), getContext());
+        } else {
+            adapter = new VideoGridAdapter(videoItems, getContext());
+        }
+
+        adapter.setClickVideo(getClickVideo());
+        gridView.setAdapter(adapter);
     }
 
     private ClickVideo getClickVideo() {
@@ -168,6 +273,34 @@ public class RecFragment extends BaseFragment {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+    }
 
+
+    private void showError() {
+        hideAll();
+        mError.setVisibility(View.VISIBLE);
+    }
+
+    private void showEmpty() {
+        hideAll();
+        mEmpty.setVisibility(View.VISIBLE);
+    }
+
+    private void showContent() {
+        hideAll();
+        mContent.setVisibility(View.VISIBLE);
+    }
+
+    private void hideAll() {
+        mContent.setVisibility(View.GONE);
+        mEmpty.setVisibility(View.GONE);
+        mError.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.GONE);
+        mRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onRefresh() {
+        initData();
     }
 }
