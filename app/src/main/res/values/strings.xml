@@ -6,8 +6,7 @@
     <string name="cancel">Cancel</string>
     <string name="ok">Ok</string>
     <string name="empty">Ops! Nothing Here!</string>
-    <string name="error_happens">Something wrong with network, please check out and try
-        again.</string>
+    <string name="error_happens">Something wrong, try again.</string>
     <string name="no_more">(*￣ω￣) Nothing more!</string>
     <string name="loading_more">Loading more...</string>
 

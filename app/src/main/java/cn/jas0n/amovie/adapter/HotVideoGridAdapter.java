@@ -17,19 +17,18 @@ import butterknife.ButterKnife;
 import cn.jas0n.amovie.R;
 import cn.jas0n.amovie.bean.RecBean;
 import cn.jas0n.amovie.interfaces.ClickVideo;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Author: Jas0n
  * Date: 2016/7/1
  * E-mail:chendong90x@gmail.com
  */
-public class VideoGridAdapter extends android.widget.BaseAdapter {
+public class HotVideoGridAdapter extends android.widget.BaseAdapter {
     private List<RecBean.HotVideoItem> mData;
     private Context mContext;
     private ClickVideo clickVideo;
 
-    public VideoGridAdapter(List<RecBean.HotVideoItem> mData, Context mContext) {
+    public HotVideoGridAdapter(List<RecBean.HotVideoItem> mData, Context mContext) {
         this.mData = mData;
         this.mContext = mContext;
     }
@@ -53,7 +52,7 @@ public class VideoGridAdapter extends android.widget.BaseAdapter {
     public View getView(final int i, View view, ViewGroup viewGroup) {
         ViewHolder holder = null;
         if (view == null) {
-            view = LayoutInflater.from(mContext).inflate(R.layout.layout_video_item, viewGroup,
+            view = LayoutInflater.from(mContext).inflate(R.layout.layout_hot_video_item, viewGroup,
                     false);
             holder = new ViewHolder();
             ButterKnife.bind(holder, view);
@@ -65,8 +64,6 @@ public class VideoGridAdapter extends android.widget.BaseAdapter {
         Glide.with(mContext).load(mData.get(i).getUrl()).centerCrop().crossFade().into
                 (holder.mCover);
         if (mData.get(i).getAuthor() != null) {
-            Glide.with(mContext).load(mData.get(i).getAuthor().getHeadImgUrl()).centerCrop()
-                    .crossFade().into(holder.mAvatar);
             holder.mName.setText(mData.get(i).getAuthor().getNickName());
         }
         holder.mViewCount.setText(String.valueOf(mData.get(i).getViewCount()));
@@ -95,8 +92,6 @@ public class VideoGridAdapter extends android.widget.BaseAdapter {
         TextView mViewCount;
         @BindView(R.id.comment_count)
         TextView mCommentCount;
-        @BindView(R.id.avatar)
-        CircleImageView mAvatar;
     }
 
     public void setClickVideo(ClickVideo clickVideo) {

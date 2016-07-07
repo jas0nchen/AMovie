@@ -27,6 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jas0n.amovie.R;
 import cn.jas0n.amovie.adapter.DramaGridAdapter;
+import cn.jas0n.amovie.adapter.HotVideoGridAdapter;
 import cn.jas0n.amovie.adapter.RecAdapter;
 import cn.jas0n.amovie.adapter.VideoGridAdapter;
 import cn.jas0n.amovie.api.AMovieService;
@@ -120,11 +121,11 @@ public class RecFragment extends LazyFragment implements SwipeRefreshLayout.OnRe
     @BindView(R.id.loading_view)
     AVLoadingIndicatorView mProgressBar;
 
-    private VideoGridAdapter mHotAdapter;
+    private HotVideoGridAdapter mHotAdapter;
     private DramaGridAdapter mDramaAdapter;
     private VideoGridAdapter mOriAdapter;
     private VideoGridAdapter mEntertainAdapter;
-    private VideoGridAdapter mMovieAdapter;
+    private HotVideoGridAdapter mMovieAdapter;
     private VideoGridAdapter mOpenAdapter;
     private VideoGridAdapter mMusicAdapter;
     private VideoGridAdapter mTechAdapter;
@@ -193,13 +194,13 @@ public class RecFragment extends LazyFragment implements SwipeRefreshLayout.OnRe
 
     private void setupViews() {
         if (mHotList.size() >= 4) {
-            mHotAdapter = new VideoGridAdapter(mHotList.subList(0, 4), getContext());
+            mHotAdapter = new HotVideoGridAdapter(mHotList.subList(0, 4), getContext());
         } else {
-            mHotAdapter = new VideoGridAdapter(mHotList, getContext());
+            mHotAdapter = new HotVideoGridAdapter(mHotList, getContext());
         }
-        if(mRecList.size() >= 6){
+        if (mRecList.size() >= 6) {
             mDramaAdapter = new DramaGridAdapter(mRecList.subList(0, 6), getContext());
-        }else{
+        } else {
             mDramaAdapter = new DramaGridAdapter(mRecList, getContext());
         }
 
@@ -208,9 +209,9 @@ public class RecFragment extends LazyFragment implements SwipeRefreshLayout.OnRe
         mHotAdapter.setClickVideo(getClickVideo());
         mDramaAdapter.setClickSeason(getClickSeason());
 
+        fillMovie();
         fillVideo("原创", mOriAdapter, mOriginalFirst, mOriginalGrid);
         fillVideo("娱乐", mEntertainAdapter, mEntertainFirst, mEntertainGrid);
-        fillVideo("电影", mMovieAdapter, null, mMovieGrid);
         fillVideo("公开课", mOpenAdapter, mOpenFirst, mOpenGrid);
         fillVideo("音乐", mMusicAdapter, mMusicFirst, mMusicGrid);
         fillVideo("科技", mTechAdapter, mTechFirst, mTechGrid);
@@ -238,6 +239,13 @@ public class RecFragment extends LazyFragment implements SwipeRefreshLayout.OnRe
 
         adapter.setClickVideo(getClickVideo());
         gridView.setAdapter(adapter);
+    }
+
+    private void fillMovie() {
+        List<RecBean.HotVideoItem> videoItems = mVideoMap.get("电影").getVideos();
+        mMovieAdapter = new HotVideoGridAdapter(videoItems, getContext());
+        mMovieAdapter.setClickVideo(getClickVideo());
+        mMovieGrid.setAdapter(mMovieAdapter);
     }
 
     private ClickVideo getClickVideo() {

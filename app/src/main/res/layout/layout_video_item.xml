@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -15,63 +16,80 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/black_60"
+            android:gravity="left"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/view_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="38dp"
+                android:drawableLeft="@mipmap/ic_play_box_outline_white_18dp"
+                android:drawablePadding="5dp"
+                android:gravity="center_vertical"
+                android:text="@string/app_name"
+                android:textColor="@color/white"
+                android:textSize="10sp"/>
+
+            <TextView
+                android:id="@+id/comment_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:drawableLeft="@mipmap/ic_tooltip_outline_white_18dp"
+                android:drawablePadding="5dp"
+                android:gravity="center_vertical"
+                android:text="@string/app_name"
+                android:textColor="@color/white"
+                android:textSize="10sp"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/cover_layout"
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/black_60"
+            android:layout_marginLeft="46dp"
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:paddingLeft="8dp"
             android:text="@string/app_name"
-            android:textColor="@color/white"
-            android:textSize="10sp"/>
-    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/cover_layout"
-        android:layout_marginTop="5dp"
-        android:ellipsize="end"
-        android:gravity="center_vertical"
-        android:maxLines="1"
-        android:paddingLeft="8dp"
-        android:text="@string/app_name"
-        android:textColor="@color/black_90"
-        android:textSize="14sp"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/title"
-        android:orientation="horizontal"
-        android:padding="8dp">
-
-        <TextView
-            android:id="@+id/view_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@mipmap/ic_play_box_outline_grey600_18dp"
-            android:drawablePadding="5dp"
-            android:gravity="center_vertical"
-            android:text="@string/app_name"
-            android:textColor="@color/secondaryText"
             android:textSize="10sp"/>
 
         <TextView
-            android:id="@+id/comment_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:drawableLeft="@mipmap/ic_tooltip_outline_grey600_18dp"
-            android:drawablePadding="5dp"
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginLeft="8dp"
+            android:ellipsize="end"
             android:gravity="center_vertical"
+            android:maxLines="1"
             android:text="@string/app_name"
-            android:textColor="@color/secondaryText"
-            android:textSize="10sp"/>
+            android:textColor="@color/black_90"
+            android:textSize="14sp"/>
     </LinearLayout>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/avatar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@id/cover_layout"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="-15dp"
+        app:civ_border_color="@color/white"
+        app:civ_border_width="2dp"/>
 </RelativeLayout>
