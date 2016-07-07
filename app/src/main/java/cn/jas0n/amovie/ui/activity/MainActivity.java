@@ -39,9 +39,12 @@ import cn.jas0n.amovie.adapter.HomePagerAdapter;
 import cn.jas0n.amovie.api.AMovieService;
 import cn.jas0n.amovie.bean.ConstantCategory;
 import cn.jas0n.amovie.realm.Account;
+import cn.jas0n.amovie.ui.fragment.CollectionFragment;
+import cn.jas0n.amovie.ui.fragment.DownloadFragment;
 import cn.jas0n.amovie.ui.fragment.HomeFragment;
 import cn.jas0n.amovie.ui.fragment.LazyFragment;
 import cn.jas0n.amovie.ui.fragment.RecFragment;
+import cn.jas0n.amovie.ui.fragment.SubscribeFragment;
 import cn.jas0n.amovie.util.Utils;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
@@ -131,6 +134,14 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        if(id == R.id.setting){
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            return true;
+        }else if (id == R.id.nav_share) {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            return true;
+        }
+
         mTransaction = getSupportFragmentManager().beginTransaction();
         Fragment newFragment = null;
         String tag = null;
@@ -141,16 +152,20 @@ public class MainActivity extends AppCompatActivity
                 newFragment = new HomeFragment();
             }
         } else if (id == R.id.nav_sub) {
-            tag = RecFragment.class.getName();
+            tag = SubscribeFragment.class.getName();
             newFragment = getSupportFragmentManager().findFragmentByTag(tag);
             if (newFragment == null)
-                newFragment = RecFragment.newInstanse("Rec");
+                newFragment = new SubscribeFragment();
         } else if (id == R.id.nav_collect) {
-
+            tag = CollectionFragment.class.getName();
+            newFragment = getSupportFragmentManager().findFragmentByTag(tag);
+            if (newFragment == null)
+                newFragment = new CollectionFragment();
         } else if (id == R.id.nav_download) {
-
-        } else if (id == R.id.nav_share) {
-
+            tag = DownloadFragment.class.getName();
+            newFragment = getSupportFragmentManager().findFragmentByTag(tag);
+            if (newFragment == null)
+                newFragment = new DownloadFragment();
         }
         if(!newFragment.isAdded()) {
             mTransaction.add(R.id.container, newFragment, tag).hide(mCurrentFragment).commitAllowingStateLoss();

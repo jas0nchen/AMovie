@@ -7,7 +7,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -38,11 +37,11 @@ import rx.schedulers.Schedulers;
 
 /**
  * Author: Jas0n
- * Date: 2016/7/6
+ * Date: 2016/7/7
  * E-mail:chendong90x@gmail.com
  */
-public class HomeFragment extends LazyFragment {
-    private String[] mTitle = new String[11];
+public class SubscribeFragment extends LazyFragment {
+    private String[] mTitle = new String[3];
 
     private View mView;
     @BindView(R.id.coordinator)
@@ -68,7 +67,7 @@ public class HomeFragment extends LazyFragment {
     @Override
     protected View initViews(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (mView == null) {
-            mView = inflater.inflate(R.layout.app_bar_main, container, false);
+            mView = inflater.inflate(R.layout.app_bar_subscribe, container, false);
         }
         ButterKnife.bind(this, mView);
 
@@ -80,7 +79,7 @@ public class HomeFragment extends LazyFragment {
 
     private void setupToolbar() {
         ((MainActivity) getActivity()).setSupportActionBar(mToolbar);
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.home));
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.subscribe));
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 getActivity(), ((MainActivity) getActivity()).getDrawerLayout(), mToolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -89,9 +88,7 @@ public class HomeFragment extends LazyFragment {
     }
 
     private void setupTab() {
-        mTitle = new String[]{getString(R.string.recommend), getString(R.string.drama),
-                getString(R.string.original), getString(R.string.entertainment), getString(R.string.movie), getString(R.string.open_class), getString(R.string.music),
-                getString(R.string.tech), getString(R.string.livelihood), getString(R.string.sport), getString(R.string.documentary)};
+        mTitle = new String[]{"Top", "Attention", "Update"};
         mFragments.add(RecFragment.newInstanse(mTitle[0]));
         mFragments.add(new DramaFragment());
         for (int i = 2; i < mTitle.length; i++) {
@@ -99,7 +96,6 @@ public class HomeFragment extends LazyFragment {
         }
         mAdapter = new HomePagerAdapter(getChildFragmentManager(), mTitle, mFragments);
         mPager.setAdapter(mAdapter);
-        mPager.setPageMargin(Utils.dip2px(getContext(), 8f));
         mTab.setupWithViewPager(mPager);
 
         AMovieService.builder().getApiService().getConstantCategory()

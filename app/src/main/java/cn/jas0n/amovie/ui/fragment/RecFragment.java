@@ -47,7 +47,7 @@ import rx.schedulers.Schedulers;
  * Date: 2016/6/24
  * E-mail:chendong90x@gmail.com
  */
-public class RecFragment extends LazyFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class RecFragment extends LazyFragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
     protected View mView;
     @BindView(R.id.refresh_layout)
@@ -219,6 +219,18 @@ public class RecFragment extends LazyFragment implements SwipeRefreshLayout.OnRe
         fillVideo("体育", mSportAdapter, mSportFirst, mSportGrid);
         fillVideo("纪录片", mDocumentAdapter, mDocumentFirst, mDocumentGrid);
 
+        mHotMore.setOnClickListener(this);
+        mDramaMore.setOnClickListener(this);
+        mOriginalMore.setOnClickListener(this);
+        mEntertainMore.setOnClickListener(this);
+        mMovieMore.setOnClickListener(this);
+        mOpenMore.setOnClickListener(this);
+        mMusicMore.setOnClickListener(this);
+        mTechMore.setOnClickListener(this);
+        mLiveMore.setOnClickListener(this);
+        mSportMore.setOnClickListener(this);
+        mDocumentMore.setOnClickListener(this);
+
         showContent();
     }
 
@@ -310,5 +322,32 @@ public class RecFragment extends LazyFragment implements SwipeRefreshLayout.OnRe
     @Override
     public void onRefresh() {
         initData();
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view == mHotMore) {
+
+        } else if (view == mDramaMore) {
+            ((HomeFragment)getParentFragment()).setTabIndex(1);
+        } else if (view == mOriginalMore) {
+            ((HomeFragment)getParentFragment()).setTabIndex(2);
+        } else if (view == mEntertainMore) {
+            ((HomeFragment)getParentFragment()).setTabIndex(3);
+        } else if (view == mMovieMore) {
+            ((HomeFragment)getParentFragment()).setTabIndex(4);
+        } else if (view == mOpenMore) {
+            ((HomeFragment)getParentFragment()).setTabIndex(5);
+        } else if (view == mMusicMore) {
+            ((HomeFragment)getParentFragment()).setTabIndex(6);
+        } else if (view == mTechMore) {
+            ((HomeFragment)getParentFragment()).setTabIndex(7);
+        } else if (view == mLiveMore) {
+            ((HomeFragment)getParentFragment()).setTabIndex(8);
+        } else if (view == mSportMore) {
+            ((HomeFragment)getParentFragment()).setTabIndex(9);
+        } else if (view == mDocumentMore) {
+            ((HomeFragment)getParentFragment()).setTabIndex(10);
+        }
     }
 }
