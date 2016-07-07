@@ -19,6 +19,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -45,9 +46,14 @@ import cn.jas0n.amovie.ui.fragment.CommentListFragment;
 import cn.jas0n.amovie.ui.fragment.DescFragment;
 import cn.jas0n.amovie.ui.swipebacklayout.SwipeBackActivity;
 import cn.jas0n.amovie.ui.view.FixedViewPager;
+import cn.jas0n.amovie.ui.view.JCVideoPlayerStandardShowShareButtonAfterFullscreen;
 import cn.jas0n.amovie.util.Utils;
 import cn.jas0n.amovie.util.ViewGroupUtils;
 import cn.jas0n.amovie.videoplayer.VideoPlayView;
+import fm.jiecao.jcvideoplayer_lib.JCBuriedPointStandard;
+import fm.jiecao.jcvideoplayer_lib.JCFullScreenActivity;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -58,7 +64,7 @@ import tv.danmaku.ijk.media.player.IMediaPlayer;
  * Date: 2016/6/28
  * E-mail:chendong90x@gmail.com
  */
-public class VideoDetailActivity extends SwipeBackActivity {
+public class VideoDetailActivity extends SwipeBackActivity implements View.OnClickListener {
 
     @BindView(R.id.coordinator)
     CoordinatorLayout mCoordinator;
@@ -84,14 +90,11 @@ public class VideoDetailActivity extends SwipeBackActivity {
     TabLayout mFakeTab;
     @BindView(R.id.fake_tab_layout)
     RelativeLayout mFakeTabLayout;
-    @BindView(R.id.video_layout)
-    FrameLayout mVideoLayout;
-    @BindView(R.id.fullscreen)
-    FrameLayout mFullScreen;
+    @BindView(R.id.video)
+    JCVideoPlayerStandardShowShareButtonAfterFullscreen mJCVideo;
     @BindView(R.id.progressbar)
     ProgressBar mProgressBar;
 
-    private VideoPlayView mVideoPlayView;
     private List<Fragment> mFragments = new ArrayList<>();
     private VideoDetailPagerAdapter mAdapter;
     private RecBean.HotVideoItem mVideo;
@@ -212,17 +215,12 @@ public class VideoDetailActivity extends SwipeBackActivity {
     }
 
     private void setupFab() {
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                doClickFab();
-            }
-        });
+        mFab.setOnClickListener(this);
     }
 
     private void doClickFab() {
         if (isM3U8Ready) {
-            Revealator.reveal(mVideoLayout)
+            Revealator.reveal(mJCVideo)
                     .from(mFab)
                     .withChildsAnimation()
                     .withEndAction(new Runnable() {
@@ -238,52 +236,15 @@ public class VideoDetailActivity extends SwipeBackActivity {
                     })
                     .start();
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
-                mFab.setVisibility(View.GONE);
+                mFab.hide();
         }
     }
 
     private void initVideoPlayer() {
-        mVideoPlayView = new VideoPlayView(this);
-        mVideoPlayView.setQualities(mCurrentQuality, mQuality);
-        mVideoPlayView.setCompletionListener(new VideoPlayView.CompletionListener() {
-            @Override
-            public void completion(IMediaPlayer mp) {
-                if (Utils.isLandscape(VideoDetailActivity.this)) {
-                    if (mFullScreen.isShown()) {
-                        changeToPortrait();
-                        doCompleteAnimation();
-                    }
-                } else {
-                    doCompleteAnimation();
-                }
-            }
-        });
-        mVideoLayout.addView(mVideoPlayView);
-        mVideoPlayView.start(m3U8Info.getData().getM3u8().getUrl());
-        mVideoPlayView.setKeepScreenOn(true);
-    }
-
-    private void doCompleteAnimation() {
-        FrameLayout frameLayout = (FrameLayout) mVideoPlayView.getParent();
-        mVideoPlayView.release();
-        if (frameLayout != null && frameLayout.getChildCount() > 0) {
-            frameLayout.removeAllViews();
-            Revealator.unreveal(mVideoLayout)
-                    .withEndAction(new Runnable() {
-                        @Override
-                        public void run() {
-                            CoordinatorLayout.LayoutParams params =
-                                    (CoordinatorLayout.LayoutParams) mAppBar.getLayoutParams();
-                            params.setBehavior(new AppBarLayout.Behavior());
-                            mPager.setDisableAppbar(false);
-                            mPager.requestLayout();
-                            mFab.show();
-                        }
-                    })
-                    .start();
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
-                mFab.setVisibility(View.VISIBLE);
-        }
+        mJCVideo.setUp(m3U8Info.getData().getM3u8().getUrl(), mVideo.getTitle());
+        Glide.with(this).load(mVideo.getUrl()).centerCrop().crossFade().into(mJCVideo
+                .thumbImageView);
+        JCVideoPlayerStandardShowShareButtonAfterFullscreen.setJcBuriedPointStandard(jcBuriedPointStandard);
     }
 
     private void setupToolbar() {
@@ -301,73 +262,121 @@ public class VideoDetailActivity extends SwipeBackActivity {
 
     @Override
     public void onBackPressed() {
-        if (Utils.isLandscape(this) && mFullScreen.isShown()) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            changeToPortrait();
-        } else
-            finish();
+        finish();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (mVideoPlayView != null && mVideoPlayView.isPlay()) {
-            mVideoPlayView.pause();
-            mVideoPlayView.setMediaControllerStop();
-        }
+        JCVideoPlayer.releaseAllVideos();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(mVideoPlayView != null){
-            mVideoPlayView.setContorllerVisiable();
-        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mVideoPlayView != null) {
-            mVideoPlayView.release();
-        }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (mVideoPlayView != null) {
-            mVideoPlayView.onChanged(newConfig);
-            if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                changeToPortrait();
-            } else {
-                changeToFullScreen();
-            }
-        } else {
-            mCoordinator.setVisibility(View.VISIBLE);
-            mFullScreen.setVisibility(View.GONE);
+    }
+
+    public static JCBuriedPointStandard jcBuriedPointStandard = new JCBuriedPointStandard() {
+        @Override
+        public void onClickStartThumb(String url, Object... objects) {
+            Log.i("Buried_Point", "onClickStartThumb" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " mUrl is : " + url);
         }
-    }
 
-    private void changeToPortrait() {
-        mCoordinator.setVisibility(View.VISIBLE);
-        mFullScreen.setVisibility(View.GONE);
-        mFullScreen.removeAllViews();
-        mVideoLayout.removeAllViews();
-        mVideoLayout.addView(mVideoPlayView);
-        mVideoPlayView.setShowContoller(true);
-        mVideoPlayView.setContorllerVisiable();
-        mVideoPlayView.setPortraitAction();
-    }
+        @Override
+        public void onClickBlank(String url, Object... objects) {
+            Log.i("Buried_Point", "onClickBlank" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " mUrl is : " + url);
+        }
 
-    private void changeToFullScreen() {
-        ViewGroup viewGroup = (ViewGroup) mVideoPlayView.getParent();
-        if (viewGroup == null)
-            return;
-        viewGroup.removeAllViews();
-        mFullScreen.addView(mVideoPlayView);
-        mCoordinator.setVisibility(View.GONE);
-        mFullScreen.setVisibility(View.VISIBLE);
-        mVideoPlayView.setFullAction();
+        @Override
+        public void onClickBlankFullscreen(String url, Object... objects) {
+            Log.i("Buried_Point", "onClickBlankFullscreen" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " mUrl is : " + url);
+        }
+
+        @Override
+        public void onClickStartIcon(String url, Object... objects) {
+            Log.i("Buried_Point", "onClickStartIcon" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " mUrl is : " + url);
+        }
+
+        @Override
+        public void onClickStartError(String url, Object... objects) {
+            Log.i("Buried_Point", "onClickStartError" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " mUrl is : " + url);
+        }
+
+        @Override
+        public void onClickStop(String url, Object... objects) {
+            Log.i("Buried_Point", "onClickStop" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " mUrl is : " + url);
+        }
+
+        @Override
+        public void onClickStopFullscreen(String url, Object... objects) {
+            Log.i("Buried_Point", "onClickStopFullscreen" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " mUrl is : " + url);
+        }
+
+        @Override
+        public void onClickResume(String url, Object... objects) {
+            Log.i("Buried_Point", "onClickResume" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " mUrl is : " + url);
+        }
+
+        @Override
+        public void onClickResumeFullscreen(String url, Object... objects) {
+            Log.i("Buried_Point", "onClickResumeFullscreen" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " mUrl is : " + url);
+        }
+
+        @Override
+        public void onClickSeekbar(String url, Object... objects) {
+            Log.i("Buried_Point", "onClickSeekbar" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " mUrl is : " + url);
+        }
+
+        @Override
+        public void onClickSeekbarFullscreen(String url, Object... objects) {
+            Log.i("Buried_Point", "onClickSeekbarFullscreen" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " mUrl is : " + url);
+        }
+
+        @Override
+        public void onAutoComplete(String url, Object... objects) {
+            Log.i("Buried_Point", "onAutoComplete" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " mUrl is : " + url);
+        }
+
+        @Override
+        public void onAutoCompleteFullscreen(String url, Object... objects) {
+            Log.i("Buried_Point", "onAutoCompleteFullscreen" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " mUrl is : " + url);
+        }
+
+        @Override
+        public void onEnterFullscreen(String url, Object... objects) {
+            Log.i("Buried_Point", "onEnterFullscreen" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " mUrl is : " + url);
+        }
+
+        @Override
+        public void onQuitFullscreen(String url, Object... objects) {
+            Log.i("Buried_Point", "onQuitFullscreen" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " mUrl is : " + url);
+        }
+
+        @Override
+        public void onTouchScreenSeekVolume(String url, Object... objects) {
+            Log.i("Buried_Point", "onTouchScreenSeekVolume" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " mUrl is : " + url);
+        }
+
+        @Override
+        public void onTouchScreenSeekPosition(String url, Object... objects) {
+            Log.i("Buried_Point", "onTouchScreenSeekVolume" + " title is : " + (objects.length == 0 ? "" : objects[0]) + " mUrl is : " + url);
+        }
+    };
+
+    @Override
+    public void onClick(View view) {
+        if(view == mFab){
+            doClickFab();
+        }
     }
 }

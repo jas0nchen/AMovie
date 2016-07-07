@@ -30,7 +30,9 @@ import cn.jas0n.amovie.bean.SeasonDetail;
 import cn.jas0n.amovie.bean.VideoDetail;
 import cn.jas0n.amovie.ui.activity.EpisodePlayActivity;
 import cn.jas0n.amovie.ui.view.FixedGridView;
+import cn.jas0n.amovie.ui.view.JCVideoPlayerStandardShowShareButtonAfterFullscreen;
 import de.hdodenhof.circleimageview.CircleImageView;
+import fm.jiecao.jcvideoplayer_lib.JCFullScreenActivity;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -144,7 +146,7 @@ public class SeasonDescFragment extends LazyFragment implements View.OnClickList
     }
 
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+    public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
         final ProgressDialog dialog = new ProgressDialog(getContext());
         dialog.setMessage("正在获取播放链接中...");
         dialog.show();
@@ -157,7 +159,9 @@ public class SeasonDescFragment extends LazyFragment implements View.OnClickList
                     @Override
                     public void call(Episode episode) {
                         dialog.dismiss();
-                        startActivity(EpisodePlayActivity.newIntent(getContext(), episode));
+                        JCFullScreenActivity.startActivity(getContext(), episode.getData()
+                                .getM3u8().getUrl(), JCVideoPlayerStandardShowShareButtonAfterFullscreen.class,
+                                mDetail.getData().getSeason().getTitle() + " E " + mEpisodeList.get(i).getEpisode());
                     }
                 }, new Action1<Throwable>() {
                     @Override
