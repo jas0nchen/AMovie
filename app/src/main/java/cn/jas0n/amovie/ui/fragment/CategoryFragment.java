@@ -3,13 +3,8 @@ package cn.jas0n.amovie.ui.fragment;
 import android.app.ActivityOptions;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +12,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.jcodecraeer.xrecyclerview.progressindicator.AVLoadingIndicatorView;
-import com.jude.easyrecyclerview.EasyRecyclerView;
-import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.orhanobut.logger.Logger;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,15 +20,16 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jas0n.amovie.R;
-import cn.jas0n.amovie.adapter.DramaAdapter;
 import cn.jas0n.amovie.adapter.DramaGridAdapter;
-import cn.jas0n.amovie.adapter.RecAdapter;
 import cn.jas0n.amovie.adapter.VideoGridAdapter;
 import cn.jas0n.amovie.api.AMovieService;
+import cn.jas0n.amovie.bean.CateBean;
 import cn.jas0n.amovie.bean.DramaBean;
 import cn.jas0n.amovie.bean.RecBean;
 import cn.jas0n.amovie.interfaces.ClickSeason;
+import cn.jas0n.amovie.interfaces.ClickVideo;
 import cn.jas0n.amovie.ui.activity.SeasonDetailActivity;
+import cn.jas0n.amovie.ui.activity.VideoDetailActivity;
 import cn.jas0n.amovie.ui.view.FixedGridView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -49,7 +40,7 @@ import rx.schedulers.Schedulers;
  * Date: 2016/6/24
  * E-mail:chendong90x@gmail.com
  */
-public class DramaFragment extends LazyFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class CategoryFragment extends LazyFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     protected View mView;
     @BindView(R.id.refresh_layout)
@@ -73,17 +64,27 @@ public class DramaFragment extends LazyFragment implements SwipeRefreshLayout.On
     @BindView(R.id.empty)
     TextView mEmpty;
 
-    private DramaGridAdapter mLastUpdateAdapter;
-    private DramaGridAdapter mRecAdapter;
-    private DramaGridAdapter mHotAdapter;
-    private List<RecBean.RecDramaItem> mLastUpdate = new ArrayList<>();
-    private List<RecBean.RecDramaItem> mRecommended = new ArrayList<>();
-    private List<RecBean.RecDramaItem> mHot = new ArrayList<>();
+    private int cateId;
+
+    private VideoGridAdapter mLastUpdateAdapter;
+    private VideoGridAdapter mRecAdapter;
+    private VideoGridAdapter mHotAdapter;
+    private List<RecBean.HotVideoItem> mLastUpdate = new ArrayList<>();
+    private List<RecBean.HotVideoItem> mRecommended = new ArrayList<>();
+    private List<RecBean.HotVideoItem> mHot = new ArrayList<>();
+
+    public static CategoryFragment newInstance(int cateId) {
+        CategoryFragment fragment = new CategoryFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("cateId", cateId);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Override
     protected View initViews(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (mView == null) {
-            mView = inflater.inflate(R.layout.fragment_drama, container, false);
+            mView = inflater.inflate(R.layout.fragment_cate, container, false);
         }
         ButterKnife.bind(this, mView);
 
@@ -95,20 +96,22 @@ public class DramaFragment extends LazyFragment implements SwipeRefreshLayout.On
     private void setupRecyclerView() {
         mRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorAccent));
         mRefreshLayout.setOnRefreshListener(this);
+        cateId = getArguments().getInt("cateId");
     }
 
     @Override
     protected void initData() {
-        AMovieService.builder().getApiService().getSeasonIndex("3.0.3")
+        AMovieService.builder().getApiService().getCategoryIndex(cateId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<DramaBean>() {
+                .subscribe(new Action1<CateBean>() {
                     @Override
-                    public void call(DramaBean dramaBean) {
-                        if (dramaBean.getData().getHot().size() == 0)
+                    public void call(CateBean cateBean) {
+                        Logger.d(cateBean.toString());
+                        if (cateBean.getData().getHot().size() == 0)
                             showEmpty();
                         else
-                            fillData(dramaBean);
+                            fillData(cateBean);
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -119,24 +122,33 @@ public class DramaFragment extends LazyFragment implements SwipeRefreshLayout.On
                 });
     }
 
-    private void fillData(DramaBean dramaBean) {
+    private void fillData(CateBean dramaBean) {
         mLastUpdate.clear();
         mRecommended.clear();
         mHot.clear();
-        mLastUpdate = dramaBean.getData().getLastUpdate();
+        mLastUpdate = dramaBean.getData().getLastest();
         mRecommended = dramaBean.getData().getRecommended();
         mHot = dramaBean.getData().getHot();
+        if (mLastUpdate.size() >= 4) {
+            mLastUpdate = mLastUpdate.subList(0, 4);
+        }
+        if (mRecommended.size() >= 4) {
+            mRecommended = mRecommended.subList(0, 4);
+        }
+        if (mHot.size() >= 4) {
+            mHot = mHot.subList(0, 4);
+        }
 
-        mLastUpdateAdapter = new DramaGridAdapter(mLastUpdate, getContext());
-        mRecAdapter = new DramaGridAdapter(mRecommended, getContext());
-        mHotAdapter = new DramaGridAdapter(mHot, getContext());
+        mLastUpdateAdapter = new VideoGridAdapter(mLastUpdate, getContext());
+        mRecAdapter = new VideoGridAdapter(mRecommended, getContext());
+        mHotAdapter = new VideoGridAdapter(mHot, getContext());
 
         mLastUpdateGrid.setAdapter(mLastUpdateAdapter);
         mRecGrid.setAdapter(mRecAdapter);
         mHotGrid.setAdapter(mHotAdapter);
-        mLastUpdateAdapter.setClickSeason(getClickSeason());
-        mRecAdapter.setClickSeason(getClickSeason());
-        mHotAdapter.setClickSeason(getClickSeason());
+        mLastUpdateAdapter.setClickVideo(getClickVideo());
+        mRecAdapter.setClickVideo(getClickVideo());
+        mHotAdapter.setClickVideo(getClickVideo());
 
         showContent();
     }
@@ -145,16 +157,16 @@ public class DramaFragment extends LazyFragment implements SwipeRefreshLayout.On
     protected void setDefaultFragmentTitle(String title) {
     }
 
-    private ClickSeason getClickSeason() {
-        return new ClickSeason() {
+    private ClickVideo getClickVideo() {
+        return new ClickVideo() {
             @Override
-            public void onClickSeason(ImageView imageView, RecBean.RecDramaItem dramaItem) {
+            public void onVideoClicked(ImageView image, RecBean.HotVideoItem video) {
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-                    startActivity(SeasonDetailActivity.newIntent(getContext(), dramaItem),
-                            ActivityOptions.makeSceneTransitionAnimation(getActivity(), imageView,
+                    startActivity(VideoDetailActivity.newIntent(getContext(), video),
+                            ActivityOptions.makeSceneTransitionAnimation(getActivity(), image,
                                     "transitionCover").toBundle());
                 } else {
-                    startActivity(SeasonDetailActivity.newIntent(getContext(), dramaItem));
+                    startActivity(VideoDetailActivity.newIntent(getContext(), video));
                 }
             }
         };
@@ -170,7 +182,7 @@ public class DramaFragment extends LazyFragment implements SwipeRefreshLayout.On
         mError.setVisibility(View.VISIBLE);
     }
 
-    private void showProgress(){
+    private void showProgress() {
         hideAll();
         mRefreshLayout.setProgressViewOffset(false, 0, 150);
         mRefreshLayout.setRefreshing(true);

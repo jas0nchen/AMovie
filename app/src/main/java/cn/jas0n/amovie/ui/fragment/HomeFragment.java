@@ -94,8 +94,11 @@ public class HomeFragment extends LazyFragment {
                 getString(R.string.tech), getString(R.string.livelihood), getString(R.string.sport), getString(R.string.documentary)};
         mFragments.add(RecFragment.newInstanse(mTitle[0]));
         mFragments.add(new DramaFragment());
-        for (int i = 2; i < mTitle.length; i++) {
-            mFragments.add(RecFragment.newInstanse(mTitle[i]));
+        for (int i = 2; i < 6; i++) {
+            mFragments.add(CategoryFragment.newInstance(i));
+        }
+        for (int i = 6; i < mTitle.length; i++) {
+            mFragments.add(CategoryFragment.newInstance(i+1));
         }
         mAdapter = new HomePagerAdapter(getChildFragmentManager(), mTitle, mFragments);
         mPager.setAdapter(mAdapter);
@@ -108,7 +111,8 @@ public class HomeFragment extends LazyFragment {
                 .subscribe(new Action1<ConstantCategory>() {
                     @Override
                     public void call(ConstantCategory constantCategory) {
-
+                        constantCategory.getData().getCategory().size();
+                        Logger.d(constantCategory.toString());
                     }
                 }, new Action1<Throwable>() {
                     @Override

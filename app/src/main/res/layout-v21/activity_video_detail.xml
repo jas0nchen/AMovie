@@ -37,6 +37,7 @@
                     android:fitsSystemWindows="true"
                     android:scaleType="centerCrop"
                     android:transitionName="transitionCover"
+                    android:foreground="@color/black_40"
                     app:layout_collapseMode="parallax"/>
 
                 <android.support.v7.widget.Toolbar

@@ -1,6 +1,7 @@
 package cn.jas0n.amovie.adapter;
 
 import android.content.Context;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,10 +28,12 @@ public class HotVideoGridAdapter extends android.widget.BaseAdapter {
     private List<RecBean.HotVideoItem> mData;
     private Context mContext;
     private ClickVideo clickVideo;
+    private Handler mHandler;
 
     public HotVideoGridAdapter(List<RecBean.HotVideoItem> mData, Context mContext) {
         this.mData = mData;
         this.mContext = mContext;
+        this.mHandler = new Handler(mContext.getMainLooper());
     }
 
     @Override
@@ -61,8 +64,14 @@ public class HotVideoGridAdapter extends android.widget.BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
         holder.mTitle.setText(mData.get(i).getTitle());
-        Glide.with(mContext).load(mData.get(i).getUrl()).centerCrop().crossFade().into
-                (holder.mCover);
+        final ViewHolder finalHolder1 = holder;
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Glide.with(mContext).load(mData.get(i).getUrl()).centerCrop().crossFade().into
+                        (finalHolder1.mCover);
+            }
+        }, 400);
         if (mData.get(i).getAuthor() != null) {
             holder.mName.setText(mData.get(i).getAuthor().getNickName());
         }

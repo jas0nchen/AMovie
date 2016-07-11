@@ -118,8 +118,6 @@ public class RecFragment extends LazyFragment implements SwipeRefreshLayout.OnRe
     TextView mError;
     @BindView(R.id.empty)
     TextView mEmpty;
-    @BindView(R.id.loading_view)
-    AVLoadingIndicatorView mProgressBar;
 
     private HotVideoGridAdapter mHotAdapter;
     private DramaGridAdapter mDramaAdapter;
@@ -152,6 +150,7 @@ public class RecFragment extends LazyFragment implements SwipeRefreshLayout.OnRe
         ButterKnife.bind(this, mView);
         mRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorAccent));
         mRefreshLayout.setOnRefreshListener(this);
+        showProgress();
         return mView;
     }
 
@@ -306,6 +305,12 @@ public class RecFragment extends LazyFragment implements SwipeRefreshLayout.OnRe
         mEmpty.setVisibility(View.VISIBLE);
     }
 
+    private void showProgress(){
+        hideAll();
+        mRefreshLayout.setProgressViewOffset(false, 0, 150);
+        mRefreshLayout.setRefreshing(true);
+    }
+
     private void showContent() {
         hideAll();
         mContent.setVisibility(View.VISIBLE);
@@ -315,7 +320,6 @@ public class RecFragment extends LazyFragment implements SwipeRefreshLayout.OnRe
         mContent.setVisibility(View.GONE);
         mEmpty.setVisibility(View.GONE);
         mError.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.GONE);
         mRefreshLayout.setRefreshing(false);
     }
 

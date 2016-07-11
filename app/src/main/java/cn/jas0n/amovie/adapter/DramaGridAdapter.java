@@ -1,6 +1,7 @@
 package cn.jas0n.amovie.adapter;
 
 import android.content.Context;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +25,12 @@ import cn.jas0n.amovie.interfaces.ClickSeason;
 public class DramaGridAdapter extends android.widget.BaseAdapter {
     private List<RecBean.RecDramaItem> mData;
     private Context mContext;
+    private Handler mHandler;
 
     public DramaGridAdapter(List<RecBean.RecDramaItem> mData, Context mContext) {
         this.mData = mData;
         this.mContext = mContext;
+        this.mHandler = new Handler(mContext.getMainLooper());
     }
 
     @Override
@@ -59,8 +62,14 @@ public class DramaGridAdapter extends android.widget.BaseAdapter {
         holder.mName.setText(mData.get(i).getTitle());
         holder.mUpdate.setText(String.format(mContext.getString(R.string.update_to), mData.get(i)
                 .getUpInfo()));
-        Glide.with(mContext).load(mData.get(i).getVerticalUrl()).centerCrop().crossFade().into
-                (holder.mCover);
+        final ViewHolder finalHolder1 = holder;
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Glide.with(mContext).load(mData.get(i).getVerticalUrl()).centerCrop().crossFade().into
+                        (finalHolder1.mCover);
+            }
+        }, 400);
         final ViewHolder finalHolder = holder;
         holder.mLayout.setOnClickListener(new View.OnClickListener() {
             @Override

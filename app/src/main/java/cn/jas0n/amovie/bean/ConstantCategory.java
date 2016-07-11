@@ -55,7 +55,7 @@ public class ConstantCategory implements Serializable {
         this.data = data;
     }
 
-    class Data{
+    public class Data{
         private List<Category> category;
 
         public List<Category> getCategory() {
