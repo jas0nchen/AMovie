@@ -41,6 +41,7 @@ import cn.jas0n.amovie.bean.RecBean;
 import cn.jas0n.amovie.interfaces.ClickSeason;
 import cn.jas0n.amovie.ui.activity.HotSeasonsActivity;
 import cn.jas0n.amovie.ui.activity.SeasonDetailActivity;
+import cn.jas0n.amovie.ui.activity.SeasonQueryActivity;
 import cn.jas0n.amovie.ui.view.FixedGridView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -210,7 +211,7 @@ public class DramaFragment extends LazyFragment implements SwipeRefreshLayout.On
         int id = view.getId();
         switch (id){
             case R.id.more:
-
+                startActivity(new Intent(getContext(), SeasonQueryActivity.class));
                 break;
             case R.id.rec_more:
                 startActivity(HotSeasonsActivity.newIntent(getContext(), false, getString(R.string

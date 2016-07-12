@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <View
+        android:id="@+id/fake_status"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimaryDark"/>
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:elevation="0dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+    </android.support.design.widget.AppBarLayout>
+
+    <com.yyydjk.library.DropDownMenu
+        android:id="@+id/drop_menu"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:ddmenuTextSize="13sp"
+        app:ddtextUnselectedColor="@color/primaryText"
+        app:ddtextSelectedColor="@color/colorAccent"
+        app:dddividerColor="@color/gray"
+        app:ddunderlineColor="@color/gray"
+        app:ddmenuSelectedIcon="@mipmap/ic_drop_down_unselected_icon"
+        app:ddmaskColor="@color/mask_color"
+        app:ddmenuBackgroundColor="@color/white"
+        app:ddmenuUnselectedIcon="@mipmap/ic_drop_down_unselected_icon"
+        />
+</LinearLayout>

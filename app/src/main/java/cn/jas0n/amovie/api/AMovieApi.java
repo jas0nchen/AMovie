@@ -10,6 +10,7 @@ import cn.jas0n.amovie.bean.M3U8ById;
 import cn.jas0n.amovie.bean.RecBean;
 import cn.jas0n.amovie.bean.RecDramaBean;
 import cn.jas0n.amovie.bean.SeasonDetail;
+import cn.jas0n.amovie.bean.SeasonQueryBean;
 import cn.jas0n.amovie.bean.ValidInfo;
 import cn.jas0n.amovie.bean.VerifyMobile;
 import cn.jas0n.amovie.bean.VideoDetail;
@@ -43,6 +44,12 @@ public interface AMovieApi {
 
     @GET("season/recommended")
     Observable<RecDramaBean> getRecommendSeasons(@Query("page") int page, @Query("rows") int rows);
+
+    @FormUrlEncoded
+    @POST("season/query")
+    Observable<SeasonQueryBean> getSeasonQuerys(@Query("page") int page, @Query("rows") int
+            rows, @Field("sort") String sort, @Field("cat") String cat,
+                                                @Field("isFinish") String isFinish);
 
     @FormUrlEncoded
     @POST("video/findM3u8ByVideoId")
