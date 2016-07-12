@@ -1,6 +1,7 @@
 package cn.jas0n.amovie.ui.fragment;
 
 import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -38,6 +39,7 @@ import cn.jas0n.amovie.api.AMovieService;
 import cn.jas0n.amovie.bean.DramaBean;
 import cn.jas0n.amovie.bean.RecBean;
 import cn.jas0n.amovie.interfaces.ClickSeason;
+import cn.jas0n.amovie.ui.activity.HotSeasonsActivity;
 import cn.jas0n.amovie.ui.activity.SeasonDetailActivity;
 import cn.jas0n.amovie.ui.view.FixedGridView;
 import rx.android.schedulers.AndroidSchedulers;
@@ -49,7 +51,7 @@ import rx.schedulers.Schedulers;
  * Date: 2016/6/24
  * E-mail:chendong90x@gmail.com
  */
-public class DramaFragment extends LazyFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class DramaFragment extends LazyFragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
     protected View mView;
     @BindView(R.id.refresh_layout)
@@ -60,14 +62,20 @@ public class DramaFragment extends LazyFragment implements SwipeRefreshLayout.On
     TextView mLastUpdateCate;
     @BindView(R.id.grid)
     FixedGridView mLastUpdateGrid;
+    @BindView(R.id.more)
+    TextView mLastUpdateMore;
     @BindView(R.id.rec_category)
     TextView mRecCate;
     @BindView(R.id.rec_grid)
     FixedGridView mRecGrid;
+    @BindView(R.id.rec_more)
+    TextView mRecMore;
     @BindView(R.id.hot_category)
     TextView mHotCate;
     @BindView(R.id.hot_grid)
     FixedGridView mHotGrid;
+    @BindView(R.id.hot_more)
+    TextView mHotMore;
     @BindView(R.id.error)
     TextView mError;
     @BindView(R.id.empty)
@@ -95,6 +103,10 @@ public class DramaFragment extends LazyFragment implements SwipeRefreshLayout.On
     private void setupRecyclerView() {
         mRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorAccent));
         mRefreshLayout.setOnRefreshListener(this);
+
+        mLastUpdateMore.setOnClickListener(this);
+        mRecMore.setOnClickListener(this);
+        mHotMore.setOnClickListener(this);
     }
 
     @Override
@@ -191,5 +203,23 @@ public class DramaFragment extends LazyFragment implements SwipeRefreshLayout.On
         mEmpty.setVisibility(View.GONE);
         mError.setVisibility(View.GONE);
         mRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+        switch (id){
+            case R.id.more:
+
+                break;
+            case R.id.rec_more:
+                startActivity(HotSeasonsActivity.newIntent(getContext(), false, getString(R.string
+                        .recommended)));
+                break;
+            case R.id.hot_more:
+                startActivity(HotSeasonsActivity.newIntent(getContext(), true, getString(R.string
+                        .hot_season)));
+                break;
+        }
     }
 }

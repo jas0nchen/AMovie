@@ -1,11 +1,10 @@
 package cn.jas0n.amovie.adapter;
 
 import android.content.Context;
-import android.support.annotation.LayoutRes;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -13,10 +12,6 @@ import com.bumptech.glide.Glide;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 
-import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import cn.jas0n.amovie.R;
 import cn.jas0n.amovie.bean.RecBean;
 import cn.jas0n.amovie.interfaces.ClickSeason;
@@ -41,13 +36,13 @@ public class DramaAdapter extends RecyclerArrayAdapter<RecBean.RecDramaItem> {
     }
 
     class ViewHolder extends BaseViewHolder<RecBean.RecDramaItem>{
-        RelativeLayout mLayout;
+        LinearLayout mLayout;
         ImageView mCover;
         TextView mName;
         TextView mUpdate;
 
         public ViewHolder(ViewGroup parent) {
-            super(parent, R.layout.layout_drama_item_padding);
+            super(parent, R.layout.layout_drama_item_card);
             mLayout = $(R.id.layout);
             mCover = $(R.id.cover);
             mName = $(R.id.name);

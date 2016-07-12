@@ -63,7 +63,7 @@ public class RecDramaBean implements Serializable {
         @Override
         public String toString() {
             return "Data{" +
-                    ", recommended=" + recommended +
+                    "recommended=" + recommended +
                     '}';
         }
     }

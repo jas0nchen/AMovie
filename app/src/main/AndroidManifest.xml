@@ -40,6 +40,9 @@
             android:label="@string/title_activity_login"
             android:theme="@style/FullscreenTheme">
         </activity>
+        <activity
+            android:name=".ui.activity.HotSeasonsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
