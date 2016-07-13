@@ -1,6 +1,7 @@
 package cn.jas0n.amovie.ui.fragment;
 
 import android.app.ActivityOptions;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +18,7 @@ import android.widget.RelativeLayout;
 import com.bumptech.glide.Glide;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
+import com.jude.easyrecyclerview.decoration.DividerDecoration;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ import cn.jas0n.amovie.bean.CategoryQueryBean;
 import cn.jas0n.amovie.bean.RecBean;
 import cn.jas0n.amovie.interfaces.ClickVideo;
 import cn.jas0n.amovie.ui.activity.VideoDetailActivity;
+import cn.jas0n.amovie.util.Utils;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -82,6 +85,12 @@ public class VideoQueryFragment extends LazyFragment implements SwipeRefreshLayo
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setRefreshListener(this);
         mRecyclerView.getRecyclerView().setHasFixedSize(true);
+
+        DividerDecoration itemDecoration = new DividerDecoration(ContextCompat.getColor
+                (getContext(), R.color.divider), Utils.dip2px(getContext(), 0.5f),
+                Utils.dip2px(getContext(), 160), Utils.dip2px(getContext(), 5f));
+        itemDecoration.setDrawLastItem(false);
+        mRecyclerView.addItemDecoration(itemDecoration);
 
         mAdapter = new VideoAdapter(getContext());
         mAdapter.setClickVideo(getClickVideo());
@@ -136,7 +145,7 @@ public class VideoQueryFragment extends LazyFragment implements SwipeRefreshLayo
                     @Override
                     public void call(CategoryQueryBean categoryQueryBean) {
                         Logger.d(categoryQueryBean.toString());
-                        mPage ++;
+                        mPage++;
                         mData.addAll(categoryQueryBean.getData().getResults());
                         mAdapter.addAll(categoryQueryBean.getData().getResults());
                     }
@@ -153,13 +162,7 @@ public class VideoQueryFragment extends LazyFragment implements SwipeRefreshLayo
         return new ClickVideo() {
             @Override
             public void onVideoClicked(ImageView image, RecBean.HotVideoItem video) {
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-                    startActivity(VideoDetailActivity.newIntent(getContext(), video),
-                            ActivityOptions.makeSceneTransitionAnimation(getActivity(), image,
-                                    "transitionCover").toBundle());
-                } else {
-                    startActivity(VideoDetailActivity.newIntent(getContext(), video));
-                }
+                startActivity(VideoDetailActivity.newIntent(getContext(), video));
             }
         };
     }

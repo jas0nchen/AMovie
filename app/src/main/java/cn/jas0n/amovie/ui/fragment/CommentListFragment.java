@@ -9,11 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bumptech.glide.util.Util;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jcodecraeer.xrecyclerview.progressindicator.AVLoadingIndicatorView;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
+import com.jude.easyrecyclerview.decoration.DividerDecoration;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ import cn.jas0n.amovie.api.AMovieService;
 import cn.jas0n.amovie.bean.Comment;
 import cn.jas0n.amovie.bean.RecBean;
 import cn.jas0n.amovie.bean.VideoDetail;
+import cn.jas0n.amovie.util.Utils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -49,7 +52,7 @@ public class CommentListFragment extends LazyFragment implements RecyclerArrayAd
     protected RecyclerArrayAdapter mAdapter;
     private Handler mHandler;
     private int page = 1;
-    private List<Comment.Result> mComments;
+    private List<Comment.Result> mComments = new ArrayList<Comment.Result>();
     private boolean isRefresh;
 
     public static final int VIDEO = 0;
@@ -70,17 +73,9 @@ public class CommentListFragment extends LazyFragment implements RecyclerArrayAd
         this.isRefresh = true;
         if (!isFirstLoad) {
             page = 1;
-            if (mComments != null) {
-                mComments.clear();
-                mAdapter.clear();
-            } else
-                mComments = new ArrayList<Comment.Result>();
+            mComments.clear();
+            mAdapter.clear();
 
-            if (mAdapter == null) {
-                mAdapter = new CommentListAdapter(getContext());
-                mRecyclerView.setAdapterWithProgress(mAdapter);
-                mAdapter.addAll(mComments);
-            }
             fetchCommentList();
         }
     }
@@ -99,13 +94,21 @@ public class CommentListFragment extends LazyFragment implements RecyclerArrayAd
     private void setupRecyclerView() {
         mRecyclerView.setRefreshingColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        DividerDecoration dividerDecoration = new DividerDecoration(ContextCompat.getColor
+                (getContext(), R.color.divider), Utils.dip2px(getContext(), 0.5f), Utils.dip2px
+                (getContext(), 56f), Utils.dip2px(getContext(), 8f));
+        dividerDecoration.setDrawLastItem(false);
+        mRecyclerView.addItemDecoration(dividerDecoration);
 
+        initAdapter();
+    }
+
+    private void initAdapter() {
         mAdapter = new CommentListAdapter(getContext());
         mAdapter.setMore(R.layout.view_more, this);
         mAdapter.setNoMore(R.layout.view_nomore);
         mAdapter.setError(R.layout.view_error);
-
-        mRecyclerView.setAdapterWithProgress(mAdapter);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -118,6 +121,7 @@ public class CommentListFragment extends LazyFragment implements RecyclerArrayAd
     }
 
     private void fetchCommentList() {
+        mRecyclerView.setRefreshing(true);
         if (mType == VIDEO) {
             AMovieService.builder().getApiService().getCommentList(page, 20, mId, "", "", "", "", "")
                     .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -125,10 +129,13 @@ public class CommentListFragment extends LazyFragment implements RecyclerArrayAd
                         @Override
                         public void call(Comment comment) {
                             fillCommentsToAdapter(comment);
+                            mRecyclerView.setRefreshing(false);
                         }
                     }, new Action1<Throwable>() {
                         @Override
                         public void call(Throwable throwable) {
+                            mRecyclerView.setRefreshing(false);
+                            mRecyclerView.showError();
                             Logger.e(throwable.getMessage());
                         }
                     });
@@ -138,11 +145,14 @@ public class CommentListFragment extends LazyFragment implements RecyclerArrayAd
                     .subscribe(new Action1<Comment>() {
                         @Override
                         public void call(Comment comment) {
+                            mRecyclerView.setRefreshing(false);
                             fillCommentsToAdapter(comment);
                         }
                     }, new Action1<Throwable>() {
                         @Override
                         public void call(Throwable throwable) {
+                            mRecyclerView.setRefreshing(false);
+                            mRecyclerView.showError();
                             Logger.e(throwable.getMessage());
                         }
                     });
@@ -152,14 +162,6 @@ public class CommentListFragment extends LazyFragment implements RecyclerArrayAd
     @Override
     protected void setDefaultFragmentTitle(String title) {
 
-    }
-
-    public void setHandler(Handler handler) {
-        this.mHandler = handler;
-    }
-
-    public Handler getHandler() {
-        return mHandler;
     }
 
     @Override
@@ -177,6 +179,7 @@ public class CommentListFragment extends LazyFragment implements RecyclerArrayAd
                         @Override
                         public void call(Throwable throwable) {
                             Logger.e(throwable.getMessage());
+                            mAdapter.pauseMore();
                         }
                     });
         } else if (mType == SEASON) {
@@ -192,13 +195,14 @@ public class CommentListFragment extends LazyFragment implements RecyclerArrayAd
                         @Override
                         public void call(Throwable throwable) {
                             Logger.e(throwable.getMessage());
+                            mAdapter.pauseMore();
                         }
                     });
         }
     }
 
     private void fillCommentsToAdapter(Comment comment) {
-        mComments = comment.getData().getResults();
+        mComments.addAll(comment.getData().getResults());
         mAdapter.addAll(mComments);
         page++;
     }
@@ -207,5 +211,12 @@ public class CommentListFragment extends LazyFragment implements RecyclerArrayAd
         mComments.addAll(comment.getData().getResults());
         mAdapter.addAll(comment.getData().getResults());
         page++;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mRecyclerView != null)
+            mRecyclerView.clear();
     }
 }

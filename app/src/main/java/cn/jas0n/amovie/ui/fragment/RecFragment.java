@@ -263,13 +263,7 @@ public class RecFragment extends LazyFragment implements SwipeRefreshLayout.OnRe
         return new ClickVideo() {
             @Override
             public void onVideoClicked(ImageView image, RecBean.HotVideoItem video) {
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-                    startActivity(VideoDetailActivity.newIntent(getContext(), video),
-                            ActivityOptions.makeSceneTransitionAnimation(getActivity(), image,
-                                    "transitionCover").toBundle());
-                } else {
                     startActivity(VideoDetailActivity.newIntent(getContext(), video));
-                }
             }
         };
     }
@@ -278,13 +272,7 @@ public class RecFragment extends LazyFragment implements SwipeRefreshLayout.OnRe
         return new ClickSeason() {
             @Override
             public void onClickSeason(ImageView imageView, RecBean.RecDramaItem dramaItem) {
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-                    startActivity(SeasonDetailActivity.newIntent(getContext(), dramaItem),
-                            ActivityOptions.makeSceneTransitionAnimation(getActivity(), imageView,
-                                    "transitionCover").toBundle());
-                } else {
                     startActivity(SeasonDetailActivity.newIntent(getContext(), dramaItem));
-                }
             }
         };
     }

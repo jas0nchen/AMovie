@@ -2,6 +2,8 @@ package cn.jas0n.amovie.ui.fragment;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.jude.easyrecyclerview.EasyRecyclerView;
+import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.orhanobut.logger.Logger;
 
 import java.util.Collections;
@@ -18,6 +22,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jas0n.amovie.R;
+import cn.jas0n.amovie.adapter.EpisodeAdapter;
 import cn.jas0n.amovie.adapter.EpisodeGridAdapter;
 import cn.jas0n.amovie.api.AMovieService;
 import cn.jas0n.amovie.bean.Episode;
@@ -35,35 +40,15 @@ import rx.schedulers.Schedulers;
  * Date: 2016/6/28
  * E-mail:chendong90x@gmail.com
  */
-public class SeasonDescFragment extends LazyFragment implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class SeasonDescFragment extends LazyFragment implements View.OnClickListener {
 
-    @BindView(R.id.user_layout)
-    RelativeLayout mUserLayout;
-    @BindView(R.id.avatar)
-    CircleImageView mAvatar;
-    @BindView(R.id.title)
-    TextView mTitle;
-    @BindView(R.id.title_en)
-    TextView mTitleEn;
-    @BindView(R.id.view_count)
-    TextView mViewCount;
-    @BindView(R.id.score)
-    TextView mScore;
-    @BindView(R.id.brief)
-    TextView mBrief;
-    @BindView(R.id.username)
-    TextView mName;
-    @BindView(R.id.create_time)
-    TextView mCreateTime;
-    @BindView(R.id.follow)
-    TextView mFollow;
-    @BindView(R.id.episode_grid)
-    FixedGridView mEpisodeGrid;
+    @BindView(R.id.recycler_view)
+    RecyclerView mRecyclerView;
 
     private SeasonDetail mDetail;
-    List<SeasonDetail.EpisodeBrief> mEpisodeList;
+    private List<SeasonDetail.EpisodeBrief> mEpisodeList;
     private boolean isRefresh;
-    private EpisodeGridAdapter mAdapter;
+    private EpisodeAdapter mAdapter;
 
     public static SeasonDescFragment newInstance(SeasonDetail detail) {
         SeasonDescFragment fragment = new SeasonDescFragment();
@@ -93,33 +78,17 @@ public class SeasonDescFragment extends LazyFragment implements View.OnClickList
             mDetail = (SeasonDetail) getArguments().getSerializable("detail");
 
         fillDetail();
-        mFollow.setOnClickListener(this);
     }
 
     private void fillDetail() {
-        if (mDetail.getData().getSeason().getAuthor() != null) {
-            Glide.with(this).load(mDetail.getData().getSeason().getAuthor().getHeadImgUrl()).centerCrop().crossFade
-                    ().into(mAvatar);
-            mName.setText(mDetail.getData().getSeason().getAuthor().getNickName());
-            mCreateTime.setText(String.format(getString(R.string.created_at), mDetail.getData()
-                    .getSeason().getCreateTimeStr()));
-        } else {
-            mUserLayout.setVisibility(View.GONE);
-        }
-
-        mTitle.setText(mDetail.getData().getSeason().getTitle());
-        mTitleEn.setText(mDetail.getData().getSeason().getEnTitle());
-        mViewCount.setText(String.format(getString(R.string.play_count), mDetail.getData()
-                .getSeason().getViewCount()));
-        mScore.setText(String.format(getString(R.string.score), mDetail.getData().getSeason()
-                .getScore()));
-        mBrief.setText(mDetail.getData().getSeason().getBrief());
-
         mEpisodeList = mDetail.getData().getSeason().getEpisode_brief();
         Collections.reverse(mEpisodeList);
-        mAdapter = new EpisodeGridAdapter(mEpisodeList, getContext());
-        mEpisodeGrid.setAdapter(mAdapter);
-        mEpisodeGrid.setOnItemClickListener(this);
+
+        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(4,
+                StaggeredGridLayoutManager.VERTICAL));
+        mRecyclerView.setHasFixedSize(true);
+        mAdapter = new EpisodeAdapter(getContext(), mDetail, mEpisodeList);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -129,39 +98,6 @@ public class SeasonDescFragment extends LazyFragment implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        if (view == mFollow) {
-            doFollow();
-        }
-    }
 
-    private void doFollow() {
-
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
-        final ProgressDialog dialog = new ProgressDialog(getContext());
-        dialog.setMessage("正在获取播放链接中...");
-        dialog.show();
-
-        AMovieService.builder().getApiService().getEpisode("high", mDetail.getData().getSeason()
-                .getSid(),mEpisodeList.get(i).getSid())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Episode>() {
-                    @Override
-                    public void call(Episode episode) {
-                        dialog.dismiss();
-                        JCFullScreenActivity.startActivity(getContext(), episode.getData()
-                                .getM3u8().getUrl(), JCVideoPlayerStandardShowShareButtonAfterFullscreen.class,
-                                mDetail.getData().getSeason().getTitle() + " E " + mEpisodeList.get(i).getEpisode());
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        Logger.e(throwable.getMessage());
-                        dialog.dismiss();
-                    }
-                });
     }
 }

@@ -163,13 +163,7 @@ public class DramaFragment extends LazyFragment implements SwipeRefreshLayout.On
         return new ClickSeason() {
             @Override
             public void onClickSeason(ImageView imageView, RecBean.RecDramaItem dramaItem) {
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-                    startActivity(SeasonDetailActivity.newIntent(getContext(), dramaItem),
-                            ActivityOptions.makeSceneTransitionAnimation(getActivity(), imageView,
-                                    "transitionCover").toBundle());
-                } else {
-                    startActivity(SeasonDetailActivity.newIntent(getContext(), dramaItem));
-                }
+                startActivity(SeasonDetailActivity.newIntent(getContext(), dramaItem));
             }
         };
     }
@@ -184,7 +178,7 @@ public class DramaFragment extends LazyFragment implements SwipeRefreshLayout.On
         mError.setVisibility(View.VISIBLE);
     }
 
-    private void showProgress(){
+    private void showProgress() {
         hideAll();
         mRefreshLayout.setProgressViewOffset(false, 0, 150);
         mRefreshLayout.setRefreshing(true);
@@ -210,7 +204,7 @@ public class DramaFragment extends LazyFragment implements SwipeRefreshLayout.On
     @Override
     public void onClick(View view) {
         int id = view.getId();
-        switch (id){
+        switch (id) {
             case R.id.more:
                 startActivity(new Intent(getContext(), SeasonQueryActivity.class));
                 break;

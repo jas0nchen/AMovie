@@ -168,16 +168,4 @@ public class HomeFragment extends LazyFragment {
     public void setTabIndex(int index){
         mPager.setCurrentItem(index);
     }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Glide.with(this).pauseRequests();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Glide.with(this).onDestroy();
-    }
 }

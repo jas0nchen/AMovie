@@ -177,13 +177,7 @@ public class CategoryFragment extends LazyFragment implements SwipeRefreshLayout
         return new ClickVideo() {
             @Override
             public void onVideoClicked(ImageView image, RecBean.HotVideoItem video) {
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-                    startActivity(VideoDetailActivity.newIntent(getContext(), video),
-                            ActivityOptions.makeSceneTransitionAnimation(getActivity(), image,
-                                    "transitionCover").toBundle());
-                } else {
-                    startActivity(VideoDetailActivity.newIntent(getContext(), video));
-                }
+                startActivity(VideoDetailActivity.newIntent(getContext(), video));
             }
         };
     }
@@ -224,7 +218,7 @@ public class CategoryFragment extends LazyFragment implements SwipeRefreshLayout
     @Override
     public void onClick(View view) {
         int id = view.getId();
-        switch (id){
+        switch (id) {
             case R.id.more:
                 startActivity(CategoryQueryActivity.newIntent(getContext(), cateId, 0, mTitle));
                 break;
