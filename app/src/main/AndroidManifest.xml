@@ -15,12 +15,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:name=".ui.activity.MainActivity"
             android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -41,11 +40,11 @@
             android:theme="@style/FullscreenTheme">
         </activity>
         <activity
-            android:name=".ui.activity.HotSeasonsActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:name=".ui.activity.HotSeasonsActivity"/>
         <activity
-            android:name=".ui.activity.SeasonQueryActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:name=".ui.activity.SeasonQueryActivity"/>
+        <activity
+            android:name=".ui.activity.CategoryQueryActivity"/>
     </application>
 
 </manifest>

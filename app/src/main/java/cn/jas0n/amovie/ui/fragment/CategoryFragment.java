@@ -1,6 +1,7 @@
 package cn.jas0n.amovie.ui.fragment;
 
 import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ import cn.jas0n.amovie.bean.DramaBean;
 import cn.jas0n.amovie.bean.RecBean;
 import cn.jas0n.amovie.interfaces.ClickSeason;
 import cn.jas0n.amovie.interfaces.ClickVideo;
+import cn.jas0n.amovie.ui.activity.CategoryQueryActivity;
 import cn.jas0n.amovie.ui.activity.SeasonDetailActivity;
 import cn.jas0n.amovie.ui.activity.VideoDetailActivity;
 import cn.jas0n.amovie.ui.view.FixedGridView;
@@ -40,7 +43,7 @@ import rx.schedulers.Schedulers;
  * Date: 2016/6/24
  * E-mail:chendong90x@gmail.com
  */
-public class CategoryFragment extends LazyFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class CategoryFragment extends LazyFragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
     protected View mView;
     @BindView(R.id.refresh_layout)
@@ -51,20 +54,27 @@ public class CategoryFragment extends LazyFragment implements SwipeRefreshLayout
     TextView mLastUpdateCate;
     @BindView(R.id.grid)
     FixedGridView mLastUpdateGrid;
+    @BindView(R.id.more)
+    TextView mLastUpdateMore;
     @BindView(R.id.rec_category)
     TextView mRecCate;
     @BindView(R.id.rec_grid)
     FixedGridView mRecGrid;
+    @BindView(R.id.rec_more)
+    TextView mRecMore;
     @BindView(R.id.hot_category)
     TextView mHotCate;
     @BindView(R.id.hot_grid)
     FixedGridView mHotGrid;
+    @BindView(R.id.hot_more)
+    TextView mHotMore;
     @BindView(R.id.error)
     TextView mError;
     @BindView(R.id.empty)
     TextView mEmpty;
 
     private int cateId;
+    private String mTitle;
 
     private VideoGridAdapter mLastUpdateAdapter;
     private VideoGridAdapter mRecAdapter;
@@ -73,10 +83,11 @@ public class CategoryFragment extends LazyFragment implements SwipeRefreshLayout
     private List<RecBean.HotVideoItem> mRecommended = new ArrayList<>();
     private List<RecBean.HotVideoItem> mHot = new ArrayList<>();
 
-    public static CategoryFragment newInstance(int cateId) {
+    public static CategoryFragment newInstance(int cateId, String title) {
         CategoryFragment fragment = new CategoryFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("cateId", cateId);
+        bundle.putString("title", title);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -97,6 +108,11 @@ public class CategoryFragment extends LazyFragment implements SwipeRefreshLayout
         mRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorAccent));
         mRefreshLayout.setOnRefreshListener(this);
         cateId = getArguments().getInt("cateId");
+        mTitle = getArguments().getString("title");
+
+        mLastUpdateMore.setOnClickListener(this);
+        mRecMore.setOnClickListener(this);
+        mHotMore.setOnClickListener(this);
     }
 
     @Override
@@ -203,5 +219,21 @@ public class CategoryFragment extends LazyFragment implements SwipeRefreshLayout
         mEmpty.setVisibility(View.GONE);
         mError.setVisibility(View.GONE);
         mRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+        switch (id){
+            case R.id.more:
+                startActivity(CategoryQueryActivity.newIntent(getContext(), cateId, 0, mTitle));
+                break;
+            case R.id.rec_more:
+                startActivity(CategoryQueryActivity.newIntent(getContext(), cateId, 1, mTitle));
+                break;
+            case R.id.hot_more:
+                startActivity(CategoryQueryActivity.newIntent(getContext(), cateId, 2, mTitle));
+                break;
+        }
     }
 }

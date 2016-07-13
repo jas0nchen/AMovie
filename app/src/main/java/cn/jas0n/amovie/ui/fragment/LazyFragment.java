@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+
 /**
  * <pre>
  * 若把初始化内容放到initData实现
@@ -145,5 +147,15 @@ public abstract class LazyFragment extends Fragment {
      * @param title 一般用于显示在TabLayout的标题
      */
     protected abstract void setDefaultFragmentTitle(String title);
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 }
 

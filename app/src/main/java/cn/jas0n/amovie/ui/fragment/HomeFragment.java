@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
@@ -95,10 +96,10 @@ public class HomeFragment extends LazyFragment {
         mFragments.add(RecFragment.newInstanse(mTitle[0]));
         mFragments.add(new DramaFragment());
         for (int i = 2; i < 6; i++) {
-            mFragments.add(CategoryFragment.newInstance(i));
+            mFragments.add(CategoryFragment.newInstance(i, mTitle[i]));
         }
         for (int i = 6; i < mTitle.length; i++) {
-            mFragments.add(CategoryFragment.newInstance(i+1));
+            mFragments.add(CategoryFragment.newInstance(i+1, mTitle[i]));
         }
         mAdapter = new HomePagerAdapter(getChildFragmentManager(), mTitle, mFragments);
         mPager.setAdapter(mAdapter);
@@ -166,5 +167,17 @@ public class HomeFragment extends LazyFragment {
 
     public void setTabIndex(int index){
         mPager.setCurrentItem(index);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Glide.with(this).pauseRequests();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Glide.with(this).onDestroy();
     }
 }

@@ -205,7 +205,6 @@ public class SeasonQueryActivity extends SwipeBackActivity implements SwipeRefre
                 .subscribe(new Action1<SeasonQueryBean>() {
                     @Override
                     public void call(SeasonQueryBean seasonQueryBean) {
-                        Logger.d(seasonQueryBean.toString());
                         page++;
                         mData = seasonQueryBean.getData().getResults();
                         mAdapter.addAll(mData);
@@ -226,7 +225,6 @@ public class SeasonQueryActivity extends SwipeBackActivity implements SwipeRefre
                 .subscribe(new Action1<SeasonQueryBean>() {
                     @Override
                     public void call(SeasonQueryBean seasonQueryBean) {
-                        Logger.d(seasonQueryBean.toString());
                         page++;
                         mData.addAll(seasonQueryBean.getData().getResults());
                         mAdapter.addAll(seasonQueryBean.getData().getResults());

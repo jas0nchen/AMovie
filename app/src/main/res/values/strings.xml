@@ -69,6 +69,7 @@
 
     <!-- Fragments titles -->
     <string name="season_category">Season Category</string>
+    <string name="video_category">Video Category</string>
     <string name="last_update">Last Update</string>
     <string name="recommended">Recommended</string>
     <string name="hot_season">Hot Season</string>

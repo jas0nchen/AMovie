@@ -1,6 +1,7 @@
 package cn.jas0n.amovie.api;
 
 import cn.jas0n.amovie.bean.CateBean;
+import cn.jas0n.amovie.bean.CategoryQueryBean;
 import cn.jas0n.amovie.bean.Comment;
 import cn.jas0n.amovie.bean.ConstantCategory;
 import cn.jas0n.amovie.bean.DramaBean;
@@ -50,6 +51,11 @@ public interface AMovieApi {
     Observable<SeasonQueryBean> getSeasonQuerys(@Query("page") int page, @Query("rows") int
             rows, @Field("sort") String sort, @Field("cat") String cat,
                                                 @Field("isFinish") String isFinish);
+
+    @FormUrlEncoded
+    @POST("video/categoryQuery")
+    Observable<CategoryQueryBean> getCateQuery(@Query("page") int page, @Query("rows") int
+            rows, @Field("sort") String sort, @Field("categoryId") int catId);
 
     @FormUrlEncoded
     @POST("video/findM3u8ByVideoId")
