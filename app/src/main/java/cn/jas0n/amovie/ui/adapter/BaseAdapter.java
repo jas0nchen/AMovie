@@ -1,4 +1,4 @@
-package cn.jas0n.amovie.adapter;
+package cn.jas0n.amovie.ui.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

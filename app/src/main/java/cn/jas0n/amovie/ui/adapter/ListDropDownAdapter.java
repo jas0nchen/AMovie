@@ -1,4 +1,4 @@
-package cn.jas0n.amovie.adapter;
+package cn.jas0n.amovie.ui.adapter;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
@@ -14,7 +14,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jas0n.amovie.R;
 
-public class ConstellationAdapter extends BaseAdapter {
+
+public class ListDropDownAdapter extends BaseAdapter {
 
     private Context context;
     private List<String> list;
@@ -25,7 +26,7 @@ public class ConstellationAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public ConstellationAdapter(Context context, List<String> list) {
+    public ListDropDownAdapter(Context context, List<String> list) {
         this.context = context;
         this.list = list;
     }
@@ -51,7 +52,7 @@ public class ConstellationAdapter extends BaseAdapter {
         if (convertView != null) {
             viewHolder = (ViewHolder) convertView.getTag();
         } else {
-            convertView = LayoutInflater.from(context).inflate(R.layout.layout_constellation_item, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.layout_list_drop_down_item, null);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         }
@@ -65,10 +66,10 @@ public class ConstellationAdapter extends BaseAdapter {
             if (checkItemPosition == position) {
                 viewHolder.mText.setTextColor(ContextCompat.getColor(context, R.color
                         .colorAccent));
-                viewHolder.mText.setBackgroundResource(R.drawable.filter_check_bg);
+                viewHolder.mText.setBackgroundResource(R.color.check_bg);
             } else {
-                viewHolder.mText.setTextColor(ContextCompat.getColor(context, R.color.primaryText));
-                viewHolder.mText.setBackgroundResource(R.drawable.filter_uncheck_bg);
+                viewHolder.mText.setTextColor(ContextCompat.getColor(context, R.color.drop_down_unselected));
+                viewHolder.mText.setBackgroundResource(R.color.white);
             }
         }
     }

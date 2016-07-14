@@ -34,7 +34,6 @@
         android:paddingTop="@dimen/abc_dialog_padding_top_material"
         android:singleLine="true"
         android:text="@string/card_picker"
-        android:textAlignment="viewStart"
         android:textSize="18sp"/>
 
     <LinearLayout

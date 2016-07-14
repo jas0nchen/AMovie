@@ -1,16 +1,9 @@
 package cn.jas0n.amovie.ui.fragment;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.jcodecraeer.xrecyclerview.progressindicator.AVLoadingIndicatorView;
-import com.jude.easyrecyclerview.EasyRecyclerView;
-import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.orhanobut.logger.Logger;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +19,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jas0n.amovie.R;
-import cn.jas0n.amovie.adapter.DramaAdapter;
-import cn.jas0n.amovie.adapter.DramaGridAdapter;
-import cn.jas0n.amovie.adapter.RecAdapter;
-import cn.jas0n.amovie.adapter.VideoGridAdapter;
+import cn.jas0n.amovie.ui.adapter.DramaGridAdapter;
 import cn.jas0n.amovie.api.AMovieService;
 import cn.jas0n.amovie.bean.DramaBean;
 import cn.jas0n.amovie.bean.RecBean;

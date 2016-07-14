@@ -3,54 +3,31 @@ package cn.jas0n.amovie.ui.activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.orhanobut.logger.Logger;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jas0n.amovie.AMovie;
 import cn.jas0n.amovie.R;
-import cn.jas0n.amovie.adapter.HomePagerAdapter;
-import cn.jas0n.amovie.api.AMovieService;
-import cn.jas0n.amovie.bean.ConstantCategory;
 import cn.jas0n.amovie.realm.Account;
 import cn.jas0n.amovie.ui.fragment.CollectionFragment;
 import cn.jas0n.amovie.ui.fragment.DownloadFragment;
 import cn.jas0n.amovie.ui.fragment.HomeFragment;
-import cn.jas0n.amovie.ui.fragment.LazyFragment;
-import cn.jas0n.amovie.ui.fragment.RecFragment;
 import cn.jas0n.amovie.ui.fragment.SubscribeFragment;
-import cn.jas0n.amovie.util.Utils;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 /**
  * Author: Jas0n

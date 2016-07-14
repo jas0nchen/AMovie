@@ -1,4 +1,4 @@
-package cn.jas0n.amovie.adapter;
+package cn.jas0n.amovie.ui.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

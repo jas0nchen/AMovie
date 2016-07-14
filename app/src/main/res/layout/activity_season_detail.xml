@@ -31,9 +31,10 @@
                     android:id="@+id/detail_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:contentDescription="@string/empty"
                     android:fitsSystemWindows="true"
-                    android:scaleType="centerCrop"
                     android:foreground="@color/black_40"
+                    android:scaleType="centerCrop"
                     app:layout_collapseMode="parallax"/>
 
                 <android.support.v7.widget.Toolbar

@@ -1,4 +1,4 @@
-package cn.jas0n.amovie.adapter;
+package cn.jas0n.amovie.ui.adapter;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -81,7 +81,7 @@ public class EpisodeAdapter extends RecyclerView.Adapter implements View.OnClick
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position == 0) {
             Header header = (Header) holder;
             if(mDetail.getData().getSeason().getAuthor() != null){
@@ -103,12 +103,12 @@ public class EpisodeAdapter extends RecyclerView.Adapter implements View.OnClick
 
             header.mFollow.setOnClickListener(this);
         } else {
-            Item item = (Item) holder;
+            final Item item = (Item) holder;
             item.mTv.setText(mList.get(position - 1).getEpisode());
             item.mCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    doOnClickEpisode(position);
+                    doOnClickEpisode(item.getAdapterPosition());
                 }
             });
         }

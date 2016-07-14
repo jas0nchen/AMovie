@@ -1,8 +1,6 @@
 package cn.jas0n.amovie.ui.fragment;
 
-import android.app.ActivityOptions;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,9 +11,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.jcodecraeer.xrecyclerview.progressindicator.AVLoadingIndicatorView;
-import com.jude.easyrecyclerview.EasyRecyclerView;
-import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
@@ -26,10 +21,9 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jas0n.amovie.R;
-import cn.jas0n.amovie.adapter.DramaGridAdapter;
-import cn.jas0n.amovie.adapter.HotVideoGridAdapter;
-import cn.jas0n.amovie.adapter.RecAdapter;
-import cn.jas0n.amovie.adapter.VideoGridAdapter;
+import cn.jas0n.amovie.ui.adapter.DramaGridAdapter;
+import cn.jas0n.amovie.ui.adapter.HotVideoGridAdapter;
+import cn.jas0n.amovie.ui.adapter.VideoGridAdapter;
 import cn.jas0n.amovie.api.AMovieService;
 import cn.jas0n.amovie.bean.RecBean;
 import cn.jas0n.amovie.interfaces.ClickSeason;

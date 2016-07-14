@@ -23,7 +23,7 @@
         android:background="@drawable/filter_ok_bg"
         android:gravity="center"
         android:padding="8dp"
-        android:text="确定"
+        android:text="@string/ok"
         android:textSize="16sp"/>
 
 </LinearLayout>

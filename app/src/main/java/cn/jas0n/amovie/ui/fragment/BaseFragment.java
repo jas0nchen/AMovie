@@ -9,21 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.jcodecraeer.xrecyclerview.ProgressStyle;
-import com.jcodecraeer.xrecyclerview.XRecyclerView;
-import com.jcodecraeer.xrecyclerview.progressindicator.AVLoadingIndicatorView;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jas0n.amovie.R;
-import cn.jas0n.amovie.adapter.BaseAdapter;
-import cn.jas0n.amovie.adapter.RecAdapter;
+import cn.jas0n.amovie.ui.adapter.RecAdapter;
 
 /**
  * Author: Jas0n

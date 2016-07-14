@@ -1,20 +1,11 @@
 package cn.jas0n.amovie.ui.fragment;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.jude.easyrecyclerview.EasyRecyclerView;
-import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
-import com.orhanobut.logger.Logger;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,18 +13,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jas0n.amovie.R;
-import cn.jas0n.amovie.adapter.EpisodeAdapter;
-import cn.jas0n.amovie.adapter.EpisodeGridAdapter;
-import cn.jas0n.amovie.api.AMovieService;
-import cn.jas0n.amovie.bean.Episode;
+import cn.jas0n.amovie.ui.adapter.EpisodeAdapter;
 import cn.jas0n.amovie.bean.SeasonDetail;
-import cn.jas0n.amovie.ui.view.FixedGridView;
-import cn.jas0n.amovie.ui.view.JCVideoPlayerStandardShowShareButtonAfterFullscreen;
-import de.hdodenhof.circleimageview.CircleImageView;
-import fm.jiecao.jcvideoplayer_lib.JCFullScreenActivity;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 /**
  * Author: Jas0n

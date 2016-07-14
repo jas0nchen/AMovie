@@ -34,7 +34,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jas0n.amovie.R;
-import cn.jas0n.amovie.adapter.VideoDetailPagerAdapter;
+import cn.jas0n.amovie.ui.adapter.VideoDetailPagerAdapter;
 import cn.jas0n.amovie.api.AMovieService;
 import cn.jas0n.amovie.bean.M3U8ById;
 import cn.jas0n.amovie.bean.RecBean;

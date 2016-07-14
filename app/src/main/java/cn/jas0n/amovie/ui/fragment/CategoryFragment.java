@@ -1,8 +1,5 @@
 package cn.jas0n.amovie.ui.fragment;
 
-import android.app.ActivityOptions;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
@@ -22,16 +18,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jas0n.amovie.R;
-import cn.jas0n.amovie.adapter.DramaGridAdapter;
-import cn.jas0n.amovie.adapter.VideoGridAdapter;
+import cn.jas0n.amovie.ui.adapter.VideoGridAdapter;
 import cn.jas0n.amovie.api.AMovieService;
 import cn.jas0n.amovie.bean.CateBean;
-import cn.jas0n.amovie.bean.DramaBean;
 import cn.jas0n.amovie.bean.RecBean;
-import cn.jas0n.amovie.interfaces.ClickSeason;
 import cn.jas0n.amovie.interfaces.ClickVideo;
 import cn.jas0n.amovie.ui.activity.CategoryQueryActivity;
-import cn.jas0n.amovie.ui.activity.SeasonDetailActivity;
 import cn.jas0n.amovie.ui.activity.VideoDetailActivity;
 import cn.jas0n.amovie.ui.view.FixedGridView;
 import rx.android.schedulers.AndroidSchedulers;

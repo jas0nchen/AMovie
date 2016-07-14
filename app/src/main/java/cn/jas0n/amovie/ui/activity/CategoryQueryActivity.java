@@ -1,53 +1,24 @@
 package cn.jas0n.amovie.ui.activity;
 
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.jude.easyrecyclerview.EasyRecyclerView;
-import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
-import com.orhanobut.logger.Logger;
-import com.yyydjk.library.DropDownMenu;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jas0n.amovie.R;
-import cn.jas0n.amovie.adapter.ConstellationAdapter;
-import cn.jas0n.amovie.adapter.DramaAdapter;
-import cn.jas0n.amovie.adapter.HomePagerAdapter;
-import cn.jas0n.amovie.adapter.ListDropDownAdapter;
-import cn.jas0n.amovie.api.AMovieService;
-import cn.jas0n.amovie.bean.RecBean;
-import cn.jas0n.amovie.bean.SeasonQueryBean;
-import cn.jas0n.amovie.interfaces.ClickSeason;
-import cn.jas0n.amovie.ui.fragment.CategoryFragment;
-import cn.jas0n.amovie.ui.fragment.DramaFragment;
+import cn.jas0n.amovie.ui.adapter.HomePagerAdapter;
 import cn.jas0n.amovie.ui.fragment.LazyFragment;
-import cn.jas0n.amovie.ui.fragment.RecFragment;
 import cn.jas0n.amovie.ui.fragment.VideoQueryFragment;
 import cn.jas0n.amovie.ui.swipebacklayout.SwipeBackActivity;
 import cn.jas0n.amovie.util.Utils;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 /**
  * Author: Jas0n

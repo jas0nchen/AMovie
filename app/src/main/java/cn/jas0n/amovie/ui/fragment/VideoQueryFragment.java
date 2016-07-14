@@ -1,21 +1,14 @@
 package cn.jas0n.amovie.ui.fragment;
 
-import android.app.ActivityOptions;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
-import com.bumptech.glide.Glide;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.jude.easyrecyclerview.decoration.DividerDecoration;
@@ -26,10 +19,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.jas0n.amovie.AMovie;
 import cn.jas0n.amovie.R;
-import cn.jas0n.amovie.adapter.RecAdapter;
-import cn.jas0n.amovie.adapter.VideoAdapter;
+import cn.jas0n.amovie.ui.adapter.VideoAdapter;
 import cn.jas0n.amovie.api.AMovieService;
 import cn.jas0n.amovie.bean.CategoryQueryBean;
 import cn.jas0n.amovie.bean.RecBean;
