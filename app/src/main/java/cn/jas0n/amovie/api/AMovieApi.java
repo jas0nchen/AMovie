@@ -12,9 +12,12 @@ import cn.jas0n.amovie.bean.RecBean;
 import cn.jas0n.amovie.bean.RecDramaBean;
 import cn.jas0n.amovie.bean.SeasonDetail;
 import cn.jas0n.amovie.bean.SeasonQueryBean;
+import cn.jas0n.amovie.bean.SeasonSearch;
 import cn.jas0n.amovie.bean.ValidInfo;
 import cn.jas0n.amovie.bean.VerifyMobile;
 import cn.jas0n.amovie.bean.VideoDetail;
+import cn.jas0n.amovie.bean.VideoSearch;
+import cn.jas0n.amovie.bean.ZimuzuSearch;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -56,6 +59,21 @@ public interface AMovieApi {
     @POST("video/categoryQuery")
     Observable<CategoryQueryBean> getCateQuery(@Query("page") int page, @Query("rows") int
             rows, @Field("sort") String sort, @Field("categoryId") int catId);
+
+    @FormUrlEncoded
+    @POST("season/search")
+    Observable<SeasonSearch> searchSeasonByName(@Query("page") int page, @Query("rows") int
+            rows, @Field("name") String name);
+
+    @FormUrlEncoded
+    @POST("video/search")
+    Observable<VideoSearch> searchVideoByName(@Query("page") int page, @Query("rows") int
+            rows, @Field("name") String name);
+
+    @FormUrlEncoded
+    @POST("user/search")
+    Observable<ZimuzuSearch> searchZimuzuByName(@Query("page") int page, @Query("rows") int
+            rows, @Field("name") String name);
 
     @FormUrlEncoded
     @POST("video/findM3u8ByVideoId")

@@ -16,6 +16,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.util.Util;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -156,14 +158,24 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         syncAccountInfo();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(Util.isOnMainThread()) {
+            Glide.with(getApplicationContext()).pauseRequests();
+        }
     }
 
     public DrawerLayout getDrawerLayout() {

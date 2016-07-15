@@ -173,7 +173,7 @@ public class SeasonDetailActivity extends SwipeBackActivity implements OnTabSele
     private void setupToolbar() {
         setSupportActionBar(mToolbar);
 
-        Glide.with(this).load(mDrama.getHorizontalUrl()).centerCrop().crossFade().into
+        Glide.with(getApplicationContext()).load(mDrama.getHorizontalUrl()).centerCrop().crossFade().into
                 (mDetailImage);
         final Drawable upArrow = ContextCompat.getDrawable(this, R.mipmap.ic_arrow_left_white_24dp);
         mToolbar.setNavigationIcon(upArrow);
@@ -207,7 +207,7 @@ public class SeasonDetailActivity extends SwipeBackActivity implements OnTabSele
                 .subscribe(new Action1<SeasonDetail>() {
                     @Override
                     public void call(SeasonDetail seasonDetail) {
-                        Glide.with(SeasonDetailActivity.this).load(mDetail.getData().getSeason()
+                        Glide.with(getApplicationContext()).load(mDetail.getData().getSeason()
                                 .getRecommend().get(position).getHorizontalUrl()).centerCrop().crossFade().into(mDetailImage);
 
                         mDetail = seasonDetail;

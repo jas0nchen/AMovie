@@ -12,6 +12,10 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
@@ -27,6 +31,15 @@ import cn.jas0n.amovie.R;
  */
 public class Utils {
     private Utils() {
+    }
+
+    public static View getViewHolder(Context context, int resource, ViewGroup parent, boolean
+            isFullSpan) {
+        View view = LayoutInflater.from(context).inflate(resource, parent, false);
+        StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) view.getLayoutParams();
+        layoutParams.setFullSpan(isFullSpan);
+        view.setLayoutParams(layoutParams);
+        return view;
     }
 
     public static void setTint(Context context, ImageView imageView, int color, int resource){

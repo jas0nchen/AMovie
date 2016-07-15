@@ -187,14 +187,14 @@ public class RecFragment extends LazyFragment implements SwipeRefreshLayout.OnRe
 
     private void setupViews() {
         if (mHotList.size() >= 4) {
-            mHotAdapter = new HotVideoGridAdapter(mHotList.subList(0, 4), getContext());
+            mHotAdapter = new HotVideoGridAdapter(mHotList.subList(0, 4), getActivity());
         } else {
-            mHotAdapter = new HotVideoGridAdapter(mHotList, getContext());
+            mHotAdapter = new HotVideoGridAdapter(mHotList, getActivity());
         }
         if (mRecList.size() >= 6) {
-            mDramaAdapter = new DramaGridAdapter(mRecList.subList(0, 6), getContext());
+            mDramaAdapter = new DramaGridAdapter(mRecList.subList(0, 6), getActivity());
         } else {
-            mDramaAdapter = new DramaGridAdapter(mRecList, getContext());
+            mDramaAdapter = new DramaGridAdapter(mRecList, getActivity());
         }
 
         mHotGrid.setAdapter(mHotAdapter);
@@ -237,9 +237,9 @@ public class RecFragment extends LazyFragment implements SwipeRefreshLayout.OnRe
         }
 
         if (firstItem != null && videoItems.size() >= 4) {
-            adapter = new VideoGridAdapter(videoItems.subList(0, 4), getContext());
+            adapter = new VideoGridAdapter(videoItems.subList(0, 4), getActivity());
         } else {
-            adapter = new VideoGridAdapter(videoItems, getContext());
+            adapter = new VideoGridAdapter(videoItems, getActivity());
         }
 
         adapter.setClickVideo(getClickVideo());
@@ -248,7 +248,7 @@ public class RecFragment extends LazyFragment implements SwipeRefreshLayout.OnRe
 
     private void fillMovie() {
         List<RecBean.HotVideoItem> videoItems = mVideoMap.get("电影").getVideos();
-        mMovieAdapter = new HotVideoGridAdapter(videoItems, getContext());
+        mMovieAdapter = new HotVideoGridAdapter(videoItems, getActivity());
         mMovieAdapter.setClickVideo(getClickVideo());
         mMovieGrid.setAdapter(mMovieAdapter);
     }

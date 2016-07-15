@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.umeng.analytics.MobclickAgent;
+
 import cn.jas0n.amovie.util.Utils;
 
 public class SwipeBackActivity extends AppCompatActivity implements SwipeBackActivityBase {
@@ -45,5 +47,17 @@ public class SwipeBackActivity extends AppCompatActivity implements SwipeBackAct
     public void scrollToFinishActivity() {
         Utils.convertActivityToTranslucent(this);
         getSwipeBackLayout().scrollToFinishActivity();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

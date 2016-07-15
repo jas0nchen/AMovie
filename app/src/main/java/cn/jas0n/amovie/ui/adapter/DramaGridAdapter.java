@@ -62,14 +62,8 @@ public class DramaGridAdapter extends android.widget.BaseAdapter {
         holder.mName.setText(mData.get(i).getTitle());
         holder.mUpdate.setText(String.format(mContext.getString(R.string.update_to), mData.get(i)
                 .getUpInfo()));
-        final ViewHolder finalHolder1 = holder;
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Glide.with(mContext).load(mData.get(i).getVerticalUrl()).centerCrop().crossFade().into
-                        (finalHolder1.mCover);
-            }
-        }, 400);
+        Glide.with(mContext).load(mData.get(i).getVerticalUrl()).centerCrop().crossFade().into
+                (holder.mCover);
         final ViewHolder finalHolder = holder;
         holder.mLayout.setOnClickListener(new View.OnClickListener() {
             @Override

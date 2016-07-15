@@ -27,6 +27,7 @@ import cn.jas0n.amovie.bean.Episode;
 import cn.jas0n.amovie.bean.RecBean;
 import cn.jas0n.amovie.bean.SeasonDetail;
 import cn.jas0n.amovie.ui.view.JCVideoPlayerStandardShowShareButtonAfterFullscreen;
+import cn.jas0n.amovie.util.Utils;
 import de.hdodenhof.circleimageview.CircleImageView;
 import fm.jiecao.jcvideoplayer_lib.JCFullScreenActivity;
 import rx.android.schedulers.AndroidSchedulers;
@@ -61,21 +62,14 @@ public class EpisodeAdapter extends RecyclerView.Adapter implements View.OnClick
             return TYPE_ITEM;
     }
 
-    private View getViewHolder(int resource, ViewGroup parent, boolean isFullSpan) {
-        View view = LayoutInflater.from(mContext).inflate(resource, parent, false);
-        StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) view.getLayoutParams();
-        layoutParams.setFullSpan(isFullSpan);
-        view.setLayoutParams(layoutParams);
-        return view;
-    }
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_HEADER) {
-            View view = getViewHolder(R.layout.layout_season_des_header, parent, true);
+            View view = Utils.getViewHolder(mContext, R.layout.layout_season_des_header, parent,
+                    true);
             return new Header(view);
         } else {
-            View view = getViewHolder(R.layout.layout_episode_item, parent, false);
+            View view = Utils.getViewHolder(mContext, R.layout.layout_episode_item, parent, false);
             return new Item(view);
         }
     }

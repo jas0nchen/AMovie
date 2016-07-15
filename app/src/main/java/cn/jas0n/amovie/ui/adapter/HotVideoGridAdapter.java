@@ -64,14 +64,7 @@ public class HotVideoGridAdapter extends android.widget.BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
         holder.mTitle.setText(mData.get(i).getTitle());
-        final ViewHolder finalHolder1 = holder;
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Glide.with(mContext).load(mData.get(i).getUrl()).centerCrop().crossFade().into
-                        (finalHolder1.mCover);
-            }
-        }, 400);
+        Glide.with(mContext).load(mData.get(i).getUrl()).centerCrop().crossFade().into(holder.mCover);
         if (mData.get(i).getAuthor() != null) {
             holder.mName.setText(mData.get(i).getAuthor().getNickName());
         }
